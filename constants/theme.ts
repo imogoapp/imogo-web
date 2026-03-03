@@ -8,6 +8,10 @@ import { Platform } from 'react-native';
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
+export const Breakpoints = {
+  mobileMaxWidth: 768,
+} as const;
+
 export const Colors = {
   light: {
     text: '#11181C',
