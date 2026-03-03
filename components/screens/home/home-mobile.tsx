@@ -9,9 +9,10 @@ import { ThemedView } from '@/components/themed-view';
 
 type HomeMobileProps = {
   width: number;
+  isPwaInstalled: boolean;
 };
 
-export function HomeMobile({ width }: HomeMobileProps) {
+export function HomeMobile({ width, isPwaInstalled }: HomeMobileProps) {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -29,6 +30,7 @@ export function HomeMobile({ width }: HomeMobileProps) {
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Screen type (PWA)</ThemedText>
         <ThemedText>{`Detected: mobile (${Math.round(width)}px width)`}</ThemedText>
+        <ThemedText>{`PWA installed: ${isPwaInstalled ? 'yes' : 'no'}`}</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.stepContainer}>
@@ -76,4 +78,3 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
-

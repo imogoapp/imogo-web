@@ -9,9 +9,10 @@ import { ThemedView } from '@/components/themed-view';
 
 type HomeDesktopProps = {
   width: number;
+  isPwaInstalled: boolean;
 };
 
-export function HomeDesktop({ width }: HomeDesktopProps) {
+export function HomeDesktop({ width, isPwaInstalled }: HomeDesktopProps) {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#8BC6EC', dark: '#243B53' }}
@@ -30,6 +31,7 @@ export function HomeDesktop({ width }: HomeDesktopProps) {
         <ThemedView style={styles.card}>
           <ThemedText type="subtitle">Screen type (PWA)</ThemedText>
           <ThemedText>{`Detected: desktop (${Math.round(width)}px width)`}</ThemedText>
+          <ThemedText>{`PWA installed: ${isPwaInstalled ? 'yes' : 'no'}`}</ThemedText>
         </ThemedView>
 
         <ThemedView style={styles.card}>
@@ -86,4 +88,3 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
-

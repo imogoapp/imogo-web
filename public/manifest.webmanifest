@@ -1,0 +1,26 @@
+{
+  "name": "imoGo",
+  "short_name": "imoGo",
+  "description": "imoGo PWA para Android, iOS, Windows e macOS via navegador.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#0a7ea4",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/icons/icon-1024.png",
+      "type": "image/png",
+      "sizes": "1024x1024",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-1024.png",
+      "type": "image/png",
+      "sizes": "1024x1024",
+      "purpose": "maskable"
+    }
+  ]
+}
