@@ -1,6 +1,9 @@
+import { Nunito_400Regular, Nunito_700Bold } from '@expo-google-fonts/nunito';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
@@ -8,12 +11,32 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
+SplashScreen.preventAutoHideAsync();
+
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const [fontsLoaded, fontsError] = useFonts({
+    Nunito_400Regular,
+    Nunito_700Bold,
+  });
+
+  useEffect(() => {
+    if (fontsError) {
+      throw fontsError;
+    }
+  }, [fontsError]);
+
+  useEffect(() => {
+    if (!fontsLoaded) {
+      return;
+    }
+
+    SplashScreen.hideAsync();
+  }, [fontsLoaded]);
 
   useEffect(() => {
     if (Platform.OS !== 'web') {
@@ -29,25 +52,23 @@ export default function RootLayout() {
     });
   }, []);
 
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <>
       <Head>
-        <title>Imogo</title>
-        <meta name="description" content="Imogo PWA para Android, iOS, Windows e macOS via navegador." />
-        <meta name="theme-color" content="#0a7ea4" />
-        <meta name="application-name" content="Imogo" />
+        <meta name="theme-color" content="#730d83" />
+        <meta name="application-name" content="imoGo" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-title" content="Imogo" />
+        <meta name="apple-mobile-web-app-title" content="imoGo" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="msapplication-TileColor" content="#0a7ea4" />
-        <meta property="og:title" content="Imogo" />
-        <meta
-          property="og:description"
-          content="Imogo PWA para Android, iOS, Windows e macOS via navegador."
-        />
+        <meta name="msapplication-TileColor" content="#730d83" />
+        <meta property="og:site_name" content="imoGo" />
         <link rel="manifest" href="/manifest.webmanifest" />
-        <link rel="apple-touch-icon" href="/icons/icon-1024.png" />
+        <link rel="apple-touch-icon" href="/img/favicon.png" />
       </Head>
 
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

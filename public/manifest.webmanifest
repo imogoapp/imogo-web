@@ -1,25 +1,25 @@
 {
   "name": "imoGo",
   "short_name": "imoGo",
-  "description": "imoGo PWA para Android, iOS, Windows e macOS via navegador.",
+  "description": "imoGo App - Descomplicando o setor imobiliário",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#ffffff",
-  "theme_color": "#0a7ea4",
+  "background_color": "#730d83",
+  "theme_color": "#730d83",
   "lang": "pt-BR",
   "icons": [
     {
-      "src": "/icons/icon-1024.png",
+      "src": "/img/icon.png",
       "type": "image/png",
-      "sizes": "1024x1024",
+      "sizes": "512x512",
       "purpose": "any"
     },
     {
-      "src": "/icons/maskable-1024.png",
+      "src": "/img/adaptive-icon.png",
       "type": "image/png",
-      "sizes": "1024x1024",
+      "sizes": "512x512",
       "purpose": "maskable"
     }
   ]
