@@ -4,7 +4,7 @@
     "slug": "imogo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/img/favicon.png",
     "scheme": "imogo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,10 +13,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#730d83",
+        "foregroundImage": "./assets/img/adaptive-icon.png",
+        "backgroundImage": "./assets/img/adaptive-icon.png",
+        "monochromeImage": "./assets/img/adaptive-icon.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
@@ -24,23 +24,24 @@
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png",
-      "backgroundColor": "#ffffff",
-      "themeColor": "#0a7ea4"
+      "backgroundColor": "#730d83",
+      "themeColor": "#730d83"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/img/adaptive-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#730d83",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#730d83"
           }
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,
