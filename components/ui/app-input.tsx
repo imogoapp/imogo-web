@@ -30,6 +30,12 @@ type AppInputProps = TextInputProps & {
   containerStyle?: StyleProp<ViewStyle>;
   inputWrapperStyle?: StyleProp<ViewStyle>;
   inputStyle?: StyleProp<TextStyle>;
+  labelSize?: number;
+  inputSize?: number;
+  radius?: number;
+  minHeight?: number;
+  wrapperBackgroundColor?: string;
+  wrapperBorderColor?: string;
 };
 
 export function AppInput({
@@ -43,6 +49,12 @@ export function AppInput({
   containerStyle,
   inputWrapperStyle,
   inputStyle,
+  labelSize = 15,
+  inputSize = AppTheme.typography.body,
+  radius = AppTheme.radius.md,
+  minHeight = 50,
+  wrapperBackgroundColor = '#ffffff',
+  wrapperBorderColor = AppTheme.colors.inputBorder,
   onFocus,
   onBlur,
   ...props
@@ -76,11 +88,17 @@ export function AppInput({
 
   return (
     <View style={containerStyle}>
-      {label ? <Text style={styles.label}>{label}</Text> : null}
+      {label ? <Text style={[styles.label, { fontSize: labelSize }]}>{label}</Text> : null}
 
       <View
         style={[
           styles.inputWrapper,
+          {
+            borderRadius: radius,
+            minHeight,
+            backgroundColor: wrapperBackgroundColor,
+            borderColor: wrapperBorderColor,
+          },
           isFocused && styles.inputWrapperFocused,
           !!errorMessage && styles.inputWrapperError,
           inputWrapperStyle,
@@ -90,7 +108,7 @@ export function AppInput({
         <TextInput
           placeholderTextColor="#A9A9A9"
           autoCapitalize="none"
-          style={[styles.input, webInputReset, inputStyle]}
+          style={[styles.input, { fontSize: inputSize }, webInputReset, inputStyle]}
           secureTextEntry={resolvedSecureTextEntry}
           onFocus={(event) => {
             setIsFocused(true);
@@ -124,11 +142,7 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     width: '100%',
-    borderRadius: AppTheme.radius.md,
     borderWidth: 1.5,
-    borderColor: '#d7d9df',
-    backgroundColor: '#ffffff',
-    minHeight: 50,
     paddingHorizontal: AppTheme.spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
@@ -143,7 +157,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     color: AppTheme.colors.text,
-    fontSize: AppTheme.typography.body,
     fontFamily: AppTheme.typography.fontRegular,
     paddingVertical: 12,
   },

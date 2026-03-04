@@ -4,9 +4,11 @@ import { AppTheme } from '@/constants/app-theme';
 
 type AppTitleProps = TextProps & {
   size?: number;
+  maxSize?: number;
   align?: 'left' | 'center' | 'right';
   marginBottom?: number;
   weight?: 'regular' | 'bold';
+  color?: string;
   textStyle?: StyleProp<TextStyle>;
 };
 
@@ -15,19 +17,24 @@ export function AppTitle({
   textStyle,
   children,
   size = AppTheme.typography.title,
+  maxSize = AppTheme.typography.title,
   align = 'center',
   marginBottom = AppTheme.spacing.xl,
   weight = 'bold',
+  color = AppTheme.colors.text,
   ...props
 }: AppTitleProps) {
+  const resolvedSize = Math.min(size, maxSize);
+
   return (
     <Text
       style={[
         styles.title,
         {
-          fontSize: size,
+          fontSize: resolvedSize,
           textAlign: align,
           marginBottom,
+          color,
           fontFamily: weight === 'bold' ? AppTheme.typography.fontBold : AppTheme.typography.fontRegular,
         },
         textStyle,
