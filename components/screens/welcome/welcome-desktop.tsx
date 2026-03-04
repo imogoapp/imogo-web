@@ -1,6 +1,5 @@
 import { router } from 'expo-router';
-import Head from 'expo-router/head';
-import { ImageBackground, Platform, View } from 'react-native';
+import { ImageBackground,View } from 'react-native';
 
 import { AppButton } from '@/components/ui/app-button';
 import { AppLogo } from '@/components/ui/app-logo';
@@ -17,8 +16,8 @@ export default function WelcomeDesktop({
   onRegisterPress,
   onLoginPress,
 }: WelcomeDesktopProps) {
-  const handleRegister = onRegisterPress ?? (() => router.push('/modal'));
-  const handleLogin = onLoginPress ?? (() => router.push('/modal'));
+  const handleRegister = onRegisterPress ?? (() => router.push('/register'));
+  const handleLogin = onLoginPress ?? (() => router.push('/login'));
 
   return (
     <>
@@ -29,7 +28,7 @@ export default function WelcomeDesktop({
         resizeMode="cover">
         <View style={styles.card}>
           <AppLogo />
-          <AppTitle>Faca parte da imoGo</AppTitle>
+          <AppTitle>Faça parte da imoGo</AppTitle>
 
           <View style={styles.actions}>
             <AppButton label="Criar cadastro" onPress={handleRegister} />

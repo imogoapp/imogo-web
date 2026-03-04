@@ -1,7 +1,9 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
   type StyleProp,
   type TextStyle,
   type TouchableOpacityProps,
@@ -19,6 +21,9 @@ type AppButtonProps = TouchableOpacityProps & {
   size?: AppButtonSize;
   fullWidth?: boolean;
   radius?: number;
+  leftIconName?: keyof typeof Ionicons.glyphMap;
+  rightIconName?: keyof typeof Ionicons.glyphMap;
+  iconSize?: number;
   labelStyle?: StyleProp<TextStyle>;
   containerStyle?: StyleProp<ViewStyle>;
 };
@@ -35,12 +40,16 @@ export function AppButton({
   size = 'md',
   fullWidth = true,
   radius = AppTheme.radius.lg,
+  leftIconName,
+  rightIconName,
+  iconSize = 18,
   style,
   containerStyle,
   labelStyle,
   ...props
 }: AppButtonProps) {
   const isPrimary = variant === 'primary';
+  const iconColor = isPrimary ? AppTheme.colors.primaryText : AppTheme.colors.text;
 
   return (
     <TouchableOpacity
@@ -55,9 +64,13 @@ export function AppButton({
         style,
       ]}
       {...props}>
-      <Text style={[isPrimary ? styles.primaryButtonText : styles.secondaryButtonText, labelStyle]}>
-        {label}
-      </Text>
+      <View style={styles.contentRow}>
+        {leftIconName ? <Ionicons name={leftIconName} size={iconSize} color={iconColor} /> : null}
+        <Text style={[isPrimary ? styles.primaryButtonText : styles.secondaryButtonText, labelStyle]}>
+          {label}
+        </Text>
+        {rightIconName ? <Ionicons name={rightIconName} size={iconSize} color={iconColor} /> : null}
+      </View>
     </TouchableOpacity>
   );
 }
@@ -69,6 +82,12 @@ const styles = StyleSheet.create({
   },
   fullWidth: {
     width: '100%',
+  },
+  contentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
   },
   primaryButton: {
     backgroundColor: AppTheme.colors.primary,
