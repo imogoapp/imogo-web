@@ -6,6 +6,8 @@ export const AppTheme = {
     primary: '#730d83',
     primaryText: '#ffffff',
     border: '#1F2024',
+    muted: '#6b7280',
+    inputBorder: '#d7d9df',
   },
   spacing: {
     xs: 8,
@@ -22,7 +24,10 @@ export const AppTheme = {
   },
   typography: {
     title: 24,
+    subtitle: 20,
     body: 16,
+    bodySm: 14,
+    overline: 16,
     button: 16,
     fontRegular: 'Nunito_400Regular',
     fontBold: 'Nunito_700Bold',
@@ -34,5 +39,8 @@ export const AppTheme = {
     offsetX: 0,
     offsetY: 4,
     elevation: 8,
+  },
+  sizes: {
+    authCardMaxWidth: 560,
   },
 } as const;

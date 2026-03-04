@@ -17,8 +17,8 @@ export default function WelcomeMobile({ onRegisterPress, onLoginPress }: Welcome
   const { width, height } = useWindowDimensions();
   const styles = createWelcomeMobileStyles(width, height);
 
-  const handleRegister = onRegisterPress ?? (() => router.push('/modal'));
-  const handleLogin = onLoginPress ?? (() => router.push('/modal'));
+  const handleRegister = onRegisterPress ?? (() => router.push('/register'));
+  const handleLogin = onLoginPress ?? (() => router.push('/login'));
 
   return (
     <ImageBackground
@@ -34,7 +34,7 @@ export default function WelcomeMobile({ onRegisterPress, onLoginPress }: Welcome
 
         <View style={styles.whiteContainer}>
           <AppTitle size={width * 0.06} marginBottom={height * 0.04}>
-            Faca parte da imoGo
+            Faça parte da imoGo
           </AppTitle>
 
           <View style={styles.actions}>
