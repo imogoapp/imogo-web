@@ -70,11 +70,13 @@ export function createLoginMobileStyles(width: number, height: number) {
       fontFamily: AppTheme.typography.fontBold,
     },
     primaryButton: {
-      paddingVertical: height * 0.012,
+      minHeight: 48,
+      paddingVertical: 12,
       marginBottom: height * 0.01,
     },
     secondaryButton: {
-      paddingVertical: height * 0.014,
+      minHeight: 48,
+      paddingVertical: 12,
       marginBottom: height * 0.012,
     },
   });
