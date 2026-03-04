@@ -66,7 +66,7 @@ export function AppButton({
       {...props}>
       <View style={styles.contentRow}>
         {leftIconName ? <Ionicons name={leftIconName} size={iconSize} color={iconColor} /> : null}
-        <Text style={[isPrimary ? styles.primaryButtonText : styles.secondaryButtonText, labelStyle]}>
+        <Text allowFontScaling={false} style={[isPrimary ? styles.primaryButtonText : styles.secondaryButtonText, labelStyle]}>
           {label}
         </Text>
         {rightIconName ? <Ionicons name={rightIconName} size={iconSize} color={iconColor} /> : null}

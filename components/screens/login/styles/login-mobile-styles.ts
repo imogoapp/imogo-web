@@ -4,44 +4,62 @@ import { AppTheme } from '@/constants/app-theme';
 
 export function createLoginMobileStyles(width: number, height: number) {
   return StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: '#F5F5F5',
+      paddingTop: 0,
+    },
     background: {
       flex: 1,
       width: '100%',
       height: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: 'flex-end',
       backgroundColor: AppTheme.colors.background,
     },
     container: {
       flex: 1,
-      justifyContent: 'flex-start',
+      justifyContent: 'flex-end',
+    },
+    scrollContainer: {
+      flexGrow: 1,
+      justifyContent: 'center',
       alignItems: 'center',
-      width: '100%',
     },
     logoContainer: {
-      height: height * 0.34,
+      height: height * 0.25,
       justifyContent: 'center',
       alignItems: 'center',
     },
     whiteContainer: {
       width: '100%',
-      height: height * 0.66,
+      minHeight: height * 0.75,
       backgroundColor: AppTheme.colors.card,
       borderTopLeftRadius: 30,
       borderTopRightRadius: 30,
-      paddingHorizontal: width * 0.06,
+      paddingHorizontal: width * 0.05,
       paddingVertical: height * 0.03,
       alignItems: 'center',
       justifyContent: 'flex-start',
-      position: 'absolute',
-      bottom: 0,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.2,
+      shadowRadius: 1.41,
+      elevation: 3,
+      paddingBottom: height * 0.05,
+      flexGrow: 1,
+      flexShrink: 0,
+    },
+    title: {
+      width: '100%',
+      textAlign: 'left',
     },
     form: {
       width: '100%',
       gap: AppTheme.spacing.md,
     },
     optionsRow: {
-      marginTop: 4,
+      marginTop: height * 0.01,
+      marginBottom: height * 0.01,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -49,8 +67,15 @@ export function createLoginMobileStyles(width: number, height: number) {
     },
     forgotText: {
       color: AppTheme.colors.primary,
-      fontSize: 14,
       fontFamily: AppTheme.typography.fontBold,
+    },
+    primaryButton: {
+      paddingVertical: height * 0.012,
+      marginBottom: height * 0.01,
+    },
+    secondaryButton: {
+      paddingVertical: height * 0.014,
+      marginBottom: height * 0.012,
     },
   });
 }
