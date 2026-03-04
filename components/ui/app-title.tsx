@@ -28,6 +28,7 @@ export function AppTitle({
 
   return (
     <Text
+      allowFontScaling={false}
       style={[
         styles.title,
         {

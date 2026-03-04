@@ -88,7 +88,11 @@ export function AppInput({
 
   return (
     <View style={containerStyle}>
-      {label ? <Text style={[styles.label, { fontSize: labelSize }]}>{label}</Text> : null}
+      {label ? (
+        <Text allowFontScaling={false} style={[styles.label, { fontSize: labelSize }]}>
+          {label}
+        </Text>
+      ) : null}
 
       <View
         style={[
@@ -106,6 +110,7 @@ export function AppInput({
         {leadingIconName ? <Ionicons name={leadingIconName} size={18} color="#7b8190" /> : null}
 
         <TextInput
+          allowFontScaling={false}
           placeholderTextColor="#A9A9A9"
           autoCapitalize="none"
           style={[styles.input, { fontSize: inputSize }, webInputReset, inputStyle]}
@@ -128,7 +133,11 @@ export function AppInput({
         ) : null}
       </View>
 
-      {!!errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
+      {!!errorMessage ? (
+        <Text allowFontScaling={false} style={styles.errorText}>
+          {errorMessage}
+        </Text>
+      ) : null}
     </View>
   );
 }

@@ -1,7 +1,16 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ImageBackground, Platform, Pressable, Text, View, useWindowDimensions } from 'react-native';
+import {
+  ImageBackground,
+  Platform,
+  Pressable,
+  ScrollView,
+  SafeAreaView,
+  Text,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 
 import { AppButton } from '@/components/ui/app-button';
 import { AppCheckbox } from '@/components/ui/app-checkbox';
@@ -34,6 +43,14 @@ export default function LoginMobile({
 }: LoginMobileProps) {
   const { width, height } = useWindowDimensions();
   const styles = createLoginMobileStyles(width, height);
+  const titleSize =
+    Platform.select({ ios: width * 0.055, android: width * 0.05, default: width * 0.05 }) ?? width * 0.05;
+  const labelSize =
+    Platform.select({ ios: width * 0.033, android: width * 0.032, default: width * 0.032 }) ?? width * 0.032;
+  const nativeInputSize =
+    Platform.select({ ios: width * 0.04, android: width * 0.038, default: width * 0.038 }) ?? width * 0.038;
+  const inputSize = Platform.OS === 'web' ? Math.max(nativeInputSize, 16) : nativeInputSize;
+  const buttonTextSize = width * 0.04;
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -73,58 +90,90 @@ export default function LoginMobile({
   const handleGoogle = onGooglePress ?? (() => router.push('/modal'));
 
   return (
-    <ImageBackground source={require('@/assets/img/bg.png')} style={styles.background} resizeMode="cover">
-      <StatusBar style={Platform.OS === 'ios' ? 'dark' : 'light'} translucent />
+    <SafeAreaView style={styles.safeArea}>
+      <ImageBackground source={require('@/assets/img/bg.png')} style={styles.background} resizeMode="cover">
+        <StatusBar style={Platform.OS === 'ios' ? 'dark' : 'light'} translucent />
 
-      <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <AppLogo width={width * 0.35} height={height * 0.12} marginBottom={0} />
-        </View>
-
-        <View style={styles.whiteContainer}>
-          <AppTitle size={width * 0.05} marginBottom={height * 0.025} >
-            Bem-vindo!
-          </AppTitle>
-
-          <View style={styles.form}>
-            <AppInput
-              label="Email"
-              value={email}
-              onChangeText={handleEmailChange}
-              placeholder="Email"
-              keyboardType="email-address"
-              leadingIconName="mail-outline"
-              errorMessage={emailError}
-            />
-
-            <AppInput
-              label="Senha"
-              value={password}
-              onChangeText={setPassword}
-              placeholder="Senha"
-              secureToggle
-              leadingIconName="lock-closed-outline"
-            />
-
-            <View style={styles.optionsRow}>
-              <AppCheckbox checked={remember} label="Lembrar senha" onToggle={() => setRemember((s) => !s)} />
-
-              <Pressable onPress={handleForgotPassword}>
-                <Text style={styles.forgotText}>Esqueceu sua senha?</Text>
-              </Pressable>
+        <View style={styles.container}>
+          <ScrollView
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="always"
+            bounces={false}>
+            <View style={styles.logoContainer}>
+              <AppLogo width={width * 0.35} height={height * 0.08} marginBottom={0} />
             </View>
 
-            <AppButton label="Entrar" onPress={handleLogin} radius={30} />
-            <AppButton
-              label="Google"
-              variant="secondary"
-              onPress={handleGoogle}
-              leftIconName="logo-google"
-              radius={30}
-            />
-          </View>
+            <View style={styles.whiteContainer}>
+              <AppTitle size={titleSize} marginBottom={height * 0.015} align="left" style={styles.title}>
+                Bem-vindo!
+              </AppTitle>
+
+              <View style={styles.form}>
+                <AppInput
+                  label="Email"
+                  value={email}
+                  onChangeText={handleEmailChange}
+                  placeholder="Email"
+                  keyboardType="email-address"
+                  leadingIconName="mail-outline"
+                  errorMessage={emailError}
+                  labelSize={labelSize}
+                  inputSize={inputSize}
+                  minHeight={height * 0.055}
+                  radius={8}
+                  wrapperBackgroundColor="#ffffff"
+                  wrapperBorderColor="#EAEAEA"
+                  autoCorrect={false}
+                />
+
+                <AppInput
+                  label="Senha"
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholder="Senha"
+                  secureToggle
+                  leadingIconName="lock-closed-outline"
+                  labelSize={labelSize}
+                  inputSize={inputSize}
+                  minHeight={height * 0.055}
+                  radius={8}
+                  wrapperBackgroundColor="#ffffff"
+                  wrapperBorderColor="#EAEAEA"
+                  autoCorrect={false}
+                />
+
+                <View style={styles.optionsRow}>
+                  <AppCheckbox checked={remember} label="Manter Login" onToggle={() => setRemember((s) => !s)} />
+
+                  <Pressable onPress={handleForgotPassword}>
+                    <Text style={[styles.forgotText, { fontSize: labelSize }]}>Esqueceu sua senha?</Text>
+                  </Pressable>
+                </View>
+
+                <AppButton
+                  label="Entrar"
+                  onPress={handleLogin}
+                  radius={30}
+                  size="sm"
+                  labelStyle={{ fontSize: buttonTextSize }}
+                  containerStyle={styles.primaryButton}
+                />
+                <AppButton
+                  label="Continuar com Google"
+                  variant="secondary"
+                  onPress={handleGoogle}
+                  leftIconName="logo-google"
+                  radius={30}
+                  size="sm"
+                  labelStyle={{ fontSize: buttonTextSize }}
+                  containerStyle={styles.secondaryButton}
+                />
+              </View>
+            </View>
+          </ScrollView>
         </View>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </SafeAreaView>
   );
 }
