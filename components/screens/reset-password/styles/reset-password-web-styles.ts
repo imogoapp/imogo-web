@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 import { AppTheme } from '@/constants/app-theme';
 
-const loginWebStyles = StyleSheet.create({
+const resetPasswordWebStyles = StyleSheet.create({
   background: {
     flex: 1,
     width: '100%',
@@ -24,29 +24,34 @@ const loginWebStyles = StyleSheet.create({
     shadowOffset: { width: AppTheme.shadow.offsetX, height: AppTheme.shadow.offsetY },
     elevation: AppTheme.shadow.elevation,
   },
-  form: {
+  content: {
     width: '100%',
     gap: AppTheme.spacing.md,
   },
-  optionsRow: {
-    marginTop: 4,
-    marginBottom: 4,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: AppTheme.spacing.md,
-  },
-  forgotText: {
-    color: AppTheme.colors.primary,
-    fontSize: 14,
-    fontFamily: AppTheme.typography.fontBold,
-  },
-  dividerText: {
+  description: {
+    color: AppTheme.colors.muted,
+    fontSize: 15,
+    lineHeight: 22,
     textAlign: 'center',
-    color: '#6b7280',
-    fontSize: 14,
     fontFamily: AppTheme.typography.fontRegular,
-    marginVertical: 2,
+    marginBottom: AppTheme.spacing.sm,
+  },
+  successWrap: {
+    alignItems: 'center',
+    width: '100%',
+  },
+  successImage: {
+    width: 220,
+    height: 150,
+    marginBottom: AppTheme.spacing.md,
+  },
+  successText: {
+    color: AppTheme.colors.muted,
+    fontSize: 15,
+    lineHeight: 22,
+    textAlign: 'center',
+    fontFamily: AppTheme.typography.fontRegular,
+    marginBottom: AppTheme.spacing.lg,
   },
   primaryButton: {
     minHeight: 48,
@@ -57,6 +62,13 @@ const loginWebStyles = StyleSheet.create({
     borderColor: '#E9E9E9',
     opacity: 0.5,
   },
+  backLink: {
+    color: AppTheme.colors.primary,
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: AppTheme.typography.fontBold,
+    marginTop: 4,
+  },
 });
 
-export default loginWebStyles;
+export default resetPasswordWebStyles;
