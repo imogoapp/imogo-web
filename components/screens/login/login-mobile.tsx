@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
   ImageBackground,
@@ -56,6 +56,7 @@ export default function LoginMobile({
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(true);
+  const canLogin = useMemo(() => isValidEmail(email) && !!password.trim(), [email, password]);
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
@@ -86,7 +87,7 @@ export default function LoginMobile({
     router.push('/modal');
   };
 
-  const handleForgotPassword = onForgotPasswordPress ?? (() => router.push('/modal'));
+  const handleForgotPassword = onForgotPasswordPress ?? (() => router.push('/reset-password'));
   const handleGoogle = onGooglePress ?? (() => router.push('/modal'));
 
   return (
@@ -154,10 +155,11 @@ export default function LoginMobile({
                 <AppButton
                   label="Entrar"
                   onPress={handleLogin}
+                  disabled={!canLogin}
                   radius={30}
                   size="sm"
-                  labelStyle={{ fontSize: buttonTextSize }}
-                  containerStyle={styles.primaryButton}
+                  labelStyle={{ fontSize: buttonTextSize, color: canLogin ? '#F5F5F5' : '#C4C4C4' }}
+                  containerStyle={[styles.primaryButton, !canLogin ? styles.buttonDisabled : undefined]}
                 />
                 <AppButton
                   label="Continuar com Google"

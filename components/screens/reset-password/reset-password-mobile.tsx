@@ -1,0 +1,156 @@
+import { router } from 'expo-router';
+import { Image } from 'expo-image';
+import { StatusBar } from 'expo-status-bar';
+import { useMemo, useState } from 'react';
+import { Alert, ImageBackground, Platform, Pressable, SafeAreaView, ScrollView, Text, View, useWindowDimensions } from 'react-native';
+
+import { AppButton } from '@/components/ui/app-button';
+import { AppInput } from '@/components/ui/app-input';
+import { AppLogo } from '@/components/ui/app-logo';
+import { AppTitle } from '@/components/ui/app-title';
+
+import { createResetPasswordMobileStyles } from './styles/reset-password-mobile-styles';
+
+type ResetPasswordMobileProps = {
+  onSubmitPress?: (payload: { email: string }) => Promise<void> | void;
+};
+
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+export default function ResetPasswordMobile({ onSubmitPress }: ResetPasswordMobileProps) {
+  const { width, height } = useWindowDimensions();
+  const styles = createResetPasswordMobileStyles(width, height);
+
+  const titleSize =
+    Platform.select({ ios: width * 0.055, android: width * 0.05, default: width * 0.05 }) ?? width * 0.05;
+  const descSize = Platform.select({ ios: width * 0.036, android: width * 0.034, default: width * 0.034 }) ?? width * 0.034;
+  const labelSize =
+    Platform.select({ ios: width * 0.033, android: width * 0.032, default: width * 0.032 }) ?? width * 0.032;
+  const nativeInputSize =
+    Platform.select({ ios: width * 0.04, android: width * 0.038, default: width * 0.038 }) ?? width * 0.038;
+  const inputSize = Platform.OS === 'web' ? Math.max(nativeInputSize, 16) : nativeInputSize;
+  const buttonTextSize = width * 0.04;
+
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const canSubmit = useMemo(() => isValidEmail(email) && !sending, [email, sending]);
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    if (!value.trim()) {
+      setEmailError('');
+      return;
+    }
+
+    setEmailError(isValidEmail(value) ? '' : 'Por favor, insira um email valido.');
+  };
+
+  const handleSubmit = async () => {
+    if (!isValidEmail(email)) {
+      setEmailError('Por favor, insira um email valido.');
+      return;
+    }
+
+    try {
+      setSending(true);
+      await onSubmitPress?.({ email });
+      setSent(true);
+    } catch {
+      Alert.alert('Erro', 'Nao foi possivel enviar o email de recuperacao.');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <ImageBackground source={require('@/assets/img/bg.png')} style={styles.background} resizeMode="cover">
+        <StatusBar style={Platform.OS === 'ios' ? 'dark' : 'light'} translucent />
+
+        <View style={styles.container}>
+          <ScrollView
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="always"
+            bounces={false}>
+            <View style={styles.logoContainer}>
+              <AppLogo width={width * 0.35} height={height * 0.08} marginBottom={0} />
+            </View>
+
+            <View style={styles.whiteContainer}>
+              {!sent ? (
+                <>
+                  <AppTitle size={titleSize} marginBottom={height * 0.012} align="left" style={styles.title}>
+                    Esqueceu sua senha?
+                  </AppTitle>
+
+                  <Text style={[styles.description, { fontSize: descSize }]}>
+                    Nao se preocupe. Enviaremos uma nova senha para o email informado.
+                  </Text>
+
+                  <View style={styles.form}>
+                    <AppInput
+                      label="Email"
+                      value={email}
+                      onChangeText={handleEmailChange}
+                      placeholder="exemplo@email.com"
+                      keyboardType="email-address"
+                      leadingIconName="mail-outline"
+                      errorMessage={emailError}
+                      labelSize={labelSize}
+                      inputSize={inputSize}
+                      minHeight={height * 0.055}
+                      radius={8}
+                      wrapperBackgroundColor="#ffffff"
+                      wrapperBorderColor="#EAEAEA"
+                      autoCorrect={false}
+                    />
+
+                    <AppButton
+                      label={sending ? 'Enviando...' : 'Enviar'}
+                      onPress={handleSubmit}
+                      disabled={!canSubmit}
+                      radius={30}
+                      size="sm"
+                      labelStyle={{ fontSize: buttonTextSize, color: canSubmit ? '#F5F5F5' : '#C4C4C4' }}
+                      containerStyle={[styles.primaryButton, !canSubmit ? styles.buttonDisabled : undefined]}
+                    />
+
+                    <Pressable onPress={() => router.push('/login')}>
+                      <Text style={[styles.backLink, { fontSize: labelSize }]}>Voltar para login</Text>
+                    </Pressable>
+                  </View>
+                </>
+              ) : (
+                <View style={styles.successWrap}>
+                  <Image source={require('@/assets/img/success.png')} style={styles.successImage} contentFit="contain" />
+                  <AppTitle size={titleSize} marginBottom={height * 0.008} color="#730d83">
+                    Email enviado!
+                  </AppTitle>
+                  <Text style={[styles.successText, { fontSize: descSize }]}>
+                    Verifique sua caixa de entrada e siga as instrucoes para redefinir sua senha.
+                  </Text>
+                  <View style={styles.form}>
+                    <AppButton
+                      label="Ir para login"
+                      onPress={() => router.push('/login')}
+                      radius={30}
+                      size="sm"
+                      labelStyle={{ fontSize: buttonTextSize }}
+                      containerStyle={{ minHeight: 48, paddingVertical: 12 }}
+                    />
+                  </View>
+                </View>
+              )}
+            </View>
+          </ScrollView>
+        </View>
+      </ImageBackground>
+    </SafeAreaView>
+  );
+}

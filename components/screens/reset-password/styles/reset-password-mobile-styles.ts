@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 import { AppTheme } from '@/constants/app-theme';
 
-export function createLoginMobileStyles(width: number, height: number) {
+export function createResetPasswordMobileStyles(width: number, height: number) {
   return StyleSheet.create({
     safeArea: {
       flex: 1,
@@ -53,26 +53,21 @@ export function createLoginMobileStyles(width: number, height: number) {
       width: '100%',
       textAlign: 'left',
     },
+    description: {
+      color: AppTheme.colors.muted,
+      fontFamily: AppTheme.typography.fontRegular,
+      width: '100%',
+      textAlign: 'left',
+      marginBottom: height * 0.02,
+      lineHeight: 21,
+    },
     form: {
       width: '100%',
       gap: AppTheme.spacing.md,
     },
-    optionsRow: {
-      marginTop: height * 0.01,
-      marginBottom: height * 0.01,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: AppTheme.spacing.md,
-    },
-    forgotText: {
-      color: AppTheme.colors.primary,
-      fontFamily: AppTheme.typography.fontBold,
-    },
     primaryButton: {
       minHeight: 48,
       paddingVertical: 12,
-      marginBottom: height * 0.01,
     },
     buttonDisabled: {
       backgroundColor: '#E9E9E9',
@@ -80,10 +75,28 @@ export function createLoginMobileStyles(width: number, height: number) {
       borderColor: '#E9E9E9',
       opacity: 0.5,
     },
-    secondaryButton: {
-      minHeight: 48,
-      paddingVertical: 12,
-      marginBottom: height * 0.012,
+    successWrap: {
+      width: '100%',
+      alignItems: 'center',
+    },
+    successImage: {
+      width: width * 0.58,
+      height: height * 0.2,
+      marginBottom: height * 0.02,
+    },
+    successText: {
+      color: AppTheme.colors.muted,
+      fontFamily: AppTheme.typography.fontRegular,
+      textAlign: 'center',
+      marginBottom: height * 0.02,
+      lineHeight: 21,
+      width: '100%',
+    },
+    backLink: {
+      color: AppTheme.colors.primary,
+      fontFamily: AppTheme.typography.fontBold,
+      textAlign: 'center',
+      marginTop: 4,
     },
   });
 }

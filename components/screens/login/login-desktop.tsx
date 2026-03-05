@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ImageBackground, Pressable, Text, View } from 'react-native';
 
 import { AppButton } from '@/components/ui/app-button';
@@ -35,6 +35,7 @@ export default function LoginDesktop({
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(true);
+  const canLogin = useMemo(() => isValidEmail(email) && !!password.trim(), [email, password]);
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
@@ -65,7 +66,7 @@ export default function LoginDesktop({
     router.push('/modal');
   };
 
-  const handleForgotPassword = onForgotPasswordPress ?? (() => router.push('/modal'));
+  const handleForgotPassword = onForgotPasswordPress ?? (() => router.push('/reset-password'));
   const handleGoogle = onGooglePress ?? (() => router.push('/modal'));
 
   return (
@@ -105,7 +106,13 @@ export default function LoginDesktop({
             </Pressable>
           </View>
 
-          <AppButton label="Entrar" onPress={handleLogin} />
+          <AppButton
+            label="Entrar"
+            onPress={handleLogin}
+            disabled={!canLogin}
+            labelStyle={{ color: canLogin ? '#F5F5F5' : '#C4C4C4' }}
+            containerStyle={[styles.primaryButton, !canLogin ? styles.disabledButton : undefined]}
+          />
 
           <Text style={styles.dividerText}>Ou acesse com</Text>
 
