@@ -67,6 +67,7 @@ export default function RootLayout() {
   return (
     <>
       <Head>
+        <meta httpEquiv="content-language" content="pt-BR" />
         <meta name="theme-color" content="#730d83" />
         <meta name="application-name" content="imoGo" />
         <meta name="mobile-web-app-capable" content="yes" />

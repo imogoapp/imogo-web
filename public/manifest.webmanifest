@@ -1,7 +1,7 @@
-{
+﻿{
   "name": "imoGo",
   "short_name": "imoGo",
-  "description": "imoGo App - Descomplicando o setor imobiliário",
+  "description": "imoGo App - Descomplicando o setor imobiliario",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -9,22 +9,23 @@
   "background_color": "#730d83",
   "theme_color": "#730d83",
   "lang": "pt-BR",
-  "splash": {
-      "image": "/img/adaptive-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#741781"
-    },
   "icons": [
     {
-      "src": "/img/icon.png",
+      "src": "/img/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "/img/icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"
     },
     {
-      "src": "/img/adaptive-icon.png",
+      "src": "/icons/maskable-1024.png",
       "type": "image/png",
-      "sizes": "512x512",
+      "sizes": "1024x1024",
       "purpose": "maskable"
     }
   ]
