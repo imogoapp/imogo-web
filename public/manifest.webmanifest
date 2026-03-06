@@ -9,6 +9,11 @@
   "background_color": "#730d83",
   "theme_color": "#730d83",
   "lang": "pt-BR",
+  "splash": {
+      "image": "/img/adaptive-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#741781"
+    },
   "icons": [
     {
       "src": "/img/icon.png",
