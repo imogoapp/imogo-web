@@ -5,14 +5,15 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Stack, usePathname } from "expo-router";
 import Head from "expo-router/head";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
-import { Platform } from "react-native";
+import { useEffect, useState } from "react";
+import { Platform, View } from "react-native";
 import "react-native-reanimated";
 
+import GlobalPageLoader from "@/components/ui/global-page-loader";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
 SplashScreen.preventAutoHideAsync();
@@ -23,6 +24,8 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const pathname = usePathname();
+  const [isRouteLoading, setIsRouteLoading] = useState(true);
   const [fontsLoaded, fontsError] = useFonts({
     Nunito_400Regular,
     Nunito_700Bold,
@@ -60,8 +63,20 @@ export default function RootLayout() {
     });
   }, []);
 
+  useEffect(() => {
+    setIsRouteLoading(true);
+
+    const timeoutId = setTimeout(() => {
+      setIsRouteLoading(false);
+    }, 250);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [pathname]);
+
   if (!fontsLoaded) {
-    return null;
+    return <GlobalPageLoader />;
   }
 
   return (
@@ -81,14 +96,17 @@ export default function RootLayout() {
       </Head>
 
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="modal"
-            options={{ presentation: "modal", title: "Modal" }}
-          />
-        </Stack>
-        <StatusBar style="auto" />
+        <View style={{ flex: 1, position: "relative" }}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="modal"
+              options={{ presentation: "modal", title: "Modal" }}
+            />
+          </Stack>
+          <StatusBar style="auto" />
+          {isRouteLoading ? <GlobalPageLoader /> : null}
+        </View>
       </ThemeProvider>
     </>
   );
