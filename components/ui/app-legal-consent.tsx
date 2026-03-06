@@ -13,11 +13,11 @@ export function AppLegalConsent({ style, onTermsPress, onPrivacyPress }: AppLega
     <Text style={[styles.base, style]}>
       Eu li e estou de acordo com os{' '}
       <Text style={styles.link} onPress={onTermsPress}>
-        Termos e Condicoes
+        Termos e Condições
       </Text>{' '}
       e com a{' '}
       <Text style={styles.link} onPress={onPrivacyPress}>
-        Politica de Privacidade
+        Política de Privacidade
       </Text>
       .
     </Text>

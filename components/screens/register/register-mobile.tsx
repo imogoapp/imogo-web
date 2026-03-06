@@ -1,5 +1,6 @@
 import { router } from 'expo-router';
 import { Image } from 'expo-image';
+import axios, { isAxiosError } from 'axios';
 import { useMemo, useState } from 'react';
 import {
   Alert,
@@ -29,12 +30,33 @@ type RegisterMobileProps = {
     telefone: string;
     email: string;
     password: string;
-    origem: string;
+    origem: number;
     acceptedTerms: boolean;
   }) => void;
 };
 
-const options = ['Facebook', 'Instagram', 'Google', 'Loja de aplicativos', 'Indicacao de amigos', 'Outro'] as const;
+const options = ['Facebook', 'Instagram', 'Google', 'Loja de aplicativos', 'Indicacao', 'Outro'] as const;
+// 'Facebook' = 10 , 'Instagram' = 11, 'Google' = 12, 'Loja de aplicativos' = 13, 'Indicacao' = 14, 'Outro' = 15
+const originMap: Record<(typeof options)[number], number> = {
+  Facebook: 10,
+  Instagram: 11,
+  Google: 12,
+  'Loja de aplicativos': 13,
+  Indicacao: 14,
+  Outro: 15,
+};
+
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_IMOGO ?? process.env.API_IMOGO;
+
+type RegisterApiSuccess = {
+  public_id: string;
+  message: string;
+};
+
+type RegisterApiError = {
+  message?: string;
+  detail?: string;
+};
 
 function validateEmail(emailInput: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput);
@@ -93,6 +115,7 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
   const [confirmPassword, setConfirmPassword] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const confirmPasswordError =
     confirmPassword.length > 0 && password !== confirmPassword ? 'As senhas nao coincidem.' : '';
@@ -147,23 +170,80 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
     setStep(3);
   };
 
-  const finishRegister = () => {
+  const finishRegister = async () => {
     if (!selectedOption) {
       showAlert('Atencao', 'Selecione uma opcao de origem.');
       return;
     }
 
-    onRegisterPress?.({
+    const origin = originMap[selectedOption as (typeof options)[number]];
+
+    if (!origin) {
+      showAlert('Atencao', 'Opcao de origem invalida.');
+      return;
+    }
+
+    const payload = {
       nome,
       sobrenome,
       telefone,
       email,
       password,
-      origem: selectedOption,
+      origem: origin,
       acceptedTerms,
-    });
+    };
 
-    setStep(4);
+    setLoading(true);
+    try {
+      const response = await axios.post<RegisterApiSuccess>(`${API_BASE_URL}/api/v2/auth/register`, {
+        name: `${nome.trim()} ${sobrenome.trim()}`.trim(),
+        phone: telefone.trim(),
+        email: email.trim(),
+        password,
+        origin,
+        device: 10,
+      }, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status !== 201) {
+        showAlert('Erro no cadastro', 'Nao foi possivel criar sua conta. Tente novamente.');
+        return;
+      }
+
+      const successData = response.data as RegisterApiSuccess | null;
+      if (!successData?.public_id || !successData?.message) {
+        showAlert('Erro no cadastro', 'Resposta de cadastro invalida. Tente novamente.');
+        return;
+      }
+
+      onRegisterPress?.(payload);
+      setStep(4);
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const status = error.response?.status;
+        const errorData = (error.response?.data ?? {}) as RegisterApiError;
+        let message = errorData.message ?? errorData.detail ?? 'Nao foi possivel criar sua conta. Tente novamente.';
+
+        if (status === 409) {
+          if (errorData.detail === 'email already registered') {
+            message = 'Este e-mail ja esta cadastrado.';
+          } else if (errorData.detail === 'phone already registered') {
+            message = 'Este telefone ja esta cadastrado.';
+          }
+        }
+
+        showAlert('Erro no cadastro', message);
+        return;
+      }
+
+      showAlert('Erro de conexao', 'Nao foi possivel conectar com o servidor. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -300,8 +380,8 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
             <View style={styles.legalRow}>
               <AppCheckbox checked={acceptedTerms} onToggle={() => setAcceptedTerms((state) => !state)} label="" />
               <AppLegalConsent
-                onTermsPress={() => Linking.openURL('https://imogo.com.br/01')}
-                onPrivacyPress={() => Linking.openURL('https://imogo.com.br/02')}
+                onTermsPress={() => Linking.openURL('https://sites.google.com/view/imogoapp/termos')}
+                onPrivacyPress={() => Linking.openURL('https://sites.google.com/view/imogoapp/privacy-policy')}
               />
             </View>
           </View>
@@ -340,12 +420,12 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
 
           <View style={styles.buttonArea}>
             <AppButton
-              label="Concluir"
+              label={loading ? 'Criando conta...' : 'Concluir'}
               onPress={finishRegister}
-              disabled={!isStep3Valid}
+              disabled={loading || !isStep3Valid}
               radius={buttonRadius}
-              labelStyle={{ fontSize: buttonLabelSize, color: isStep3Valid ? enabledButtonLabelColor : disabledButtonLabelColor }}
-              containerStyle={[styles.primaryButton, !isStep3Valid ? styles.buttonDisabled : undefined]}
+              labelStyle={{ fontSize: buttonLabelSize, color: loading || isStep3Valid ? enabledButtonLabelColor : disabledButtonLabelColor }}
+              containerStyle={[styles.primaryButton, loading || !isStep3Valid ? styles.buttonDisabled : undefined]}
             />
           </View>
         </View>
