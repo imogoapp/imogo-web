@@ -1,5 +1,6 @@
 import { router } from 'expo-router';
 import { Image } from 'expo-image';
+import axios, { isAxiosError } from 'axios';
 import { useMemo, useState } from 'react';
 import { Alert, ImageBackground, Linking, Text, View } from 'react-native';
 
@@ -20,7 +21,7 @@ type RegisterPayload = {
   telefone: string;
   email: string;
   password: string;
-  origem: string;
+  origem: number;
   acceptedTerms: boolean;
 };
 
@@ -30,6 +31,27 @@ type RegisterDesktopProps = {
 };
 
 const options = ['Facebook', 'Instagram', 'Google', 'Loja de aplicativos', 'Indicacao', 'Outro'] as const;
+// 'Facebook' = 10 , 'Instagram' = 11, 'Google' = 12, 'Loja de aplicativos' = 13, 'Indicacao' = 14, 'Outro' = 15
+const originMap: Record<(typeof options)[number], number> = {
+  Facebook: 10,
+  Instagram: 11,
+  Google: 12,
+  'Loja de aplicativos': 13,
+  Indicacao: 14,
+  Outro: 15,
+};
+
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_IMOGO ?? process.env.API_IMOGO;
+
+type RegisterApiSuccess = {
+  public_id: string;
+  message: string;
+};
+
+type RegisterApiError = {
+  message?: string;
+  detail?: string;
+};
 
 function validateEmail(emailInput: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput);
@@ -118,9 +140,16 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
     setStep('query');
   };
 
-  const handleCreateAccount = () => {
+  const handleCreateAccount = async () => {
     if (!selectedOption) {
       showAlert('Atencao', 'Selecione uma opcao de como conheceu a imoGo.');
+      return;
+    }
+
+    const origin = originMap[selectedOption as (typeof options)[number]];
+
+    if (!origin) {
+      showAlert('Atencao', 'Opcao de origem invalida.');
       return;
     }
 
@@ -129,17 +158,62 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
       telefone,
       email,
       password,
-      origem: selectedOption,
+      origem: origin,
       acceptedTerms,
     };
 
-    if (onRegisterPress) {
-      setLoading(true);
-      onRegisterPress(payload);
+    setLoading(true);
+
+    try {
+      const response = await axios.post<RegisterApiSuccess>(`${API_BASE_URL}/api/v2/auth/register`, {
+        name: nome.trim(),
+        phone: telefone.trim(),
+        email: email.trim(),
+        password,
+        origin,
+        device: 20,
+      }, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status !== 201) {
+        showAlert('Erro no cadastro', 'Nao foi possivel criar sua conta. Tente novamente.');
+        return;
+      }
+
+      const successData = response.data as RegisterApiSuccess | null;
+      if (!successData?.public_id || !successData?.message) {
+        showAlert('Erro no cadastro', 'Resposta de cadastro invalida. Tente novamente.');
+        return;
+      }
+
+      onRegisterPress?.(payload);
+      setStep('success');
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const status = error.response?.status;
+        const errorData = (error.response?.data ?? {}) as RegisterApiError;
+        let message = errorData.message ?? errorData.detail ?? 'Nao foi possivel criar sua conta. Tente novamente.';
+
+        if (status === 409) {
+          if (errorData.detail === 'email already registered') {
+            message = 'Este e-mail ja esta cadastrado.';
+          } else if (errorData.detail === 'phone already registered') {
+            message = 'Este telefone ja esta cadastrado.';
+          }
+        }
+
+        showAlert('Erro no cadastro', message);
+        return;
+      }
+
+      showAlert('Erro de conexao', 'Nao foi possivel conectar com o servidor. Tente novamente.');
+    } finally {
       setLoading(false);
     }
-
-    setStep('success');
   };
 
   const handleGoogle = onGooglePress ?? (() => router.push('/modal'));
