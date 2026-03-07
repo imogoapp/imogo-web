@@ -1,7 +1,9 @@
 import { router } from 'expo-router';
+import { isAxiosError } from 'axios';
 import { useMemo, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
+  Alert,
   ImageBackground,
   Platform,
   Pressable,
@@ -17,6 +19,7 @@ import { AppCheckbox } from '@/components/ui/app-checkbox';
 import { AppInput } from '@/components/ui/app-input';
 import { AppLogo } from '@/components/ui/app-logo';
 import { AppTitle } from '@/components/ui/app-title';
+import { loginWithEmail, saveSession } from '@/services/auth';
 
 import { createLoginMobileStyles } from './styles/login-mobile-styles';
 
@@ -55,11 +58,14 @@ export default function LoginMobile({
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [remember, setRemember] = useState(true);
+  const [loading, setLoading] = useState(false);
   const canLogin = useMemo(() => isValidEmail(email) && !!password.trim(), [email, password]);
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
+    setPasswordError('');
 
     if (!value.trim()) {
       setEmailError('');
@@ -69,22 +75,43 @@ export default function LoginMobile({
     setEmailError(isValidEmail(value) ? '' : 'Por favor, insira um email valido.');
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!isValidEmail(email)) {
       setEmailError('Por favor, insira um email valido.');
       return;
     }
 
     if (!password.trim()) {
+      setPasswordError('Informe sua senha.');
       return;
     }
 
-    if (onLoginPress) {
-      onLoginPress({ email, password, remember });
-      return;
-    }
+    setLoading(true);
+    setPasswordError('');
 
-    router.push('/modal');
+    try {
+      const session = await loginWithEmail(email.trim(), password);
+      saveSession(session, remember);
+      onLoginPress?.({ email, password, remember });
+      router.replace('/home');
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const errorData = (error.response?.data ?? {}) as { message?: string; detail?: string };
+        const status = error.response?.status ?? error.status;
+        const message =
+          status === 401
+            ? 'Email ou senha invalidos.'
+            : errorData.message ?? errorData.detail ?? 'Nao foi possivel fazer login.';
+        setPasswordError(message);
+        Alert.alert('Erro no login', message);
+      } else {
+        setPasswordError('Nao foi possivel conectar com o servidor.');
+        Alert.alert('Erro no login', 'Nao foi possivel conectar com o servidor.');
+      }
+      return;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleForgotPassword = onForgotPasswordPress ?? (() => router.push('/reset-password'));
@@ -131,10 +158,14 @@ export default function LoginMobile({
                 <AppInput
                   label="Senha"
                   value={password}
-                  onChangeText={setPassword}
+                  onChangeText={(value) => {
+                    setPassword(value);
+                    setPasswordError('');
+                  }}
                   placeholder="Senha"
                   secureToggle
                   leadingIconName="lock-closed-outline"
+                  errorMessage={passwordError}
                   labelSize={labelSize}
                   inputSize={inputSize}
                   minHeight={height * 0.055}
@@ -153,13 +184,13 @@ export default function LoginMobile({
                 </View>
 
                 <AppButton
-                  label="Entrar"
+                  label={loading ? 'Entrando...' : 'Entrar'}
                   onPress={handleLogin}
-                  disabled={!canLogin}
+                  disabled={loading || !canLogin}
                   radius={30}
                   size="sm"
                   labelStyle={{ fontSize: buttonTextSize, color: canLogin ? '#F5F5F5' : '#C4C4C4' }}
-                  containerStyle={[styles.primaryButton, !canLogin ? styles.buttonDisabled : undefined]}
+                  containerStyle={[styles.primaryButton, loading || !canLogin ? styles.buttonDisabled : undefined]}
                 />
                 <AppButton
                   label="Continuar com Google"
