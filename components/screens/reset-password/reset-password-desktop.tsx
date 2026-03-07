@@ -1,5 +1,6 @@
 import { router } from 'expo-router';
 import { Image } from 'expo-image';
+import { isAxiosError } from 'axios';
 import { useMemo, useState } from 'react';
 import { Alert, ImageBackground, Pressable, Text, View } from 'react-native';
 
@@ -7,6 +8,7 @@ import { AppButton } from '@/components/ui/app-button';
 import { AppInput } from '@/components/ui/app-input';
 import { AppLogo } from '@/components/ui/app-logo';
 import { AppTitle } from '@/components/ui/app-title';
+import { forgotPassword } from '@/services/auth';
 
 import styles from './styles/reset-password-web-styles';
 
@@ -44,9 +46,31 @@ export default function ResetPasswordDesktop({ onSubmitPress }: ResetPasswordDes
 
     try {
       setSending(true);
-      await onSubmitPress?.({ email });
+      setEmailError('');
+      const normalizedEmail = email.trim();
+
+      if (onSubmitPress) {
+        await onSubmitPress({ email: normalizedEmail });
+      } else {
+        await forgotPassword(normalizedEmail);
+      }
+
       setSent(true);
-    } catch {
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const status = error.response?.status ?? error.status;
+        const data = (error.response?.data ?? {}) as { message?: string; detail?: string };
+
+        if (status === 404) {
+          setEmailError('Usuario nao cadastrado.');
+          return;
+        }
+
+        const message = data.message ?? data.detail ?? 'Nao foi possivel enviar o email de recuperacao.';
+        Alert.alert('Erro', message);
+        return;
+      }
+
       Alert.alert('Erro', 'Nao foi possivel enviar o email de recuperacao.');
     } finally {
       setSending(false);

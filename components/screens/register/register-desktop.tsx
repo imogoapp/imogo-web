@@ -41,7 +41,19 @@ const originMap: Record<(typeof options)[number], number> = {
   Outro: 15,
 };
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_IMOGO ?? process.env.API_IMOGO;
+const API_BASE_URL = (() => {
+  const candidates = [process.env.EXPO_PUBLIC_API_IMOGO, process.env.API_IMOGO, 'https://api-homologacao.vercel.app'];
+  const valid = candidates.find((value) => {
+    if (!value) {
+      return false;
+    }
+
+    const normalized = value.trim().toLowerCase();
+    return normalized !== 'undefined' && normalized !== 'null';
+  });
+
+  return (valid ?? 'https://api-homologacao.vercel.app').replace(/\/+$/, '');
+})();
 
 type RegisterApiSuccess = {
   public_id: string;
