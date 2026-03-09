@@ -19,6 +19,7 @@ import { AppCheckbox } from '@/components/ui/app-checkbox';
 import { AppInput } from '@/components/ui/app-input';
 import { AppLogo } from '@/components/ui/app-logo';
 import { AppTitle } from '@/components/ui/app-title';
+import { useGoogleSocialLogin } from '@/hooks/use-google-social-login';
 import { loginWithEmail, saveSession } from '@/services/auth';
 
 import { createLoginMobileStyles } from './styles/login-mobile-styles';
@@ -61,6 +62,7 @@ export default function LoginMobile({
   const [passwordError, setPasswordError] = useState('');
   const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
+  const { loading: googleLoading, login: loginWithGoogle } = useGoogleSocialLogin();
   const canLogin = useMemo(() => isValidEmail(email) && !!password.trim(), [email, password]);
 
   const handleEmailChange = (value: string) => {
@@ -115,7 +117,18 @@ export default function LoginMobile({
   };
 
   const handleForgotPassword = onForgotPasswordPress ?? (() => router.push('/reset-password'));
-  const handleGoogle = onGooglePress ?? (() => router.push('/modal'));
+  const handleGoogle = async () => {
+    const result = await loginWithGoogle(remember, 10);
+    if (!result.ok) {
+      if (!result.cancelled) {
+        Alert.alert('Erro no login social', result.message);
+      }
+      return;
+    }
+
+    onGooglePress?.();
+    router.replace('/home');
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -193,9 +206,10 @@ export default function LoginMobile({
                   containerStyle={[styles.primaryButton, loading || !canLogin ? styles.buttonDisabled : undefined]}
                 />
                 <AppButton
-                  label="Continuar com Google"
+                  label={googleLoading ? 'Conectando com Google...' : 'Continuar com Google'}
                   variant="secondary"
                   onPress={handleGoogle}
+                  disabled={googleLoading || loading}
                   leftIconName="logo-google"
                   radius={30}
                   size="sm"

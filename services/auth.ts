@@ -29,6 +29,18 @@ export type AuthSession = {
   remember: boolean;
 };
 
+export type SocialProvider = 'google';
+
+export type SocialLoginPayload = {
+  provider: SocialProvider;
+  type: 'oauth';
+  provider_id: string;
+  email: string;
+  device: 10 | 20;
+  photo_url: string;
+  name: string;
+};
+
 type AuthSessionInput = {
   token: string;
   key: string;
@@ -135,6 +147,17 @@ export async function loginWithEmail(email: string, password: string) {
       },
     }
   );
+
+  return response.data;
+}
+
+export async function loginWithSocial(payload: SocialLoginPayload) {
+  const response = await axios.post<{ token: string; key: string }>(`${API_BASE_URL}/api/v2/auth/social`, payload, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
 
   return response.data;
 }
