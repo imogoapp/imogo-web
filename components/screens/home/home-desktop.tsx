@@ -1,90 +1,32 @@
-import { Image } from 'expo-image';
-import { Link } from 'expo-router';
-import { Platform, StyleSheet } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { AppButton } from '@/components/ui/app-button';
+import { AppCard } from '@/components/ui/app-card';
+import { AppLogo } from '@/components/ui/app-logo';
+import { AuthUser } from '@/services/auth';
+import styles from './styles/home-web-styles';
 
 type HomeDesktopProps = {
-  width: number;
-  isPwaInstalled: boolean;
+  user: AuthUser | null;
+  onLogout: () => void;
 };
 
-export function HomeDesktop({ width, isPwaInstalled }: HomeDesktopProps) {
+export default function HomeDesktop({ user, onLogout }: HomeDesktopProps) {
+  const userName = typeof user?.name === 'string' ? user.name : 'Usuario';
+  const userEmail = typeof user?.email === 'string' ? user.email : 'Email indisponivel';
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#8BC6EC', dark: '#243B53' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome Desktop</ThemedText>
-        <HelloWave />
-      </ThemedView>
-
-      <ThemedView style={styles.desktopGrid}>
-        <ThemedView style={styles.card}>
-          <ThemedText type="subtitle">Screen type (PWA)</ThemedText>
-          <ThemedText>{`Detected: desktop (${Math.round(width)}px width)`}</ThemedText>
-          <ThemedText>{`PWA installed: ${isPwaInstalled ? 'yes' : 'no'}`}</ThemedText>
-        </ThemedView>
-
-        <ThemedView style={styles.card}>
-          <ThemedText type="subtitle">Desktop Experience</ThemedText>
-          <ThemedText>
-            Esta versao usa mais area horizontal e secoes amplas para destacar informacoes.
-          </ThemedText>
-        </ThemedView>
-      </ThemedView>
-
-      <ThemedView style={styles.desktopGrid}>
-        <ThemedView style={styles.card}>
-          <ThemedText type="subtitle">Developer Tools</ThemedText>
-          <ThemedText>
-            Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>. Press{' '}
-            <ThemedText type="defaultSemiBold">
-              {Platform.select({ ios: 'cmd + d', android: 'cmd + m', web: 'F12' })}
-            </ThemedText>{' '}
-            to open developer tools.
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedView style={styles.card}>
-          <ThemedText type="subtitle">Navigation</ThemedText>
-          <Link href="/modal">
-            <ThemedText type="link">Open modal</ThemedText>
-          </Link>
-        </ThemedView>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.page}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <AppCard style={styles.card}>
+          <AppLogo width={180} height={64} marginBottom={16} />
+          <Text style={styles.title}>Home</Text>
+          <Text style={styles.subtitle}>Bem-vindo, {userName}</Text>
+          <Text style={styles.email}>{userEmail}</Text>
+          <Text style={styles.message}>Use a versao mobile para acessar os modulos da plataforma.</Text>
+          <AppButton label="Sair" variant="secondary" onPress={onLogout} />
+        </AppCard>
+      </ScrollView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  desktopGrid: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-  card: {
-    flex: 1,
-    gap: 8,
-    marginBottom: 12,
-  },
-  reactLogo: {
-    height: 220,
-    width: 360,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
