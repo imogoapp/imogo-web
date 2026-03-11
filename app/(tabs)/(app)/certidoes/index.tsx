@@ -1,9 +1,8 @@
 import Head from "expo-router/head";
 
-import PrecificadorDesktop from "@/components/screens/precificador/desktop";
-import PrecificadorMobile from "@/components/screens/precificador/mobile";
-
-import { precificadorContent } from "@/components/screens/precificador/content";
+import CertidoesDesktop from "@/components/screens/certidoes/desktop";
+import CertidoesMobile from "@/components/screens/certidoes/mobile";
+import { CertidoesContent } from "@/components/screens/certidoes/content";
 import { useScreenType } from "@/hooks/use-screen-type";
 import {
   AuthUser,
@@ -29,7 +28,7 @@ function decodeUserFromSession(): AuthUser | null {
   return payload as AuthUser;
 }
 
-export default function PrecificadorPreviewScreen() {
+export default function CertidoesPreviewScreen() {
   const { isMobile } = useScreenType();
 
   const handleLogout = useCallback(() => {
@@ -42,13 +41,13 @@ export default function PrecificadorPreviewScreen() {
   return (
     <>
       <Head>
-        <title>{`${precificadorContent.title} | imoGo`}</title>
-        <meta name="description" content={precificadorContent.previewText} />
+        <title>{`${CertidoesContent.title} | imoGo`}</title>
+        <meta name="description" content={CertidoesContent.previewText} />
       </Head>
       {isMobile ? (
-        <PrecificadorMobile />
+        <CertidoesMobile />
       ) : (
-        <PrecificadorDesktop user={user} onLogout={handleLogout} />
+        <CertidoesDesktop user={user} onLogout={handleLogout} />
       )}
     </>
   );

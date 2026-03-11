@@ -70,8 +70,8 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       description:
         "Solicite uma emissão de certidões da imoGo, você recebe, em até um dia útil, todas as certidões relativas a situação jurídica do proprietário e do imóvel.",
       accentColor: "#f5f5f5",
-      route: "/modal",
-      disabled: true,
+      route: "/certidoes",
+      disabled: false,
 
     },
     {
