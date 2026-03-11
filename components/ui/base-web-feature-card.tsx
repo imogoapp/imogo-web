@@ -25,7 +25,7 @@ export function BaseWebFeatureCard({ title, description, icon, accentColor, disa
         <View style={[styles.statusPill, disabled ? styles.statusPillDisabled : { backgroundColor: `${accentColor}18` }]}>
           <Ionicons name={disabled ? 'lock-closed-outline' : 'checkmark-circle-outline'} size={14} color={disabled ? '#8F8A95' : accentColor} />
           <Text style={[styles.statusText, disabled ? styles.statusTextDisabled : { color: accentColor }]}>
-            {disabled ? 'Desativado' : 'Ativado'}
+            {disabled ? 'Desativado' : ''}
           </Text>
         </View>
       </View>
