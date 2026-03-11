@@ -36,8 +36,16 @@ type LoginMobileProps = {
   onGooglePress?: () => void;
 };
 
+const MIN_PASSWORD_LENGTH = 6;
+
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function getPasswordLengthError(passwordValue: string) {
+  return passwordValue.length > 0 && passwordValue.length < MIN_PASSWORD_LENGTH
+    ? `A senha deve ter no minimo ${MIN_PASSWORD_LENGTH} caracteres.`
+    : '';
 }
 
 export default function LoginMobile({
@@ -63,7 +71,11 @@ export default function LoginMobile({
   const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
   const { loading: googleLoading, login: loginWithGoogle } = useGoogleSocialLogin();
-  const canLogin = useMemo(() => isValidEmail(email) && !!password.trim(), [email, password]);
+  const passwordLengthError = getPasswordLengthError(password);
+  const canLogin = useMemo(
+    () => isValidEmail(email) && password.trim().length >= MIN_PASSWORD_LENGTH,
+    [email, password]
+  );
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
@@ -85,6 +97,11 @@ export default function LoginMobile({
 
     if (!password.trim()) {
       setPasswordError('Informe sua senha.');
+      return;
+    }
+
+    if (password.trim().length < MIN_PASSWORD_LENGTH) {
+      setPasswordError(`A senha deve ter no minimo ${MIN_PASSWORD_LENGTH} caracteres.`);
       return;
     }
 
@@ -178,7 +195,7 @@ export default function LoginMobile({
                   placeholder="Senha"
                   secureToggle
                   leadingIconName="lock-closed-outline"
-                  errorMessage={passwordError}
+                  errorMessage={passwordError || passwordLengthError}
                   labelSize={labelSize}
                   inputSize={inputSize}
                   minHeight={height * 0.055}

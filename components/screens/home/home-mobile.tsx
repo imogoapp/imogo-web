@@ -1,12 +1,29 @@
-import { Image } from 'expo-image';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView, StatusBar, View, useWindowDimensions } from 'react-native';
+import { Image } from "expo-image";
+import { router, type Href } from "expo-router";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  View,
+  useWindowDimensions,
+} from "react-native";
 
-import { HomeSideMenu } from '@/components/screens/home/components/home-side-menu';
-import { HomeToolItem, HomeToolsGrid } from '@/components/screens/home/components/home-tools-grid';
-import { AuthUser, clearSession, decodeJwtPayload, getSession } from '@/services/auth';
-import { createHomeMobileStyles } from './styles/home-mobile-styles';
-import SupportModal from '@/components/ui/whatsapp-footer';
+import { HomeSideMenu } from "@/components/screens/home/components/home-side-menu";
+import {
+  HomeToolItem,
+  HomeToolsGrid,
+} from "@/components/screens/home/components/home-tools-grid";
+import { createHomeToolItems } from "@/components/screens/home/home-tools";
+import SupportModal from "@/components/ui/whatsapp-footer";
+import {
+  AuthUser,
+  clearSession,
+  decodeJwtPayload,
+  getSession,
+} from "@/services/auth";
+import { createHomeMobileStyles } from "./styles/home-mobile-styles";
 
 function decodeUserFromSession(): AuthUser | null {
   const session = getSession();
@@ -28,7 +45,10 @@ type HomeMobileProps = {
 
 export default function HomeMobile({ onLogout }: HomeMobileProps) {
   const { width, height } = useWindowDimensions();
-  const styles = useMemo(() => createHomeMobileStyles({ width, height }), [height, width]);
+  const styles = useMemo(
+    () => createHomeMobileStyles({ width, height }),
+    [height, width],
+  );
   const [menuVisible, setMenuVisible] = useState(false);
   const [user, setUser] = useState<AuthUser | null>(null);
 
@@ -52,62 +72,17 @@ export default function HomeMobile({ onLogout }: HomeMobileProps) {
     onLogout();
   }, [onLogout]);
 
-  const userName = typeof user?.name === 'string' ? user.name : 'Usuario';
-  const userEmail = typeof user?.email === 'string' ? user.email : '';
-  const userPhoto = typeof user?.photo === 'string' ? user.photo : '';
+  const userName = typeof user?.name === "string" ? user.name : "Usuario";
+  const userEmail = typeof user?.email === "string" ? user.email : "";
+  const userPhoto = typeof user?.photo === "string" ? user.photo : "";
+
+  const handleNavigate = useCallback((path: Href) => {
+    router.push(path);
+  }, []);
 
   const tools = useMemo<HomeToolItem[]>(
-    () => [
-      {
-        id: 'precificador',
-        icon: require('@/assets/icons/home.png'),
-        label: 'PRECIFICADOR',
-      },
-      {
-        id: 'credito',
-        icon: require('@/assets/icons/avaliador-roxo.png'),
-        label: 'SIMULADOR DE CREDITO IMOBILIARIO',
-      },
-      {
-        id: 'planejador',
-        icon: require('@/assets/icons/planejador.png'),
-        label: 'PLANEJADOR DE REDES SOCIAIS',
-      },
-      {
-        id: 'certidoes',
-        icon: require('@/assets/icons/query.png'),
-        label: 'EMISSAO DE CERTIDOES',
-      },
-      {
-        id: 'trilha',
-        icon: require('@/assets/icons/play.png'),
-        label: 'TRILHA DO CONHECIMENTO',
-            disabled: true,
-      },
-      {
-        id: 'staging',
-        icon: require('@/assets/icons/foto_camera.png'),
-        label: 'HOME STAGING',
-      },
-      {
-        id: 'contratos',
-        icon: require('@/assets/icons/files.png'),
-        label: 'GERADOR DE CONTRATOS',
-      },
-      {
-        id: 'boletos',
-        icon: require('@/assets/icons/money.png'),
-        label: 'PARCELAMENTO DE BOLETOS',
-        disabled: true,
-      },
-      {
-        id: 'anuncios',
-        icon: require('@/assets/icons/sacola.png'),
-        label: 'GERADOR DE ANUNCIOS',
-        disabled: true,
-      },
-    ],
-    []
+    () => createHomeToolItems({ onNavigate: handleNavigate }),
+    [handleNavigate],
   );
 
   return (
@@ -116,17 +91,28 @@ export default function HomeMobile({ onLogout }: HomeMobileProps) {
 
       <View style={styles.headerContainer}>
         <Pressable onPress={handleMenuOpen} style={styles.menuButton}>
-          <Image source={require('@/assets/icons/menu.png')} style={styles.menuIcon} contentFit="contain" />
+          <Image
+            source={require("@/assets/icons/menu.png")}
+            style={styles.menuIcon}
+            contentFit="contain"
+          />
         </Pressable>
         <View style={styles.logoWrapper}>
-          <Image source={require('@/assets/img/logo.png')} style={styles.logo} contentFit="contain" />
+          <Image
+            source={require("@/assets/img/logo.png")}
+            style={styles.logo}
+            contentFit="contain"
+          />
         </View>
         <View style={styles.headerRightSpacer} />
       </View>
 
       <View style={styles.headerDivider} />
 
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
         <HomeToolsGrid items={tools} />
       </ScrollView>
 

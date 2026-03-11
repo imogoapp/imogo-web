@@ -6,47 +6,53 @@ type HomeToolsGridStylesParams = {
 
 export function createHomeToolsGridStyles({ width }: HomeToolsGridStylesParams) {
   const responsiveFontSize = Math.max(12, Math.min(width * 0.025, 15));
+  const itemWidth = width >= 1280 ? '23%' : width >= 960 ? '31%' : '48%';
 
   return StyleSheet.create({
     gridContainer: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      justifyContent: 'space-between',
+      justifyContent: 'flex-start',
       marginTop: 20,
       gap: 12,
     },
     gridItem: {
-      width: '48%',
+      width: itemWidth,
       alignItems: 'center',
       marginVertical: 8,
-      padding: 12,
+      paddingHorizontal: 16,
+      paddingVertical: 20,
+      minHeight: 168,
+      justifyContent: 'center',
       backgroundColor: '#F5F5F5',
       borderColor: '#D3D3D3',
-      borderRadius: 10,
+      borderWidth: 1,
+      borderRadius: 18,
       elevation: 3,
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
+      shadowOpacity: 0.08,
+      shadowRadius: 8,
     },
     pressedItem: {
-      opacity: 0.8,
+      opacity: 0.9,
+      transform: [{ scale: 0.99 }],
     },
     disabledItem: {
       opacity: 0.5,
-      backgroundColor: '#E8E8E8',
+      backgroundColor: '#F5F5F5',
     },
     icon: {
-      width: 40,
-      height: 40,
-      marginBottom: 4,
+      width: 48,
+      height: 48,
+      marginBottom: 8,
     },
     label: {
       fontSize: responsiveFontSize,
       maxWidth: '90%',
-      lineHeight: 16,
+      lineHeight: 18,
       marginTop: 8,
-      fontWeight: 'bold',
+      fontFamily: 'Nunito_700Bold',
       color: '#333',
       textAlign: 'center',
     },

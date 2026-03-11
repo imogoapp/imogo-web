@@ -31,7 +31,7 @@ type RegisterDesktopProps = {
 };
 
 const options = ['Facebook', 'Instagram', 'Google', 'Loja de aplicativos', 'Indicacao', 'Outro'] as const;
-// 'Facebook' = 10 , 'Instagram' = 11, 'Google' = 12, 'Loja de aplicativos' = 13, 'Indicacao' = 14, 'Outro' = 15
+const MIN_PASSWORD_LENGTH = 6;
 const originMap: Record<(typeof options)[number], number> = {
   Facebook: 10,
   Instagram: 11,
@@ -60,9 +60,19 @@ type RegisterApiSuccess = {
   message: string;
 };
 
+type RegisterApiFieldError = {
+  type?: string;
+  loc?: (string | number)[];
+  msg?: string;
+  input?: string;
+  ctx?: {
+    min_length?: number;
+  };
+};
+
 type RegisterApiError = {
   message?: string;
-  detail?: string;
+  detail?: string | RegisterApiFieldError[];
 };
 
 function validateEmail(emailInput: string) {
@@ -87,6 +97,34 @@ function formatPhone(value: string) {
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
 }
 
+function getPasswordLengthError(passwordValue: string) {
+  return passwordValue.length > 0 && passwordValue.length < MIN_PASSWORD_LENGTH
+    ? `A senha deve ter no minimo ${MIN_PASSWORD_LENGTH} caracteres.`
+    : '';
+}
+
+function getRegisterApiErrorMessage(errorData: RegisterApiError) {
+  if (Array.isArray(errorData.detail)) {
+    const passwordError = errorData.detail.find((item) => item.loc?.includes('password'));
+
+    if (passwordError?.type === 'string_too_short') {
+      const minLength = passwordError.ctx?.min_length ?? MIN_PASSWORD_LENGTH;
+      return `A senha deve ter no minimo ${minLength} caracteres.`;
+    }
+
+    const firstMessage = errorData.detail.find((item) => typeof item.msg === 'string')?.msg;
+    if (firstMessage) {
+      return firstMessage;
+    }
+  }
+
+  if (typeof errorData.detail === 'string') {
+    return errorData.detail;
+  }
+
+  return errorData.message ?? 'Nao foi possivel criar sua conta. Tente novamente.';
+}
+
 export default function RegisterDesktop({ onRegisterPress, onGooglePress }: RegisterDesktopProps) {
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
@@ -99,6 +137,7 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
   const [step, setStep] = useState<'form' | 'query' | 'success'>('form');
   const [loading, setLoading] = useState(false);
 
+  const passwordError = getPasswordLengthError(password);
   const canContinueToQuery = useMemo(() => {
     return (
       !!nome.trim() &&
@@ -106,8 +145,10 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
       !!email.trim() &&
       !!password.trim() &&
       !!confirmPassword.trim() &&
+      password.length >= MIN_PASSWORD_LENGTH &&
       acceptedTerms &&
-      !emailError
+      !emailError &&
+      password === confirmPassword
     );
   }, [nome, telefone, email, password, confirmPassword, acceptedTerms, emailError]);
   const confirmPasswordError =
@@ -136,6 +177,11 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
 
     if (emailError || !validateEmail(email)) {
       showAlert('Atencao', 'Preencha um e-mail valido.');
+      return;
+    }
+
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      showAlert('Atencao', `A senha deve ter no minimo ${MIN_PASSWORD_LENGTH} caracteres.`);
       return;
     }
 
@@ -208,7 +254,7 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
       if (isAxiosError(error)) {
         const status = error.response?.status;
         const errorData = (error.response?.data ?? {}) as RegisterApiError;
-        let message = errorData.message ?? errorData.detail ?? 'Nao foi possivel criar sua conta. Tente novamente.';
+        let message = getRegisterApiErrorMessage(errorData);
 
         if (status === 409) {
           if (errorData.detail === 'email already registered') {
@@ -278,6 +324,7 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
                 onChangeText={setPassword}
                 leadingIconName="lock-closed-outline"
                 secureToggle
+                errorMessage={passwordError}
               />
 
               <AppInput
@@ -360,3 +407,4 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
     </ImageBackground>
   );
 }
+
