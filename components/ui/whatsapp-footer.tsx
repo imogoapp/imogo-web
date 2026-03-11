@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Modal, TouchableOpacity, Text, Linking, StyleSheet, Image } from "react-native";
+import React from "react";
+import { TouchableOpacity, Linking, StyleSheet, Image } from "react-native";
 
 const SupportModal = ({ phoneNumber = "5561981304920" }) => {  
 
