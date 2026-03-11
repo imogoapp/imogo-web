@@ -57,9 +57,9 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       navLabel: "CRÉDITO",
       description:
         "Faça simulações rápidas para facilitar a comparação de taxas e prazos.",
-      accentColor: "red",
-      route: "/modal",
-      disabled: true,
+      accentColor: "#f5f5f5",
+      route: "/simulador",
+      disabled: false,
     },
     {
       id: "certidoes",
