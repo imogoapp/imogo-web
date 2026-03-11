@@ -46,8 +46,8 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       description:
         "Gere uma avaliação detalhada do valor do seu imóvel em menos de 1 minuto.",
       accentColor: "#f5f5f5",
-      route: "/modal",
-      disabled: true,
+      route: "/precificador",
+      disabled: false,
     },
     {
       id: "credito",
