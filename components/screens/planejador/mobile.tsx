@@ -1,7 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
-import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Linking, Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 
 import { PlanejadorContent} from "./content";
 import { createPlanejadorPreviewMobileStyles } from "./styles/preview-mobile-styles";
@@ -38,32 +38,47 @@ export default function PlanejadorMobile() {
           <View style={styles.row}>
             <View style={styles.optionButtonsContainer}>
               <Pressable
-                onPress={() => router.push("/modal")}
+                onPress={() => {Linking.openURL('https://cdn.imogo.com.br/manuais/dando_os_primeiros_passos.pdf');}}
                 style={styles.optionButton}
               >
                 <Image
-                  source={require("@/assets/icons/plus.png")}
+                  source={require("@/assets/icons/download.png")}
                   style={styles.optionIcon}
                   contentFit="contain"
                 />
                 <View style={styles.optionTextContainer}>
                   <Text allowFontScaling={false} style={styles.optionTextTitle}>
-                    {PlanejadorContent.previewActionLabel}
+                    {PlanejadorContent.b1}
                   </Text>
                 </View>
               </Pressable>
               <Pressable
-                onPress={() => router.push("/modal")}
+                onPress={() => {Linking.openURL('https://juk.re/cronograma-postagem');}}
                 style={styles.optionButton}
               >
                 <Image
-                  source={require("@/assets/icons/files.png")}
+                  source={require("@/assets/icons/download.png")}
                   style={styles.optionIcon}
                   contentFit="contain"
                 />
                 <View style={styles.optionTextContainer}>
                   <Text allowFontScaling={false} style={styles.optionTextTitle}>
-                    {PlanejadorContent.previewActionLabelTwo}
+                    {PlanejadorContent.b2}
+                  </Text>
+                </View>
+              </Pressable>
+              <Pressable
+                onPress={() => {Linking.openURL('https://www.canva.com/design/DAGdnOpmQEM/LIuZfAtKG-HtZ_u2ean2LA/view');}}
+                style={styles.optionButton}
+              >
+                <Image
+                  source={require("@/assets/icons/download.png")}
+                  style={styles.optionIcon}
+                  contentFit="contain"
+                />
+                <View style={styles.optionTextContainer}>
+                  <Text allowFontScaling={false} style={styles.optionTextTitle}>
+                    {PlanejadorContent.b3}
                   </Text>
                 </View>
               </Pressable>
