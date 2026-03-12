@@ -39,7 +39,7 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
   return [
     {
       id: "precificador",
-      icon: require("@/assets/icons/home.png"),
+      icon: require("@/assets/icons/avaliador-roxo.png"),
       iconDisabled: require("@/assets/icons/home_cinza.png"),
       label: "PRECIFICADOR",
       navLabel: "PRECIFICADOR",
@@ -51,7 +51,7 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
     },
     {
       id: "credito",
-      icon: require("@/assets/icons/avaliador-roxo.png"),
+      icon: require("@/assets/icons/money.png"),
       iconDisabled: require("@/assets/icons/avaliador-cinza.png"),
       label: "SIMULADOR DE CRÉDITO IMOBILIÁRIO",
       navLabel: "CRÉDITO",
@@ -72,19 +72,18 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       accentColor: "#f5f5f5",
       route: "/certidoes",
       disabled: false,
-
     },
     {
       id: "staging",
-      icon: require("@/assets/icons/foto_camera.png"),
-      iconDisabled: require("@/assets/icons/foto_camera_cinza.png"),
+      icon: require("@/assets/icons/foto_ia.png"),
+      iconDisabled: require("@/assets/icons/foto_ia_cinza.png"),
       label: "HOME STAGING",
       navLabel: "STAGING",
       description:
         "Decore digitalmente os seus imóveis, criando imagens realistas e atraentes para vender mais.",
       accentColor: "#f5f5f5",
-      route: "/modal",
-      disabled: true,
+      route: "/staging",
+      disabled: false,
     },
     {
       id: "planejador",
@@ -95,10 +94,10 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       description:
         "Planeje e automatize publicações para se destacar nas redes sociais.",
       accentColor: "#f5f5f5",
-      route: "/modal",
-      disabled: true,
+      route: "/planejador",
+      disabled: false,
     },
-    
+
     {
       id: "trilha",
       icon: require("@/assets/icons/play.png"),
@@ -108,10 +107,10 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       description:
         "Fique por dentro das melhores práticas do mercado imobiliário! Aprimore suas habilidades e se diferencie.",
       accentColor: "#f5f5f5",
-      route: "/modal",
-      disabled: true,
+      route: "/trilha",
+      disabled: false,
     },
-    
+
     {
       id: "contratos",
       icon: require("@/assets/icons/files.png"),
@@ -121,13 +120,13 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       description:
         "Gere contratos com modelos validados em poucos minutos para serem assinados digitalmente.",
       accentColor: "#f5f5f5",
-      route: "/modal",
-      disabled: true,
+      route: "/contratos",
+      disabled: false,
     },
     {
       id: "boletos",
-      icon: require("@/assets/icons/money.png"),
-      iconDisabled: require("@/assets/icons/money_cinza.png"),
+      icon: require("@/assets/icons/barcode.png"),
+      iconDisabled: require("@/assets/icons/barcode_cinza.png"),
       label: "PARCELAMENTO DE BOLETOS",
       navLabel: "BOLETOS",
       description:
@@ -137,8 +136,8 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
     },
     {
       id: "anuncios",
-      icon: require("@/assets/icons/sacola.png"),
-      iconDisabled: require("@/assets/icons/sacola_cinza.png"),
+      icon: require("@/assets/icons/gerador.png"),
+      iconDisabled: require("@/assets/icons/gerador_cinza.png"),
       label: "GERADOR DE ANÚNCIOS",
       navLabel: "ANÚNCIOS",
       description:
