@@ -2,6 +2,6 @@ export const precificadorContent = {
   title: 'Precificador imobiliário',
   previewActionLabel: 'Gerar laudo avaliativo',
   previewText:
-    'lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti distinctio reprehenderit sint aspernatur, perferendis voluptatibus ullam culpa molestiae ex eveniet architecto magnam reiciendis molestias adipisci, quod impedit laudantium saepe repellendus!',
+    'Descubra o valor estimado do seu imóvel com base em dados reais do mercado: imóveis vendidos na região, valorização do m² e comparação com imóveis semelhantes.',
   
 } as const;

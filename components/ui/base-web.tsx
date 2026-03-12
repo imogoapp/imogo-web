@@ -1,6 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
 import type { Href } from "expo-router";
+import { router } from "expo-router";
 import { useState, type ReactNode } from "react";
 import {
   Pressable,
@@ -32,6 +33,7 @@ type BaseWebProps = {
   user: AuthUser | null;
   navigationItems: BaseWebNavigationItem[];
   onLogout: () => void;
+  showHomeButton?: boolean;
   children: ReactNode;
 };
 
@@ -39,6 +41,7 @@ export default function BaseWeb({
   user,
   navigationItems,
   onLogout,
+  showHomeButton = true,
   children,
 }: BaseWebProps) {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -138,7 +141,24 @@ export default function BaseWeb({
 
       <View style={styles.contentArea}>
         <View style={styles.header}>
-          <View />
+          <View style={styles.headerLeft}>
+            {showHomeButton ? (
+              <Pressable
+                onPress={() => router.replace("/home")}
+                accessibilityLabel="Voltar para home"
+                style={({ pressed }) => [
+                  styles.backButton,
+                  pressed ? styles.backButtonPressed : undefined,
+                ]}
+              >
+                <Image
+                  source={require("@/assets/icons/home.png")}
+                  style={styles.backIcon}
+                  contentFit="contain"
+                />
+              </Pressable>
+            ) : null}
+          </View>
           <Pressable
             onPress={() => setMenuVisible(true)}
             style={styles.userTrigger}
@@ -323,6 +343,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  backButton: {
+    width: 50,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+    borderRadius: 12,
+  },
+  backButtonPressed: {
+    backgroundColor: "#F2E6F6",
+  },
+  backIcon: {
+    width: 28,
+    height: 28,
   },
   userTrigger: {
     flexDirection: "row",
