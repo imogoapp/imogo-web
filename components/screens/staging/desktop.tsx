@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { Image } from "expo-image";
 import { useMemo } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Linking, Pressable, ScrollView, Text, View } from "react-native";
 
 import { createBaseWebNavigationItems } from "@/components/screens/home/home-tools";
 import BaseWeb from "@/components/ui/base-web";
@@ -45,10 +45,10 @@ export default function HomeStagingDesktop({
             <View style={styles.optionButtonsContainer}>
               <Pressable
                 style={styles.optionButton}
-                onPress={() => router.push("/modal")}
+                onPress={() => {Linking.openURL('https://juk.re/manual-celer');}}
               >
                 <Image
-                  source={require("@/assets/icons/files.png")}
+                  source={require("@/assets/icons/info.png")}
                   style={styles.optionIcon}
                   contentFit="contain"
                 />
@@ -57,17 +57,17 @@ export default function HomeStagingDesktop({
                     style={styles.optionTextTitle}
                     allowFontScaling={false}
                   >
-                    {HomeStagingContent.previewActionLabel}
+                    {HomeStagingContent.manual}
                   </Text>
                 </View>
               </Pressable>
               {/*  */}
               <Pressable
                 style={styles.optionButton}
-                onPress={() => router.push("/modal")}
+                onPress={() => {Linking.openURL('https://juk.re/ia-home');}}
               >
                 <Image
-                  source={require("@/assets/icons/avaliador-roxo.png")}
+                  source={require("@/assets/icons/foto_ia.png")}
                   style={styles.optionIcon}
                   contentFit="contain"
                 />
@@ -76,7 +76,25 @@ export default function HomeStagingDesktop({
                     style={styles.optionTextTitle}
                     allowFontScaling={false}
                   >
-                    {HomeStagingContent.previewActionLabelTwo}
+                    {HomeStagingContent.ia}
+                  </Text>
+                </View>
+              </Pressable>
+              <Pressable
+                style={styles.optionButton}
+                onPress={() => {Linking.openURL('https://juk.re/celer-botao');}}
+              >
+                <Image
+                  source={require("@/assets/icons/whatsapp.png")}
+                  style={styles.optionIcon}
+                  contentFit="contain"
+                />
+                <View style={styles.optionTextContainer}>
+                  <Text
+                    style={styles.optionTextTitle}
+                    allowFontScaling={false}
+                  >
+                    {HomeStagingContent.wa}
                   </Text>
                 </View>
               </Pressable>

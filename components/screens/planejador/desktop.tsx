@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { Image } from "expo-image";
 import { useMemo } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View, Linking } from "react-native";
 
 import { createBaseWebNavigationItems } from "@/components/screens/home/home-tools";
 import BaseWeb from "@/components/ui/base-web";
@@ -45,10 +45,10 @@ export default function PlanejadorDesktop({
             <View style={styles.optionButtonsContainer}>
               <Pressable
                 style={styles.optionButton}
-                onPress={() => router.push("/modal")}
+                onPress={() => {Linking.openURL('https://cdn.imogo.com.br/manuais/dando_os_primeiros_passos.pdf');}}
               >
                 <Image
-                  source={require("@/assets/icons/files.png")}
+                  source={require("@/assets/icons/download.png")}
                   style={styles.optionIcon}
                   contentFit="contain"
                 />
@@ -57,17 +57,17 @@ export default function PlanejadorDesktop({
                     style={styles.optionTextTitle}
                     allowFontScaling={false}
                   >
-                    {PlanejadorContent.previewActionLabel}
+                    {PlanejadorContent.b1}
                   </Text>
                 </View>
               </Pressable>
               {/*  */}
               <Pressable
                 style={styles.optionButton}
-                onPress={() => router.push("/modal")}
+                onPress={() => {Linking.openURL('https://juk.re/cronograma-postagem');}}
               >
                 <Image
-                  source={require("@/assets/icons/avaliador-roxo.png")}
+                  source={require("@/assets/icons/download.png")}
                   style={styles.optionIcon}
                   contentFit="contain"
                 />
@@ -76,7 +76,25 @@ export default function PlanejadorDesktop({
                     style={styles.optionTextTitle}
                     allowFontScaling={false}
                   >
-                    {PlanejadorContent.previewActionLabelTwo}
+                    {PlanejadorContent.b2}
+                  </Text>
+                </View>
+              </Pressable>
+              <Pressable
+                style={styles.optionButton}
+                onPress={() => {Linking.openURL('https://www.canva.com/design/DAGdnOpmQEM/LIuZfAtKG-HtZ_u2ean2LA/view');}}
+              >
+                <Image
+                  source={require("@/assets/icons/download.png")}
+                  style={styles.optionIcon}
+                  contentFit="contain"
+                />
+                <View style={styles.optionTextContainer}>
+                  <Text
+                    style={styles.optionTextTitle}
+                    allowFontScaling={false}
+                  >
+                    {PlanejadorContent.b3}
                   </Text>
                 </View>
               </Pressable>
