@@ -21,7 +21,7 @@ import { setPrecificadorResultado } from "@/app/(tabs)/(app)/precificador/state"
 import { AppTheme } from "@/constants/app-theme";
 import { AppButton } from "@/components/ui/app-button";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import dadosLocalizacaoLocal from "@/modelo/mobile/dil/dadosLocalizacao.json";
+import dadosLocalizacaoLocal from "@/components/screens/precificador/flow/dadosLocalizacao.json";
 
 import { createPrecificadorFlowMobileStyles } from "./styles/preview-mobile-styles";
 
