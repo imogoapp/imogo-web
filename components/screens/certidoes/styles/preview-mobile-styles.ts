@@ -1,6 +1,6 @@
-import { Platform, StyleSheet } from 'react-native';
-
+import { Dimensions, Platform, StyleSheet } from 'react-native';
 import { AppTheme } from '@/constants/app-theme';
+const { width, height } = Dimensions.get('window');
 
 export function createCertidoesPreviewMobileStyles() {
   return StyleSheet.create({
@@ -108,5 +108,66 @@ export function createCertidoesPreviewMobileStyles() {
       fontFamily: AppTheme.typography.fontBold,
       color: '#1F2024',
     },
+
+     // modal 
+
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContainer: {
+        width: width,
+        paddingVertical: height * 0.03,
+        paddingHorizontal: width * 0.05,
+        backgroundColor: '#730d83',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    closeButton: {
+        position: 'absolute',
+        top: height * 0.02,
+        left: width * 0.05,
+    },
+    modalTitle: {
+        fontSize: width * 0.05,
+         fontFamily: AppTheme.typography.fontBold,
+        color: '#FFF',
+        fontWeight: 'bold',
+        marginBottom: height * 0.03,
+        textAlign: 'center',
+    },
+    categoryContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
+    },
+    categoryButton: {
+        width: width * 0.22,
+        height: width * 0.22,
+        backgroundColor: '#FFF',
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: width * 0.02,
+        marginBottom: width * 0.05
+    },
+    categoryIcon: {
+        width: '60%',
+        height: '60%',
+        resizeMode: 'contain',
+    },
+    categoryText: {
+       fontFamily: AppTheme.typography.fontBold,
+        marginTop: height * 0.01,
+        fontSize: width * 0.03,
+        color: '#730d83',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+
   });
 }

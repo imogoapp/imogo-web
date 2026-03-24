@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
-import { AppTheme } from '@/constants/app-theme';
+
+import { AppTheme } from "@/constants/app-theme";
 
 const simuladorWebStyles = StyleSheet.create({
   contentMinimal: {
@@ -10,7 +11,7 @@ const simuladorWebStyles = StyleSheet.create({
     paddingBottom: 32,
     alignItems: "center",
   },
-  title: { 
+  title: {
     fontFamily: AppTheme.typography.fontBold,
     fontSize: 22,
     fontWeight: "700",

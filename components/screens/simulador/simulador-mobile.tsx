@@ -38,7 +38,7 @@ export default function SimuladorMobile() {
           <View style={styles.row}>
             <View style={styles.optionButtonsContainer}>
               <Pressable
-                onPress={() => router.push("/modal")}
+                onPress={() => router.push("/simulador/flow")}
                 style={styles.optionButton}
               >
                 <Image

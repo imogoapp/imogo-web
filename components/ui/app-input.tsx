@@ -53,7 +53,7 @@ export function AppInput({
   inputSize = AppTheme.typography.body,
   radius = AppTheme.radius.md,
   minHeight = 50,
-  wrapperBackgroundColor = '#ffffff',
+  wrapperBackgroundColor = '#F5F5F5',
   wrapperBorderColor = AppTheme.colors.inputBorder,
   onFocus,
   onBlur,

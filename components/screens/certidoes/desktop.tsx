@@ -1,11 +1,12 @@
 import { router } from "expo-router";
 import { Image } from "expo-image";
-import { useMemo } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { useMemo, useState } from "react";
+import { Modal, Pressable, ScrollView, Text, View, TouchableOpacity } from "react-native";
 
 import { createBaseWebNavigationItems } from "@/components/screens/home/home-tools";
 import BaseWeb from "@/components/ui/base-web";
 import { AuthUser } from "@/services/auth";
+import { Ionicons } from '@expo/vector-icons';
 
 import { CertidoesContent } from "./content";
 import styles from "./styles/web-styles";
@@ -15,11 +16,12 @@ type CertidoesDesktopProps = {
   onLogout: () => void;
 };
 
-
 export default function CertidoesDesktop({
   user,
   onLogout,
 }: CertidoesDesktopProps) {
+  const [modalVisible, setModalVisible] = useState(false);
+  const closeMenu = () => setModalVisible(false);
   const navigationItems = useMemo(
     () =>
       createBaseWebNavigationItems({
@@ -45,10 +47,10 @@ export default function CertidoesDesktop({
             <View style={styles.optionButtonsContainer}>
               <Pressable
                 style={styles.optionButton}
-                onPress={() => router.push("/modal")}
+                onPress={() => setModalVisible(true)}
               >
                 <Image
-                  source={require("@/assets/icons/files.png")}
+                  source={require("@/assets/icons/plus.png")}
                   style={styles.optionIcon}
                   contentFit="contain"
                 />
@@ -61,13 +63,13 @@ export default function CertidoesDesktop({
                   </Text>
                 </View>
               </Pressable>
-              {/*  */}
+
               <Pressable
                 style={styles.optionButton}
-                onPress={() => router.push("/modal")}
+               onPress={() => router.push("/certidoes/minhas-emissoes")}
               >
                 <Image
-                  source={require("@/assets/icons/avaliador-roxo.png")}
+                  source={require("@/assets/icons/files.png")}
                   style={styles.optionIcon}
                   contentFit="contain"
                 />
@@ -100,6 +102,39 @@ export default function CertidoesDesktop({
           </View>
         </View>
       </ScrollView>
+
+      <Modal
+          visible={modalVisible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={() => setModalVisible(false)}
+      >
+
+          <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                  <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+                      <Ionicons name="close" size={24} color="#FFF" />
+                  </TouchableOpacity>
+                  <Text style={styles.modalTitle} allowFontScaling={false}>Tipo de emissão: </Text>
+                  <View style={styles.categoryContainer}>
+                      <TouchableOpacity style={styles.categoryButton} onPress={() =>{ closeMenu(); router.push("/certidoes/proprietario/cpf")}}>
+                          <Image
+                              source={require('@/assets/icons/2perfil.png')}
+                              style={styles.categoryIcon}
+                          />
+                          <Text style={styles.categoryText} allowFontScaling={false}>CPF</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.categoryButton} onPress={() =>{ closeMenu(); router.push("/certidoes/proprietario/cnpj")}}>
+                          <Image
+                              source={require('@/assets/icons/cnpj.png')}
+                              style={styles.categoryIcon}
+                          />
+                          <Text style={styles.categoryText} allowFontScaling={false}>CNPJ</Text>
+                      </TouchableOpacity>
+                  </View>
+              </View>
+          </View>
+      </Modal>
     </BaseWeb>
   );
 }

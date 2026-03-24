@@ -15,7 +15,6 @@ type SimuladorDesktopProps = {
   onLogout: () => void;
 };
 
-
 export default function SimuladorDesktop({
   user,
   onLogout,
@@ -45,7 +44,7 @@ export default function SimuladorDesktop({
             <View style={styles.optionButtonsContainer}>
               <Pressable
                 style={styles.optionButton}
-                onPress={() => router.push("/modal")}
+                onPress={() => router.push("/simulador/flow")}
               >
                 <Image
                   source={require("@/assets/icons/avaliador-roxo.png")}

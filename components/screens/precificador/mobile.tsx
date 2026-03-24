@@ -38,7 +38,7 @@ export default function PrecificadorMobile() {
           <View style={styles.row}>
             <View style={styles.optionButtonsContainer}>
               <Pressable
-                onPress={() => router.push("/modal")}
+                onPress={() => router.push("/precificador/flow")}
                 style={styles.optionButton}
               >
                 <Image

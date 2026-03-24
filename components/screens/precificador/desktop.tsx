@@ -1,5 +1,5 @@
-import { router } from "expo-router";
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import { useMemo } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
@@ -14,7 +14,6 @@ type PrecificadorDesktopProps = {
   user: AuthUser | null;
   onLogout: () => void;
 };
-
 
 export default function PrecificadorDesktop({
   user,
@@ -45,7 +44,7 @@ export default function PrecificadorDesktop({
             <View style={styles.optionButtonsContainer}>
               <Pressable
                 style={styles.optionButton}
-                onPress={() => router.push("/modal")}
+                onPress={() => router.push("/precificador/flow")}
               >
                 <Image
                   source={require("@/assets/icons/avaliador-roxo.png")}
@@ -53,10 +52,7 @@ export default function PrecificadorDesktop({
                   contentFit="contain"
                 />
                 <View style={styles.optionTextContainer}>
-                  <Text
-                    style={styles.optionTextTitle}
-                    allowFontScaling={false}
-                  >
+                  <Text style={styles.optionTextTitle} allowFontScaling={false}>
                     {precificadorContent.previewActionLabel}
                   </Text>
                 </View>

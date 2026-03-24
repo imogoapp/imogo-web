@@ -16,7 +16,6 @@ import {
   HomeToolsGrid,
 } from "@/components/screens/home/components/home-tools-grid";
 import { createHomeToolItems } from "@/components/screens/home/home-tools";
-import SupportModal from "@/components/ui/whatsapp-footer";
 import {
   AuthUser,
   clearSession,
@@ -125,7 +124,6 @@ export default function HomeMobile({ onLogout }: HomeMobileProps) {
         userPhoto={userPhoto}
       />
 
-      <SupportModal />
     </SafeAreaView>
   );
 }

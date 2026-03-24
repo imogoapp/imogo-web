@@ -1,13 +1,17 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
-import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Pressable, SafeAreaView, ScrollView, Text, View, Modal, TouchableOpacity } from "react-native";
 
-import { CertidoesContent} from "./content";
+import { CertidoesContent } from "./content";
 import { createCertidoesPreviewMobileStyles } from "./styles/preview-mobile-styles";
+import { useState } from "react";
 
 export default function CertidoesMobile() {
   const styles = createCertidoesPreviewMobileStyles();
+
+  const [modalVisible, setModalVisible] = useState(false); // Controla o primeiro modal (categoria)
+  const closeMenu = () => setModalVisible(false);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -38,7 +42,7 @@ export default function CertidoesMobile() {
           <View style={styles.row}>
             <View style={styles.optionButtonsContainer}>
               <Pressable
-                onPress={() => router.push("/modal")}
+                onPress={() => setModalVisible(true)}
                 style={styles.optionButton}
               >
                 <Image
@@ -53,7 +57,7 @@ export default function CertidoesMobile() {
                 </View>
               </Pressable>
               <Pressable
-                onPress={() => router.push("/modal")}
+                onPress={() => router.push("/certidoes/minhas-emissoes")}
                 style={styles.optionButton}
               >
                 <Image
@@ -70,8 +74,6 @@ export default function CertidoesMobile() {
             </View>
           </View>
 
-          
-
           <View style={styles.buttonContainer}>
             <Pressable
               onPress={() => router.replace("/home")}
@@ -87,6 +89,52 @@ export default function CertidoesMobile() {
               </Text>
             </Pressable>
           </View>
+          <Modal
+            visible={modalVisible}
+            animationType="slide"
+            transparent={true}
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Ionicons name="close" size={24} color="#FFF" />
+                </TouchableOpacity>
+                <Text style={styles.modalTitle} allowFontScaling={false}>
+                  Tipo de emissão:{" "}
+                </Text>
+                <View style={styles.categoryContainer}>
+                  <TouchableOpacity
+                    style={styles.categoryButton}
+                    onPress={() => {closeMenu(); router.push("/certidoes/proprietario/cpf")}}
+                  >
+                    <Image
+                      source={require("@/assets/icons/2perfil.png")}
+                      style={styles.categoryIcon}
+                    />
+                    <Text style={styles.categoryText} allowFontScaling={false}>
+                      CPF
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.categoryButton}
+                    onPress={() => {closeMenu(); router.push("/certidoes/proprietario/cnpj")}}
+                  >
+                    <Image
+                      source={require("@/assets/icons/cnpj.png")}
+                      style={styles.categoryIcon}
+                    />
+                    <Text style={styles.categoryText} allowFontScaling={false}>
+                      CNPJ
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </View>
       </ScrollView>
     </SafeAreaView>
