@@ -1,5 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
+  Image,
+  ImageSourcePropType,
   Pressable,
   StyleSheet,
   Text,
@@ -17,6 +19,7 @@ type BaseWebButtonProps = PressableProps & {
   label: string;
   variant?: BaseWebButtonVariant;
   leftIconName?: keyof typeof Ionicons.glyphMap;
+  leftIconSource?: ImageSourcePropType;
   contentStyle?: StyleProp<ViewStyle>;
 };
 
@@ -24,6 +27,7 @@ export function BaseWebButton({
   label,
   variant = "primary",
   leftIconName,
+  leftIconSource,
   style,
   contentStyle,
   disabled,
@@ -49,7 +53,11 @@ export function BaseWebButton({
       ]}
       {...props}>
       <View style={[styles.content, contentStyle]}>
-        {leftIconName ? <Ionicons name={leftIconName} size={18} color={labelColor} /> : null}
+        {leftIconSource ? (
+          <Image source={leftIconSource} style={{ width: 18, height: 18 }} resizeMode="contain" />
+        ) : leftIconName ? (
+          <Ionicons name={leftIconName} size={18} color={labelColor} />
+        ) : null}
         <Text
           style={[
             styles.label,

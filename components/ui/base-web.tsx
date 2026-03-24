@@ -16,7 +16,6 @@ import { AppTheme } from "@/constants/app-theme";
 import { AuthUser } from "@/services/auth";
 
 import { BaseWebUserMenu } from "./base-web-user-menu";
-import SupportModal from "./whatsapp-footer";
 
 export type BaseWebNavigationItem = {
   id: string;
@@ -188,7 +187,6 @@ export default function BaseWeb({
         >
           {children}
         </ScrollView>
-        <SupportModal />
       </View>
 
       <BaseWebUserMenu

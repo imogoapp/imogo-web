@@ -1,19 +1,19 @@
 import { StyleSheet } from "react-native";
-import { AppTheme } from '@/constants/app-theme';
+
+import { AppTheme } from "@/constants/app-theme";
 
 const CertidoesWebStyles = StyleSheet.create({
   contentMinimal: {
     flexGrow: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#F5F5F5",
     paddingHorizontal: 24,
     paddingTop: 48,
     paddingBottom: 32,
     alignItems: "center",
   },
-  title: { 
+  title: {
     fontFamily: AppTheme.typography.fontBold,
     fontSize: 22,
-    fontWeight: "700",
     textAlign: "center",
     color: "#1F2024",
     marginBottom: 16,
@@ -34,6 +34,13 @@ const CertidoesWebStyles = StyleSheet.create({
     lineHeight: 22,
     color: "#1F2024",
   },
+  helperText: {
+    marginTop: 12,
+    fontFamily: AppTheme.typography.fontRegular,
+    fontSize: 14,
+    lineHeight: 21,
+    color: "#6F7480",
+  },
   optionButtonsContainer: {
     width: "100%",
     marginTop: 8,
@@ -41,7 +48,7 @@ const CertidoesWebStyles = StyleSheet.create({
   optionButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#F5F5F5",
     borderColor: "#E0E0E0",
     borderWidth: 1,
     borderRadius: 10,
@@ -65,7 +72,6 @@ const CertidoesWebStyles = StyleSheet.create({
   optionTextTitle: {
     fontFamily: AppTheme.typography.fontBold,
     fontSize: 15,
-    fontWeight: "bold",
     color: "#1F2024",
   },
   buttonContainer: {
@@ -83,11 +89,91 @@ const CertidoesWebStyles = StyleSheet.create({
     marginRight: 8,
   },
   laterButtonText: {
-    color: "#730d83",
+    color: "#730D83",
     fontSize: 15,
     fontFamily: AppTheme.typography.fontBold,
-    fontWeight: "600",
   },
+  // modal 
+
+  modalOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'flex',
+    zIndex: 1000,
+  },
+
+  modalContainer: {
+    width: 600,
+    maxWidth: '90%',
+    backgroundColor: '#730d83',
+    borderRadius: 20,
+    paddingVertical: 30,
+    paddingHorizontal: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+
+  closeButton: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    zIndex: 1,
+  },
+
+  modalTitle: {
+     fontFamily: AppTheme.typography.fontBold,
+    fontSize: 24,
+    color: '#FFF',
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+
+  categoryContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    flexWrap: 'wrap',
+    width: '100%',
+    gap: 20,
+  },
+
+  categoryButton: {
+    width: 120,
+    height: 120,
+    backgroundColor: '#FFF',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+
+  categoryIcon: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
+  },
+
+  categoryText: {
+     fontFamily: AppTheme.typography.fontBold,
+    marginTop: 10,
+    fontSize: 14,
+    color: '#730d83',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
 });
-  
+
 export default CertidoesWebStyles;

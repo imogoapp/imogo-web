@@ -121,7 +121,7 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
         "Gere contratos com modelos validados em poucos minutos para serem assinados digitalmente.",
       accentColor: "#f5f5f5",
       route: "/contratos",
-      disabled: false,
+      disabled: true,
     },
     {
       id: "boletos",

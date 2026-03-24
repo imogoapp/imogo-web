@@ -6,7 +6,7 @@ export function createPrecificadorPreviewMobileStyles() {
   return StyleSheet.create({
     safeArea: {
       flex: 1,
-      backgroundColor: '#F5F5F5',
+      backgroundColor: AppTheme.colors.background,
     },
     headerContainer: {
       flexDirection: 'row',
@@ -14,17 +14,17 @@ export function createPrecificadorPreviewMobileStyles() {
       justifyContent: 'center',
       paddingHorizontal: 20,
       paddingVertical: 16,
-      backgroundColor: '#F5F5F5',
+      backgroundColor: AppTheme.colors.background,
     },
     headerTitle: {
       fontSize: 16,
       fontFamily: AppTheme.typography.fontBold,
-      color: '#1F2024',
+      color: AppTheme.colors.text,
       textAlign: 'center',
     },
     classificacaoText: {
       fontSize: 14,
-      color: '#1F2024',
+      color: AppTheme.colors.text,
       marginBottom: 10,
       marginTop: 10,
       textAlign: 'center',
@@ -54,7 +54,7 @@ export function createPrecificadorPreviewMobileStyles() {
       textAlign: 'justify',
       fontSize: 14,
       lineHeight: 22,
-      color: '#000000',
+      color: AppTheme.colors.text,
       marginLeft: 10,
       fontFamily: AppTheme.typography.fontRegular,
     },
@@ -73,7 +73,7 @@ export function createPrecificadorPreviewMobileStyles() {
       marginRight: 8,
     },
     laterButtonText: {
-      color: '#730d83',
+      color: AppTheme.colors.primary,
       fontSize: Platform.select({ ios: 16, android: 16, default: 16 }) ?? 16,
       fontWeight: '600',
       fontFamily: AppTheme.typography.fontBold,
@@ -87,8 +87,8 @@ export function createPrecificadorPreviewMobileStyles() {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'flex-start',
-      backgroundColor: '#F5F5F5',
-      borderColor: '#D3D3D3',
+      backgroundColor: AppTheme.colors.card,
+      borderColor: AppTheme.colors.inputBorder,
       borderWidth: 1,
       borderRadius: 10,
       width: '100%',
@@ -106,7 +106,7 @@ export function createPrecificadorPreviewMobileStyles() {
     optionTextTitle: {
       fontSize: 12,
       fontFamily: AppTheme.typography.fontBold,
-      color: '#1F2024',
+      color: AppTheme.colors.text,
     },
   });
 }

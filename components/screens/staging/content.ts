@@ -2,7 +2,7 @@ export const HomeStagingContent = {
   title: 'Home Staging',
   manual: "Manual do Home Staging",
   ia: "Criação de Home Staging por IA",
-  wa: "Criação de Home Staging via WhatsApp (Celer)",
+  wa: "Criação de Home Staging via WhatsApp",
   previewActionLabel: 'Solicitar nova emissão',
   previewActionLabelTwo: 'Minhas emissões',
   previewText:

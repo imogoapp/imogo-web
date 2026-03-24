@@ -4,7 +4,7 @@ import { AppTheme } from '@/constants/app-theme';
 const PrecificadorWebStyles = StyleSheet.create({
   contentMinimal: {
     flexGrow: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: AppTheme.colors.background,
     paddingHorizontal: 24,
     paddingTop: 48,
     paddingBottom: 32,
@@ -13,9 +13,8 @@ const PrecificadorWebStyles = StyleSheet.create({
   title: { 
     fontFamily: AppTheme.typography.fontBold,
     fontSize: 22,
-    fontWeight: "700",
     textAlign: "center",
-    color: "#1F2024",
+    color: AppTheme.colors.text,
     marginBottom: 16,
   },
   container: {
@@ -32,7 +31,7 @@ const PrecificadorWebStyles = StyleSheet.create({
     fontFamily: AppTheme.typography.fontRegular,
     fontSize: 15,
     lineHeight: 22,
-    color: "#1F2024",
+    color: AppTheme.colors.text,
   },
   optionButtonsContainer: {
     width: "100%",
@@ -41,8 +40,8 @@ const PrecificadorWebStyles = StyleSheet.create({
   optionButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f5f5f5",
-    borderColor: "#E0E0E0",
+    backgroundColor: AppTheme.colors.card,
+    borderColor: AppTheme.colors.inputBorder,
     borderWidth: 1,
     borderRadius: 10,
     paddingVertical: 14,
@@ -65,8 +64,7 @@ const PrecificadorWebStyles = StyleSheet.create({
   optionTextTitle: {
     fontFamily: AppTheme.typography.fontBold,
     fontSize: 15,
-    fontWeight: "bold",
-    color: "#1F2024",
+    color: AppTheme.colors.text,
   },
   buttonContainer: {
     marginTop: 32,
@@ -83,10 +81,9 @@ const PrecificadorWebStyles = StyleSheet.create({
     marginRight: 8,
   },
   laterButtonText: {
-    color: "#730d83",
+    color: AppTheme.colors.primary,
     fontSize: 15,
     fontFamily: AppTheme.typography.fontBold,
-    fontWeight: "600",
   },
 });
   
