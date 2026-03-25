@@ -6,7 +6,7 @@ export function createLoginMobileStyles(width: number, height: number) {
   return StyleSheet.create({
     safeArea: {
       flex: 1,
-      backgroundColor: '#F5F5F5',
+      backgroundColor: AppTheme.colors.background,
       paddingTop: 0,
     },
     background: {
@@ -73,17 +73,19 @@ export function createLoginMobileStyles(width: number, height: number) {
       minHeight: 48,
       paddingVertical: 12,
       marginBottom: height * 0.01,
-    },
-    buttonDisabled: {
-      backgroundColor: '#E9E9E9',
-      borderWidth: 1,
-      borderColor: '#E9E9E9',
-      opacity: 0.5,
+      color: AppTheme.colors.primaryText,
     },
     secondaryButton: {
       minHeight: 48,
       paddingVertical: 12,
       marginBottom: height * 0.012,
+    },
+    disabledButton: {
+      backgroundColor: AppTheme.colors.backgroundDisabled,
+      borderWidth: 1,
+      borderColor: AppTheme.colors.backgroundDisabled,
+      opacity: 0.5,
+      color: AppTheme.colors.textDisabled,
     },
   });
 }

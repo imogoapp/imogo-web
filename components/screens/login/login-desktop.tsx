@@ -170,7 +170,7 @@ export default function LoginDesktop({
             label={loading ? 'Entrando...' : 'Entrar'}
             onPress={handleLogin}
             disabled={loading || !canLogin}
-            labelStyle={{ color: canLogin ? '#F5F5F5' : '#C4C4C4' }}
+            labelStyle={{ color: (!canLogin || loading) ? styles.disabledButton.color : styles.primaryButton.color }}
             containerStyle={[styles.primaryButton, loading || !canLogin ? styles.disabledButton : undefined]}
           />
 

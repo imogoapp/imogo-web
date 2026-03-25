@@ -7,6 +7,8 @@ export const AppTheme = {
     primaryText: "#f5f5f5",
     border: "#d7d9df",
     muted: "#6b7280",
+    backgroundDisabled: "#E9E9E9",
+    textDisabled: "#C4C4C4",
     inputBorder: "#d7d9df",
   },
   spacing: {
