@@ -114,7 +114,7 @@ function getRegisterApiErrorMessage(errorData: RegisterApiError) {
 
     if (passwordError?.type === 'string_too_short') {
       const minLength = passwordError.ctx?.min_length ?? MIN_PASSWORD_LENGTH;
-      return `A senha deve ter no minimo ${minLength} caracteres.`;
+      return `A senha deve ter no mínimo ${minLength} caracteres.`;
     }
 
     const firstMessage = errorData.detail.find((item) => typeof item.msg === 'string')?.msg;
@@ -127,7 +127,7 @@ function getRegisterApiErrorMessage(errorData: RegisterApiError) {
     return errorData.detail;
   }
 
-  return errorData.message ?? 'Nao foi possivel criar sua conta. Tente novamente.';
+  return errorData.message ?? 'Não foi possível criar sua conta. Tente novamente.';
 }
 
 export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps) {
@@ -169,7 +169,7 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
 
   const passwordError = getPasswordLengthError(password);
   const confirmPasswordError =
-    confirmPassword.length > 0 && password !== confirmPassword ? 'As senhas nao coincidem.' : '';
+    confirmPassword.length > 0 && password !== confirmPassword ? 'As senhas não coincidem.' : '';
 
   const isStep1Valid = useMemo(() => {
     return !!nome.trim() && !!sobrenome.trim() && telefone.replace(/\D/g, '').length === 11;
@@ -201,12 +201,12 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
       return;
     }
 
-    setEmailError(validateEmail(value) ? '' : 'Por favor, insira um e-mail valido.');
+    setEmailError(validateEmail(value) ? '' : 'Por favor, insira um e-mail válido.');
   };
 
   const nextFromStep1 = () => {
     if (!isStep1Valid) {
-      showAlert('Atencao', 'Preencha nome, sobrenome e telefone valido.');
+      showAlert('Atenção', 'Preencha nome, sobrenome e telefone válido.');
       return;
     }
 
@@ -215,12 +215,12 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
 
   const nextFromStep2 = () => {
     if (password.length < MIN_PASSWORD_LENGTH) {
-      showAlert('Atencao', `A senha deve ter no minimo ${MIN_PASSWORD_LENGTH} caracteres.`);
+      showAlert('Atenção', `A senha deve ter no mínimo ${MIN_PASSWORD_LENGTH} caracteres.`);
       return;
     }
 
     if (!isStep2Valid) {
-      showAlert('Atencao', 'Revise os dados de cadastro e os termos.');
+      showAlert('Atenção', 'Revise os dados de cadastro e os termos.');
       return;
     }
 
@@ -229,14 +229,14 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
 
   const finishRegister = async () => {
     if (!selectedOption) {
-      showAlert('Atencao', 'Selecione uma opcao de origem.');
+      showAlert('Atenção', 'Selecione uma opção de origem.');
       return;
     }
 
     const origin = originMap[selectedOption as (typeof options)[number]];
 
     if (!origin) {
-      showAlert('Atencao', 'Opcao de origem invalida.');
+      showAlert('Atenção', 'Opção de origem inválida.');
       return;
     }
 
@@ -267,13 +267,13 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
       });
 
       if (response.status !== 201) {
-        showAlert('Erro no cadastro', 'Nao foi possivel criar sua conta. Tente novamente.');
+        showAlert('Erro no cadastro', 'Não foi possível criar sua conta. Tente novamente.');
         return;
       }
 
       const successData = response.data as RegisterApiSuccess | null;
       if (!successData?.public_id || !successData?.message) {
-        showAlert('Erro no cadastro', 'Resposta de cadastro invalida. Tente novamente.');
+        showAlert('Erro no cadastro', 'Resposta de cadastro inválida. Tente novamente.');
         return;
       }
 
@@ -287,9 +287,9 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
 
         if (status === 409) {
           if (errorData.detail === 'email already registered') {
-            message = 'Este e-mail ja esta cadastrado.';
+            message = 'Este e-mail já está cadastrado.';
           } else if (errorData.detail === 'phone already registered') {
-            message = 'Este telefone ja esta cadastrado.';
+            message = 'Este telefone já está cadastrado.';
           }
         }
 
@@ -297,7 +297,7 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
         return;
       }
 
-      showAlert('Erro de conexao', 'Nao foi possivel conectar com o servidor. Tente novamente.');
+      showAlert('Erro de conexão', 'Não foi possível conectar com o servidor. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -339,8 +339,6 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
               inputSize={inputSize}
               minHeight={inputHeight}
               radius={inputRadius}
-              wrapperBackgroundColor="#F4F4F4"
-              wrapperBorderColor="#C4C4C4"
             />
             <AppInput
               label="Sobrenome"
@@ -352,8 +350,6 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
               inputSize={inputSize}
               minHeight={inputHeight}
               radius={inputRadius}
-              wrapperBackgroundColor="#F4F4F4"
-              wrapperBorderColor="#C4C4C4"
             />
             <AppInput
               label="Telefone"
@@ -365,8 +361,6 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
               inputSize={inputSize}
               minHeight={inputHeight}
               radius={inputRadius}
-              wrapperBackgroundColor="#F4F4F4"
-              wrapperBorderColor="#C4C4C4"
             />
           </View>
 
@@ -404,8 +398,6 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
               inputSize={inputSize}
               minHeight={inputHeight}
               radius={inputRadius}
-              wrapperBackgroundColor="#F4F4F4"
-              wrapperBorderColor="#C4C4C4"
             />
             <AppInput
               label="Senha"
@@ -418,8 +410,6 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
               inputSize={inputSize}
               minHeight={inputHeight}
               radius={inputRadius}
-              wrapperBackgroundColor="#F4F4F4"
-              wrapperBorderColor="#C4C4C4"
             />
             <AppInput
               placeholder="Confirmar senha"
@@ -431,8 +421,6 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
               inputSize={inputSize}
               minHeight={inputHeight}
               radius={inputRadius}
-              wrapperBackgroundColor="#F4F4F4"
-              wrapperBorderColor="#C4C4C4"
             />
 
             <View style={styles.legalRow}>
