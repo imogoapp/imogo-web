@@ -43,19 +43,21 @@ const loginWebStyles = StyleSheet.create({
   },
   dividerText: {
     textAlign: 'center',
-    color: '#6b7280',
+    color: AppTheme.colors.muted,
     fontSize: 14,
     fontFamily: AppTheme.typography.fontRegular,
     marginVertical: 2,
   },
   primaryButton: {
     minHeight: 48,
+    color: AppTheme.colors.primaryText,
   },
   disabledButton: {
-    backgroundColor: '#E9E9E9',
+    backgroundColor: AppTheme.colors.backgroundDisabled,
     borderWidth: 1,
-    borderColor: '#E9E9E9',
+    borderColor: AppTheme.colors.backgroundDisabled,
     opacity: 0.5,
+    color: AppTheme.colors.textDisabled,
   },
 });
 
