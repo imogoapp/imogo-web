@@ -6,7 +6,7 @@ export function createResetPasswordMobileStyles(width: number, height: number) {
   return StyleSheet.create({
     safeArea: {
       flex: 1,
-      backgroundColor: '#F5F5F5',
+      backgroundColor: AppTheme.colors.background,
       paddingTop: 0,
     },
     background: {
@@ -67,13 +67,15 @@ export function createResetPasswordMobileStyles(width: number, height: number) {
     },
     primaryButton: {
       minHeight: 48,
+      color: AppTheme.colors.primaryText,
       paddingVertical: 12,
     },
     buttonDisabled: {
-      backgroundColor: '#E9E9E9',
+      backgroundColor: AppTheme.colors.backgroundDisabled,
       borderWidth: 1,
-      borderColor: '#E9E9E9',
+      borderColor: AppTheme.colors.backgroundDisabled,
       opacity: 0.5,
+      color: AppTheme.colors.textDisabled,
     },
     successWrap: {
       width: '100%',
