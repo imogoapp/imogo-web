@@ -13,6 +13,7 @@ import {
 } from "react-native";
 
 import { AppTheme } from "@/constants/app-theme";
+import { APP_VERSION } from "@/constants/app-version";
 import { AuthUser } from "@/services/auth";
 
 import { BaseWebUserMenu } from "./base-web-user-menu";
@@ -187,6 +188,10 @@ export default function BaseWeb({
         >
           {children}
         </ScrollView>
+{/* 
+        <View style={styles.versionFooter}>
+          <Text style={styles.versionText}>imoGo v{APP_VERSION}</Text>
+        </View> */}
       </View>
 
       <BaseWebUserMenu
@@ -394,5 +399,17 @@ const styles = StyleSheet.create({
   body: {
     paddingHorizontal: 32,
     paddingVertical: 28,
+  },
+  versionFooter: {
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderTopWidth: 1,
+    borderTopColor: '#E6DFEA',
+    alignItems: 'center' as const,
+  },
+  versionText: {
+    fontSize: 12,
+    color: '#9B9DA6',
+    fontFamily: AppTheme.typography.fontRegular,
   },
 });

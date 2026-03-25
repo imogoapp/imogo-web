@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { AppTheme } from '@/constants/app-theme';
@@ -15,6 +16,11 @@ type BaseWebUserMenuProps = {
 };
 
 export function BaseWebUserMenu({ visible, userName, userEmail, userPhoto, onClose, onLogout }: BaseWebUserMenuProps) {
+  const handleAccount = () => {
+    onClose();
+    router.push('/conta');
+  };
+
   return (
     <Modal transparent animationType="fade" visible={visible} onRequestClose={onClose}>
       <View style={styles.overlay}>
@@ -28,6 +34,7 @@ export function BaseWebUserMenu({ visible, userName, userEmail, userPhoto, onClo
             />
             <Text style={styles.name}>{userName}</Text>
             <Text style={styles.email}>{userEmail}</Text>
+            <BaseWebButton label="Minha Conta" leftIconName="person-outline" onPress={handleAccount} />
             <BaseWebButton label="Sair" leftIconName="log-out-outline" onPress={onLogout} />
           </View>
         </View>
@@ -82,3 +89,4 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 });
+
