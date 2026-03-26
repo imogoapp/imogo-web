@@ -99,7 +99,7 @@ function formatPhone(value: string) {
 
 function getPasswordLengthError(passwordValue: string) {
   return passwordValue.length > 0 && passwordValue.length < MIN_PASSWORD_LENGTH
-    ? `A senha deve ter no minimo ${MIN_PASSWORD_LENGTH} caracteres.`
+    ? `A senha deve ter no mínimo ${MIN_PASSWORD_LENGTH} caracteres.`
     : '';
 }
 
@@ -109,7 +109,7 @@ function getRegisterApiErrorMessage(errorData: RegisterApiError) {
 
     if (passwordError?.type === 'string_too_short') {
       const minLength = passwordError.ctx?.min_length ?? MIN_PASSWORD_LENGTH;
-      return `A senha deve ter no minimo ${minLength} caracteres.`;
+      return `A senha deve ter no mínimo ${minLength} caracteres.`;
     }
 
     const firstMessage = errorData.detail.find((item) => typeof item.msg === 'string')?.msg;
@@ -122,7 +122,7 @@ function getRegisterApiErrorMessage(errorData: RegisterApiError) {
     return errorData.detail;
   }
 
-  return errorData.message ?? 'Nao foi possivel criar sua conta. Tente novamente.';
+  return errorData.message ?? 'Não foi possível criar sua conta. Tente novamente.';
 }
 
 export default function RegisterDesktop({ onRegisterPress, onGooglePress }: RegisterDesktopProps) {
@@ -162,7 +162,7 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
       return;
     }
 
-    setEmailError(validateEmail(value) ? '' : 'Por favor, insira um email valido.');
+    setEmailError(validateEmail(value) ? '' : 'Por favor, insira um e-mail válido.');
   };
 
   const showAlert = (title: string, message: string) => {
@@ -171,27 +171,27 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
 
   const handleNextStep = () => {
     if (!nome || !telefone || !email || !password || !confirmPassword) {
-      showAlert('Atencao', 'Preencha todos os campos obrigatorios.');
+      showAlert('Atenção', 'Preencha todos os campos obrigatórios.');
       return;
     }
 
     if (emailError || !validateEmail(email)) {
-      showAlert('Atencao', 'Preencha um e-mail valido.');
+      showAlert('Atenção', 'Preencha um e-mail válido.');
       return;
     }
 
     if (password.length < MIN_PASSWORD_LENGTH) {
-      showAlert('Atencao', `A senha deve ter no minimo ${MIN_PASSWORD_LENGTH} caracteres.`);
+      showAlert('Atenção', `A senha deve ter no mínimo ${MIN_PASSWORD_LENGTH} caracteres.`);
       return;
     }
 
     if (password !== confirmPassword) {
-      showAlert('Atencao', 'As senhas precisam ser iguais.');
+      showAlert('Atenção', 'As senhas precisam ser iguais.');
       return;
     }
 
     if (!acceptedTerms) {
-      showAlert('Atencao', 'Voce deve aceitar os Termos e Condicoes para criar a conta.');
+      showAlert('Atenção', 'Você deve aceitar os Termos e Condições para criar a conta.');
       return;
     }
 
@@ -200,14 +200,14 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
 
   const handleCreateAccount = async () => {
     if (!selectedOption) {
-      showAlert('Atencao', 'Selecione uma opcao de como conheceu a imoGo.');
+      showAlert('Atenção', 'Selecione uma opção de como conheceu a imoGo.');
       return;
     }
 
     const origin = originMap[selectedOption as (typeof options)[number]];
 
     if (!origin) {
-      showAlert('Atencao', 'Opcao de origem invalida.');
+      showAlert('Atenção', 'Opção de origem inválida.');
       return;
     }
 
@@ -238,13 +238,13 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
       });
 
       if (response.status !== 201) {
-        showAlert('Erro no cadastro', 'Nao foi possivel criar sua conta. Tente novamente.');
+        showAlert('Erro no cadastro', 'Não foi possível criar sua conta. Tente novamente.');
         return;
       }
 
       const successData = response.data as RegisterApiSuccess | null;
       if (!successData?.public_id || !successData?.message) {
-        showAlert('Erro no cadastro', 'Resposta de cadastro invalida. Tente novamente.');
+        showAlert('Erro no cadastro', 'Resposta de cadastro inválida. Tente novamente.');
         return;
       }
 
@@ -258,9 +258,9 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
 
         if (status === 409) {
           if (errorData.detail === 'email already registered') {
-            message = 'Este e-mail ja esta cadastrado.';
+            message = 'Este e-mail já está cadastrado.';
           } else if (errorData.detail === 'phone already registered') {
-            message = 'Este telefone ja esta cadastrado.';
+            message = 'Este telefone já está cadastrado.';
           }
         }
 
@@ -268,7 +268,7 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
         return;
       }
 
-      showAlert('Erro de conexao', 'Nao foi possivel conectar com o servidor. Tente novamente.');
+      showAlert('Erro de conexão', 'Não foi possível conectar com o servidor. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -342,7 +342,7 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
               </View>
 
               <AppButton
-                label="Proximo"
+                label="Próximo"
                 onPress={handleNextStep}
                 disabled={!canContinueToQuery}
                 containerStyle={!canContinueToQuery ? styles.disabledButton : undefined}

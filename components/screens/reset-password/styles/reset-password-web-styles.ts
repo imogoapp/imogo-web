@@ -53,21 +53,23 @@ const resetPasswordWebStyles = StyleSheet.create({
     fontFamily: AppTheme.typography.fontRegular,
     marginBottom: AppTheme.spacing.lg,
   },
-  primaryButton: {
-    minHeight: 48,
-  },
-  disabledButton: {
-    backgroundColor: '#E9E9E9',
-    borderWidth: 1,
-    borderColor: '#E9E9E9',
-    opacity: 0.5,
-  },
   backLink: {
     color: AppTheme.colors.primary,
     fontSize: 14,
     textAlign: 'center',
     fontFamily: AppTheme.typography.fontBold,
     marginTop: 4,
+  },
+  primaryButton: {
+    minHeight: 48,
+    color: AppTheme.colors.primaryText,
+  },
+  disabledButton: {
+    backgroundColor: AppTheme.colors.backgroundDisabled,
+    borderWidth: 1,
+    borderColor: AppTheme.colors.backgroundDisabled,
+    opacity: 0.5,
+    color: AppTheme.colors.textDisabled,
   },
 });
 

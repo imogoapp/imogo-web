@@ -35,12 +35,12 @@ export default function ResetPasswordDesktop({ onSubmitPress }: ResetPasswordDes
       return;
     }
 
-    setEmailError(isValidEmail(value) ? '' : 'Por favor, insira um email valido.');
+    setEmailError(isValidEmail(value) ? '' : 'Por favor, insira um email válido.');
   };
 
   const handleSubmit = async () => {
     if (!isValidEmail(email)) {
-      setEmailError('Por favor, insira um email valido.');
+      setEmailError('Por favor, insira um email válido.');
       return;
     }
 
@@ -62,16 +62,16 @@ export default function ResetPasswordDesktop({ onSubmitPress }: ResetPasswordDes
         const data = (error.response?.data ?? {}) as { message?: string; detail?: string };
 
         if (status === 404) {
-          setEmailError('Usuario nao cadastrado.');
+          setEmailError('Usuário não cadastrado.');
           return;
         }
 
-        const message = data.message ?? data.detail ?? 'Nao foi possivel enviar o email de recuperacao.';
+        const message = data.message ?? data.detail ?? 'Não foi possível enviar o email de recuperação.';
         Alert.alert('Erro', message);
         return;
       }
 
-      Alert.alert('Erro', 'Nao foi possivel enviar o email de recuperacao.');
+      Alert.alert('Erro', 'Não foi possível enviar o email de recuperação.');
     } finally {
       setSending(false);
     }
@@ -86,7 +86,7 @@ export default function ResetPasswordDesktop({ onSubmitPress }: ResetPasswordDes
           <>
             <AppTitle marginBottom={12}>Esqueceu sua senha?</AppTitle>
             <Text style={styles.description}>
-              Nao se preocupe. Enviaremos uma nova senha para o email informado.
+              Informe seu email para que possamos enviar instruções de redefinição de senha.
             </Text>
 
             <View style={styles.content}>
@@ -104,7 +104,7 @@ export default function ResetPasswordDesktop({ onSubmitPress }: ResetPasswordDes
                 label={sending ? 'Enviando...' : 'Enviar'}
                 onPress={handleSubmit}
                 disabled={!canSubmit}
-                labelStyle={{ color: canSubmit ? '#F5F5F5' : '#C4C4C4' }}
+                labelStyle={{ color: (!canSubmit || sending) ? styles.disabledButton.color : styles.primaryButton.color }}
                 containerStyle={[styles.primaryButton, !canSubmit ? styles.disabledButton : undefined]}
               />
               <Pressable onPress={() => router.push('/login')}>
@@ -119,7 +119,7 @@ export default function ResetPasswordDesktop({ onSubmitPress }: ResetPasswordDes
               Email enviado!
             </AppTitle>
             <Text style={styles.successText}>
-              Verifique sua caixa de entrada e siga as instrucoes para redefinir sua senha.
+              Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.
             </Text>
             <View style={styles.content}>
               <AppButton label="Ir para login" onPress={() => router.push('/login')} />

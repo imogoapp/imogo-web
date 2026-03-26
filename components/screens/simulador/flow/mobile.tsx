@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { AuthUser } from "@/services/auth";
+import { AuthUser, getSession, API_BASE_URL } from "@/services/auth";
 import { setSimuladorLink } from "@/app/(tabs)/(app)/simulador/state";
 
 import { AppInput } from "@/components/ui/app-input";
@@ -77,6 +77,9 @@ function currencyToNumber(value: string) {
   const digits = value.replace(/\D/g, "");
   return digits ? Number(digits) / 100 : 0;
 }
+
+const session = getSession();
+const Key = session?.key;
 
 export default function SimuladorFlowMobile({ user }: SimuladorFlowMobileProps) {
   const styles = createPrecificadorFlowMobileStyles();
@@ -163,9 +166,10 @@ export default function SimuladorFlowMobile({ user }: SimuladorFlowMobileProps) 
         qtd_parcelas: prazo,
       };
 
-      const response = await axios.post("https://api.imogo.com.br/submit_simulation", payload, {
+      const response = await axios.post(`${API_BASE_URL}/api/v2/quadracred/simulador`, payload, {
         headers: {
           Accept: "application/json",
+          "X-API-Key": Key,
           "Content-Type": "application/json",
         },
       });

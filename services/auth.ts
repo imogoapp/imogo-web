@@ -15,7 +15,7 @@ function resolveApiBaseUrl() {
   return (valid ?? 'https://api-homologacao.vercel.app').replace(/\/+$/, '');
 }
 
-const API_BASE_URL = resolveApiBaseUrl();
+export const API_BASE_URL = resolveApiBaseUrl();
 const SESSION_STORAGE_KEY = 'imogo.auth.session';
 
 type JwtPayload = {
@@ -63,10 +63,6 @@ let memorySession: AuthSession | null = null;
 
 function hasLocalStorage() {
   return typeof globalThis !== 'undefined' && 'localStorage' in globalThis && !!globalThis.localStorage;
-}
-
-function canUseBase64() {
-  return typeof globalThis.atob === 'function' && typeof globalThis.btoa === 'function';
 }
 
 function decodeBase64(value: string) {
@@ -185,7 +181,37 @@ export async function renewToken(apiKey: string) {
     }
   );
 
-  return response.data.token;
+  const newToken = response.data.token;
+  const currentSession = getSession();
+  if (currentSession) {
+    saveSession({ ...currentSession, token: newToken }, currentSession.remember);
+  }
+
+  return newToken;
+}
+
+export async function updateMe(apiKey: string, data: { campo: 'nome' | 'telefone'; value: string }) {
+  const response = await axios.post<{ message: string }>(`${API_BASE_URL}/api/v2/auth/update`, data, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-API-Key': apiKey,
+    },
+  });
+
+  return response.data;
+}
+
+export async function changePassword(apiKey: string, data: Record<string, string>) {
+  const response = await axios.post<{ message: string }>(`${API_BASE_URL}/api/v2/auth/update-password`, data, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-API-Key': apiKey,
+    },
+  });
+
+  return response.data;
 }
 
 export async function forgotPassword(email: string) {

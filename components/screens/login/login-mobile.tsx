@@ -180,8 +180,6 @@ export default function LoginMobile({
                   inputSize={inputSize}
                   minHeight={height * 0.055}
                   radius={8}
-                  wrapperBackgroundColor="#ffffff"
-                  wrapperBorderColor="#EAEAEA"
                   autoCorrect={false}
                 />
 
@@ -200,8 +198,6 @@ export default function LoginMobile({
                   inputSize={inputSize}
                   minHeight={height * 0.055}
                   radius={8}
-                  wrapperBackgroundColor="#ffffff"
-                  wrapperBorderColor="#EAEAEA"
                   autoCorrect={false}
                 />
 
@@ -219,8 +215,8 @@ export default function LoginMobile({
                   disabled={loading || !canLogin}
                   radius={30}
                   size="sm"
-                  labelStyle={{ fontSize: buttonTextSize, color: canLogin ? '#F5F5F5' : '#C4C4C4' }}
-                  containerStyle={[styles.primaryButton, loading || !canLogin ? styles.buttonDisabled : undefined]}
+                  labelStyle={{ color: (!canLogin || loading) ? styles.disabledButton.color : styles.primaryButton.color }}
+                  containerStyle={[styles.primaryButton, loading || !canLogin ? styles.disabledButton : undefined]}
                 />
                 <AppButton
                   label={googleLoading ? 'Conectando com Google...' : 'Continuar com Google'}
