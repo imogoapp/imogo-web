@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
     color: AppTheme.colors.text,
     fontSize: 15,
     fontFamily: AppTheme.typography.fontBold,
+    marginTop: 10,
     marginBottom: AppTheme.spacing.xs,
   },
   inputWrapper: {
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   errorText: {
-    marginTop: 6,
+    marginTop: 10,
     color: '#c62828',
     fontSize: 13,
     fontFamily: AppTheme.typography.fontRegular,

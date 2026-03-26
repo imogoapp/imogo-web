@@ -15,7 +15,7 @@ function resolveApiBaseUrl() {
   return (valid ?? 'https://api-homologacao.vercel.app').replace(/\/+$/, '');
 }
 
-const API_BASE_URL = resolveApiBaseUrl();
+export const API_BASE_URL = resolveApiBaseUrl();
 const SESSION_STORAGE_KEY = 'imogo.auth.session';
 
 type JwtPayload = {

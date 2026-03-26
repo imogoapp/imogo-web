@@ -129,7 +129,7 @@ export function createPrecificadorFlowMobileStyles() {
       color: AppTheme.colors.text,
     },
     inputRow: {
-      flexDirection: "row",
+      flexDirection: "row",    
       gap: 12,
     },
     inputHalf: {

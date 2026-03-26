@@ -1,11 +1,11 @@
 import axios, { isAxiosError } from "axios";
 import { router } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
-import { Alert, Linking, Modal, Platform, Pressable, ScrollView, Text, View } from "react-native";
+import { Alert, Modal, ScrollView, Text, View } from "react-native";
 
 import { createBaseWebNavigationItems } from "@/components/screens/home/home-tools";
 import BaseWeb from "@/components/ui/base-web";
-import { AuthUser } from "@/services/auth";
+import { AuthUser, getSession, API_BASE_URL } from "@/services/auth";
 import { setSimuladorLink } from "@/app/(tabs)/(app)/simulador/state";
 
 import { AppInput } from "@/components/ui/app-input";
@@ -17,6 +17,9 @@ type SimuladorFlowDesktopProps = {
   user: AuthUser | null;
   onLogout: () => void;
 };
+
+const session = getSession();
+const Key = session?.key;
 
 function formatCurrency(value: string) {
   const numericValue = value.replace(/\D/g, "");
@@ -195,9 +198,10 @@ export default function SimuladorFlowDesktop({
         qtd_parcelas: prazo,
       };
 
-      const response = await axios.post("https://api.imogo.com.br/submit_simulation", payload, {
+      const response = await axios.post(`${API_BASE_URL}/api/v2/quadracred/simulador`, payload, {
         headers: {
           Accept: "application/json",
+          "X-API-Key": Key,
           "Content-Type": "application/json",
         },
       });

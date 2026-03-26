@@ -74,7 +74,7 @@ const homeSideMenuStyles = StyleSheet.create({
     flex: 1,
     color: AppTheme.colors.text,
     fontSize: 16,
-    fontFamily: AppTheme.typography.fontRegular,
+    fontFamily: AppTheme.typography.fontBold,
   },
   menuChevron: {
     marginLeft: 'auto' as any,
