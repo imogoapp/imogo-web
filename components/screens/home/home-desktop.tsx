@@ -17,7 +17,7 @@ type HomeDesktopProps = {
 };
 
 export default function HomeDesktop({ user, onLogout }: HomeDesktopProps) {
-  const userName = typeof user?.name === "string" ? user.name : "Corretor";
+  const userName = typeof user?.name === "string" ? user.name : "Usuário";
   const navigationItems = useMemo(
     () =>
       createBaseWebNavigationItems({
