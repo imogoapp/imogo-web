@@ -12,9 +12,12 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { Platform, View } from "react-native";
 import "react-native-reanimated";
+import * as WebBrowser from "expo-web-browser";
 
 import GlobalPageLoader from "@/components/ui/global-page-loader";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+
+WebBrowser.maybeCompleteAuthSession();
 
 SplashScreen.preventAutoHideAsync();
 

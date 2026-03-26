@@ -1,12 +1,9 @@
 import { useCallback, useMemo, useState } from 'react';
 import { isAxiosError } from 'axios';
-import { AuthSessionResult } from 'expo-auth-session';
+import { AuthSessionResult, makeRedirectUri } from 'expo-auth-session';
 import * as Google from 'expo-auth-session/providers/google';
-import * as WebBrowser from 'expo-web-browser';
 
 import { decodeJwtPayload, loginWithSocial, saveSession } from '@/services/auth';
-
-WebBrowser.maybeCompleteAuthSession();
 
 type GoogleProfile = {
   sub: string;
@@ -76,8 +73,19 @@ export function useGoogleSocialLogin() {
     [clientConfig.androidClientId, clientConfig.iosClientId, clientConfig.webClientId]
   );
 
+  const redirectUri = useMemo(
+    () =>
+      makeRedirectUri({
+        scheme: 'imogo',
+        path: '/',
+        preferLocalhost: false,
+      }),
+    []
+  );
+
   const [, , promptAsync] = Google.useIdTokenAuthRequest({
     ...clientConfig,
+    redirectUri,
     scopes: ['openid', 'profile', 'email'],
     selectAccount: true,
   });
