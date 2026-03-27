@@ -20,6 +20,7 @@ import { AppButton } from "@/components/ui/app-button";
 import { AppInput } from "@/components/ui/app-input";
 import { AppTheme } from "@/constants/app-theme";
 import { precificadorResultadoMobileStyles as styles } from "./styles/mobile-styles";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 type PrecificadorResultadoMobileProps = {
   resultado: any;
@@ -46,6 +47,9 @@ function parseBRLCurrencyToNumber(text = "") {
 }
 
 export default function PrecificadorResultadoMobile({ resultado }: PrecificadorResultadoMobileProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+  
   const estimativa = resultado?.resultado;
   const [estimativaLocal, setEstimativaLocal] = useState(estimativa || null);
 

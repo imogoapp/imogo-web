@@ -9,6 +9,7 @@ import { AuthUser } from "@/services/auth";
 
 import { HomeStagingContent } from "./content";
 import styles from "./styles/web-styles";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 type HomeStagingDesktopProps = {
   user: AuthUser | null;
@@ -20,6 +21,9 @@ export default function HomeStagingDesktop({
   user,
   onLogout,
 }: HomeStagingDesktopProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+  
   const navigationItems = useMemo(
     () =>
       createBaseWebNavigationItems({

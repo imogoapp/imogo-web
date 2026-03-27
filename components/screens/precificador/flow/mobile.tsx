@@ -22,7 +22,7 @@ import { AppTheme } from "@/constants/app-theme";
 import { AppButton } from "@/components/ui/app-button";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import dadosLocalizacaoLocal from "@/components/screens/precificador/flow/dadosLocalizacao.json";
-
+import { useAnalytics } from "@/hooks/use-analytics";
 import { createPrecificadorFlowMobileStyles } from "./styles/preview-mobile-styles";
 
 const API_BASE = "https://gateway-laudo.vercel.app/api/laudo/enderecos/df";
@@ -63,6 +63,9 @@ function mapPadraoToApi(label: string) {
 }
 
 export default function PrecificadorFlowMobile({ user }: { user?: AuthUser | null }) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+  
   const styles = createPrecificadorFlowMobileStyles();
 
   const [isLoadingData, setIsLoadingData] = useState(true);

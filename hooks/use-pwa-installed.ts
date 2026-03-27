@@ -39,5 +39,5 @@ export function usePwaInstalled() {
     };
   }, []);
 
-  return { isInstalled } as const;
+  return isInstalled.toString();
 }

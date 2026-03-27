@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { AppButton } from "@/components/ui/app-button";
 import { AppTheme } from "@/constants/app-theme";
 import { simuladorResultadoMobileStyles as styles } from "./styles/mobile-styles";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 type SimuladorResultadoMobileProps = {
   downloadLink: string;
@@ -14,7 +15,9 @@ type SimuladorResultadoMobileProps = {
 export default function SimuladorResultadoMobile({
   downloadLink,
 }: SimuladorResultadoMobileProps) {
-
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+  
   const handleDownload = async () => {
     if (Platform.OS === "web") {
       window.open(downloadLink, "_blank", "noopener,noreferrer");

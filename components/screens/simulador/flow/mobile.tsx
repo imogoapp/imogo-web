@@ -22,6 +22,7 @@ import { AppTheme } from "@/constants/app-theme";
 
 import { simuladorFlowContent } from "./content";
 import { createPrecificadorFlowMobileStyles } from "../../precificador/flow/styles/preview-mobile-styles";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 type SimuladorFlowMobileProps = {
   user?: AuthUser | null;
@@ -82,6 +83,9 @@ const session = getSession();
 const Key = session?.key;
 
 export default function SimuladorFlowMobile({ user }: SimuladorFlowMobileProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+  
   const styles = createPrecificadorFlowMobileStyles();
   
   const [loading, setLoading] = useState(false);

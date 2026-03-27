@@ -10,6 +10,7 @@ import { BaseWebButton } from "@/components/ui/base-web-button";
 import { AppInput } from "@/components/ui/app-input";
 import { AuthUser } from "@/services/auth";
 import { styles } from "../styles";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 type CertidoesImovelDesktopProps = {
   user: AuthUser | null;
@@ -67,6 +68,8 @@ export default function CertidoesImovelDesktop({
   onLogout,
   analiseId,
 }: CertidoesImovelDesktopProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
   const navigationItems = useMemo(
     () =>
       createBaseWebNavigationItems({

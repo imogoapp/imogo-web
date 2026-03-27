@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import React, { useMemo } from "react";
-import { Platform, Text, View } from "react-native";
+import { Platform, Text, Linking, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { createBaseWebNavigationItems } from "@/components/screens/home/home-tools";
@@ -8,6 +8,7 @@ import BaseWeb from "@/components/ui/base-web";
 import { BaseWebButton } from "@/components/ui/base-web-button";
 import { AuthUser } from "@/services/auth";
 import { AppTheme } from "@/constants/app-theme";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 import { simuladorResultadoWebStyles as styles } from "./styles/web-styles";
 
@@ -22,6 +23,9 @@ export default function SimuladorResultadoDesktop({
   onLogout,
   downloadLink,
 }: SimuladorResultadoDesktopProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+
   const navigationItems = useMemo(
     () =>
       createBaseWebNavigationItems({

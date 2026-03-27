@@ -22,6 +22,7 @@ import { AppStepProgress } from '@/components/ui/app-step-progress';
 import { AppTitle } from '@/components/ui/app-title';
 
 import { createRegisterMobileStyles } from './styles/register-mobile-styles';
+import { useAnalytics } from '@/hooks/use-analytics';
 
 type RegisterMobileProps = {
   onRegisterPress?: (payload: {
@@ -131,6 +132,9 @@ function getRegisterApiErrorMessage(errorData: RegisterApiError) {
 }
 
 export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+  
   const { width, height } = useWindowDimensions();
   const styles = createRegisterMobileStyles(width, height);
   const titleSize = Math.min(
