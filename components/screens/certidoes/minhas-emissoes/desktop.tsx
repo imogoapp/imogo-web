@@ -9,6 +9,7 @@ import BaseWeb from "@/components/ui/base-web";
 import { AuthUser } from "@/services/auth";
 import { AppTheme } from "@/constants/app-theme";
 import styles from "../styles/web-styles";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 type MinhasEmissoesDesktopProps = {
   user: AuthUser | null;
@@ -28,6 +29,9 @@ export default function MinhasEmissoesDesktop({
   user,
   onLogout,
 }: MinhasEmissoesDesktopProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+  
   const [analyses, setAnalyses] = useState<Analise[]>([]);
   const [loading, setLoading] = useState(false);
 

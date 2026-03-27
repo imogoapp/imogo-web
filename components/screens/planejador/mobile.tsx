@@ -5,8 +5,12 @@ import { Linking, Pressable, SafeAreaView, ScrollView, Text, View } from "react-
 
 import { PlanejadorContent} from "./content";
 import { createPlanejadorPreviewMobileStyles } from "./styles/preview-mobile-styles";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 export default function PlanejadorMobile() {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+  
   const styles = createPlanejadorPreviewMobileStyles();
 
   return (

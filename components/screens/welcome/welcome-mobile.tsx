@@ -8,12 +8,17 @@ import { AppTitle } from '@/components/ui/app-title';
 
 import { createWelcomeMobileStyles } from './styles/welcome-mobile-styles';
 
+import { useAnalytics } from '@/hooks/use-analytics';
+
 type WelcomeMobileProps = {
   onRegisterPress?: () => void;
   onLoginPress?: () => void;
 };
 
 export default function WelcomeMobile({ onRegisterPress, onLoginPress }: WelcomeMobileProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+
   const { width, height } = useWindowDimensions();
   const styles = createWelcomeMobileStyles(width, height);
 

@@ -15,6 +15,7 @@ import { AutocompleteField } from "./components/autocomplete-field";
 import { SelectField } from "./components/select-field";
 import { precificadorContent } from "./content";
 import styles from "./styles/web-styles";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const API_BASE = "https://gateway-laudo.vercel.app/api/laudo/enderecos/df";
 const API_TIPOS = "https://gateway-laudo.vercel.app/api/laudo/tipos";
@@ -108,6 +109,9 @@ export default function PrecificadorDesktop({
   user,
   onLogout,
 }: PrecificadorDesktopProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+  
   const navigationItems = useMemo(
     () =>
       createBaseWebNavigationItems({

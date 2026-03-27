@@ -11,6 +11,7 @@ import { AppTitle } from '@/components/ui/app-title';
 import { forgotPassword } from '@/services/auth';
 
 import styles from './styles/reset-password-web-styles';
+import { useAnalytics } from '@/hooks/use-analytics';
 
 type ResetPasswordDesktopProps = {
   onSubmitPress?: (payload: { email: string }) => Promise<void> | void;

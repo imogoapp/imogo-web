@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import axios from "axios";
-
+import { useAnalytics } from "@/hooks/use-analytics";
 import { AuthUser } from "@/services/auth";
 import { AppTheme } from "@/constants/app-theme";
 import { flowMobileStyles as styles } from "../flow/styles/flow-mobile-styles";
@@ -76,6 +76,9 @@ function formatDate(dateString: string) {
 export default function AnaliseDetalheMobile({
   analiseId,
 }: AnaliseDetalheMobileProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+  
   const [analiseData, setAnaliseData] = useState<AnaliseData | null>(null);
   const [proprietarios, setProprietarios] = useState<ProprietarioData[]>([]);
   const [loading, setLoading] = useState(false);

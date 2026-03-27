@@ -10,6 +10,7 @@ import { BaseWebButton } from "@/components/ui/base-web-button";
 import { AuthUser } from "@/services/auth";
 import { AppTheme } from "@/constants/app-theme";
 import { styles } from "../flow/styles";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 type AnaliseDetalheDesktopProps = {
   user: AuthUser | null;
@@ -41,6 +42,8 @@ export default function AnaliseDetalheDesktop({
   onLogout,
   analiseId,
 }: AnaliseDetalheDesktopProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
   const [analiseData, setAnaliseData] = useState<AnaliseData | null>(null);
   const [proprietarios, setProprietarios] = useState<ProprietarioData[]>([]);
   const [loading, setLoading] = useState(false);

@@ -21,6 +21,7 @@ import { AppInput } from "@/components/ui/app-input";
 import { AuthUser } from "@/services/auth";
 import { AppTheme } from "@/constants/app-theme";
 import { precificadorResultadoWebStyles as styles } from "./styles/web-styles";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 type PrecificadorResultadoDesktopProps = {
   user: AuthUser | null;
@@ -53,6 +54,9 @@ export default function PrecificadorResultadoDesktop({
   onLogout,
   resultado,
 }: PrecificadorResultadoDesktopProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+
   const navigationItems = useMemo(
     () =>
       createBaseWebNavigationItems({

@@ -9,6 +9,7 @@ import { AuthUser } from "@/services/auth";
 
 import { precificadorContent } from "./content";
 import styles from "./styles/web-styles";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 type PrecificadorDesktopProps = {
   user: AuthUser | null;
@@ -19,6 +20,9 @@ export default function PrecificadorDesktop({
   user,
   onLogout,
 }: PrecificadorDesktopProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+  
   const navigationItems = useMemo(
     () =>
       createBaseWebNavigationItems({

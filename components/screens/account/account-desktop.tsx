@@ -8,7 +8,7 @@ import { createBaseWebNavigationItems } from '@/components/screens/home/home-too
 import { AppInput } from '@/components/ui/app-input';
 import BaseWeb from '@/components/ui/base-web';
 import { AuthUser, changePassword, getSession, renewToken, updateMe } from '@/services/auth';
-
+import { useAnalytics } from '@/hooks/use-analytics';
 import styles from './styles/account-web-styles';
 
 /* ── Types ──────────────────────────────────────────────── */
@@ -49,6 +49,8 @@ function resolveUser(user: AuthUser | null) {
 /* ── Component ──────────────────────────────────────────── */
 
 export default function AccountDesktop({ user, onLogout, onRefresh }: AccountDesktopProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
   const navigationItems = useMemo(
     () => createBaseWebNavigationItems({ activeId: undefined, onNavigate: (path) => router.replace(path as never) }),
     [],

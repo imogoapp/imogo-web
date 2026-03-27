@@ -6,8 +6,12 @@ import { Pressable, SafeAreaView, ScrollView, Text, View, Modal, TouchableOpacit
 import { CertidoesContent } from "./content";
 import { createCertidoesPreviewMobileStyles } from "./styles/preview-mobile-styles";
 import { useState } from "react";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 export default function CertidoesMobile() {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+  
   const styles = createCertidoesPreviewMobileStyles();
 
   const [modalVisible, setModalVisible] = useState(false); // Controla o primeiro modal (categoria)
