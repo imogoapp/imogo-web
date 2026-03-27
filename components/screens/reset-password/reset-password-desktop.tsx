@@ -22,6 +22,9 @@ function isValidEmail(value: string) {
 }
 
 export default function ResetPasswordDesktop({ onSubmitPress }: ResetPasswordDesktopProps) {
+  const { trackEvent } = useAnalytics();
+  trackEvent();
+
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [sending, setSending] = useState(false);
