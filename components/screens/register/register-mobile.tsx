@@ -11,6 +11,7 @@ import {
   Text,
   View,
   useWindowDimensions,
+  TouchableOpacity,
 } from 'react-native';
 
 import { AppButton } from '@/components/ui/app-button';
@@ -163,6 +164,7 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
   const [telefone, setTelefone] = useState('');
+  const [telefoneError, setTelefoneError] = useState('');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
@@ -176,8 +178,8 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
     confirmPassword.length > 0 && password !== confirmPassword ? 'As senhas não coincidem.' : '';
 
   const isStep1Valid = useMemo(() => {
-    return !!nome.trim() && !!sobrenome.trim() && telefone.replace(/\D/g, '').length === 11;
-  }, [nome, sobrenome, telefone]);
+    return !!nome.trim() && !!sobrenome.trim() && telefone.replace(/\D/g, '').length === 11 && !telefoneError;
+  }, [nome, sobrenome, telefone, telefoneError]);
 
   const isStep2Valid = useMemo(() => {
     return (
@@ -185,11 +187,12 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
       !!password.trim() &&
       !!confirmPassword.trim() &&
       validateEmail(email) &&
+      !emailError &&
       password.length >= MIN_PASSWORD_LENGTH &&
       password === confirmPassword &&
       acceptedTerms
     );
-  }, [email, password, confirmPassword, acceptedTerms]);
+  }, [email, emailError, password, confirmPassword, acceptedTerms]);
 
   const isStep3Valid = !!selectedOption;
 
@@ -291,9 +294,13 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
 
         if (status === 409) {
           if (errorData.detail === 'email already registered') {
-            message = 'Este e-mail já está cadastrado.';
+            setEmailError('Este e-mail já está cadastrado.');
+            setStep(2);
+            return;
           } else if (errorData.detail === 'phone already registered') {
-            message = 'Este telefone já está cadastrado.';
+            setTelefoneError('Este telefone já está cadastrado.');
+            setStep(1);
+            return;
           }
         }
 
@@ -328,9 +335,14 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
 
       {step === 1 ? (
         <View style={styles.content}>
-          <AppTitle size={titleSize} marginBottom={height * 0.05} style={styles.title}>
-            Seus dados
-          </AppTitle>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: height * 0.05 }}>
+            <AppTitle size={titleSize} marginBottom={0} style={styles.title}>
+              Seus dados
+            </AppTitle>
+            <TouchableOpacity onPress={() => router.push('/login')}>
+              <Text style={{ color: '#730d83', fontSize: labelSize + 2, fontWeight: 'bold' }}>Já tenho conta</Text>
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.form}>
             <AppInput
@@ -359,12 +371,16 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
               label="Telefone"
               placeholder="(00) 0 0000-0000"
               value={telefone}
-              onChangeText={(value) => setTelefone(formatPhone(value))}
+              onChangeText={(value) => {
+                setTelefone(formatPhone(value));
+                if (telefoneError) setTelefoneError('');
+              }}
               keyboardType="phone-pad"
               labelSize={labelSize}
               inputSize={inputSize}
               minHeight={inputHeight}
               radius={inputRadius}
+              errorMessage={telefoneError}
             />
           </View>
 
@@ -386,9 +402,14 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
 
       {step === 2 ? (
         <View style={styles.content}>
-          <AppTitle size={titleSize} marginBottom={height * 0.015} style={styles.title}>
-            Criar cadastro
-          </AppTitle>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: height * 0.015 }}>
+            <AppTitle size={titleSize} marginBottom={0} style={styles.title}>
+              Criar cadastro
+            </AppTitle>
+            <TouchableOpacity onPress={() => router.push('/login')}>
+              <Text style={{ color: '#730d83', fontSize: labelSize + 2, fontWeight: 'bold' }}>Já tenho conta</Text>
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.form}>
             <AppInput
@@ -452,9 +473,14 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
       {step === 3 ? (
         <View style={styles.content}>
           <Text style={styles.helperText}>So mais uma coisa</Text>
-          <AppTitle size={titleSize} marginBottom={height * 0.01} style={styles.title}>
-            Como conheceu a imoGo?
-          </AppTitle>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: height * 0.01 }}>
+            <AppTitle size={titleSize} marginBottom={0} style={styles.title}>
+              Como conheceu a imoGo?
+            </AppTitle>
+            <TouchableOpacity onPress={() => router.push('/login')}>
+              <Text style={{ color: '#730d83', fontSize: labelSize + 2, fontWeight: 'bold' }}>Já tenho conta</Text>
+            </TouchableOpacity>
+          </View>
           <Text style={styles.helperText}>Nos conte como chegou ate aqui</Text>
 
           <View style={styles.optionsList}>
