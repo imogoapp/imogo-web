@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { Image } from 'expo-image';
 import axios, { isAxiosError } from 'axios';
 import { useMemo, useState } from 'react';
-import { Alert, ImageBackground, Linking, Text, View } from 'react-native';
+import { Alert, ImageBackground, Linking, Text, View, TouchableOpacity } from 'react-native';
 
 import { AppButton } from '@/components/ui/app-button';
 import { AppCard } from '@/components/ui/app-card';
@@ -134,6 +134,7 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
   const [telefone, setTelefone] = useState('');
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [telefoneError, setTelefoneError] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -152,9 +153,10 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
       password.length >= MIN_PASSWORD_LENGTH &&
       acceptedTerms &&
       !emailError &&
+      !telefoneError &&
       password === confirmPassword
     );
-  }, [nome, telefone, email, password, confirmPassword, acceptedTerms, emailError]);
+  }, [nome, telefone, email, password, confirmPassword, acceptedTerms, emailError, telefoneError]);
   const confirmPasswordError =
     confirmPassword.length > 0 && password !== confirmPassword ? 'As senhas precisam ser iguais.' : '';
 
@@ -262,9 +264,13 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
 
         if (status === 409) {
           if (errorData.detail === 'email already registered') {
-            message = 'Este e-mail já está cadastrado.';
+            setEmailError('Este e-mail já está cadastrado.');
+            setStep('form');
+            return;
           } else if (errorData.detail === 'phone already registered') {
-            message = 'Este telefone já está cadastrado.';
+            setTelefoneError('Este telefone já está cadastrado.');
+            setStep('form');
+            return;
           }
         }
 
@@ -304,9 +310,13 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
                 label="Telefone"
                 placeholder="(61) 99999-9999"
                 value={telefone}
-                onChangeText={(value) => setTelefone(formatPhone(value))}
+                onChangeText={(value) => {
+                  setTelefone(formatPhone(value));
+                  if (telefoneError) setTelefoneError('');
+                }}
                 keyboardType="numeric"
                 leadingIconName="call-outline"
+                errorMessage={telefoneError}
               />
 
               <View style={styles.separator} />
@@ -361,6 +371,10 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
                 leftIconName="logo-google"
                 onPress={handleGoogle}
               />
+
+              <TouchableOpacity onPress={() => router.push('/login')} style={{ alignItems: 'center', marginTop: 16 }}>
+                <Text style={{ color: '#730d83', fontSize: 14, fontWeight: 'bold' }}>Já tenho conta? Fazer login</Text>
+              </TouchableOpacity>
             </View>
           </>
         ) : null}
