@@ -1,8 +1,8 @@
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import {
-    DarkTheme,
-    DefaultTheme,
-    ThemeProvider,
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack, usePathname } from "expo-router";
@@ -119,7 +119,10 @@ export default function RootLayout() {
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-title" content="imoGo" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
         <meta name="msapplication-TileColor" content="#730d83" />
         <meta property="og:site_name" content="imoGo" />
         <link rel="manifest" href="/manifest.webmanifest" />

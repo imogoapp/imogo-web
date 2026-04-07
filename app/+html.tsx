@@ -11,6 +11,27 @@ export default function RootHtml({ children }: PropsWithChildren) {
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              :root {
+                --ios-statusbar-bg: #F5F5F5F5;
+              }
+              html, body {
+                background-color: var(--ios-statusbar-bg);
+              }
+              body {
+                padding-top: env(safe-area-inset-top);
+                padding-top: constant(safe-area-inset-top);
+              }
+              @supports (padding-top: max(0px)) {
+                body {
+                  padding-top: env(safe-area-inset-top);
+                }
+              }
+            `,
+          }}
+        />
         <ScrollViewStyleReset />
       </head>
       <body>
@@ -31,7 +52,7 @@ export default function RootHtml({ children }: PropsWithChildren) {
                   })
                 }
               })(document,"script");
-            `
+            `,
           }}
         />
       </body>
