@@ -9,7 +9,6 @@ import { AuthUser } from "@/services/auth";
 
 import { ContratosContent } from "./content";
 import styles from "./styles/web-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 type ContratosDesktopProps = {
   user: AuthUser | null;
@@ -21,8 +20,6 @@ export default function ContratosDesktop({
   user,
   onLogout,
 }: ContratosDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   const navigationItems = useMemo(
     () =>
       createBaseWebNavigationItems({

@@ -12,7 +12,6 @@ import { AppInput } from "@/components/ui/app-input";
 import { BaseWebButton } from "@/components/ui/base-web-button";
 import { simuladorFlowContent } from "./content";
 import styles from "./styles/web-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 type SimuladorFlowDesktopProps = {
   user: AuthUser | null;
@@ -99,8 +98,6 @@ export default function SimuladorFlowDesktop({
   user,
   onLogout,
 }: SimuladorFlowDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   
   const navigationItems = useMemo(
     () =>

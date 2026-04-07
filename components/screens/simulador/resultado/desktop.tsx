@@ -8,7 +8,6 @@ import BaseWeb from "@/components/ui/base-web";
 import { BaseWebButton } from "@/components/ui/base-web-button";
 import { AuthUser } from "@/services/auth";
 import { AppTheme } from "@/constants/app-theme";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 import { simuladorResultadoWebStyles as styles } from "./styles/web-styles";
 
@@ -23,8 +22,6 @@ export default function SimuladorResultadoDesktop({
   onLogout,
   downloadLink,
 }: SimuladorResultadoDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
 
   const navigationItems = useMemo(
     () =>

@@ -6,7 +6,6 @@ import { AppLogo } from '@/components/ui/app-logo';
 import { AppTitle } from '@/components/ui/app-title';
 
 import styles from './styles/welcome-web-styles';
-import { useAnalytics } from '@/hooks/use-analytics';
 
 type WelcomeDesktopProps = {
   onRegisterPress?: () => void;
@@ -17,8 +16,6 @@ export default function WelcomeDesktop({
   onRegisterPress,
   onLoginPress,
 }: WelcomeDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
 
   const handleRegister = onRegisterPress ?? (() => router.push('/register'));
   const handleLogin = onLoginPress ?? (() => router.push('/login'));

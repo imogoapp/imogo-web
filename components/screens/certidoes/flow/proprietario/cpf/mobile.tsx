@@ -15,7 +15,6 @@ import { AppInput } from "@/components/ui/app-input";
 import { AppTheme } from "@/constants/app-theme";
 import { AuthUser } from "@/services/auth";
 import { flowMobileStyles as styles } from "../../styles/flow-mobile-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 type CertidoesCpfMobileProps = {
   user: AuthUser | null;
@@ -106,8 +105,6 @@ function isOwnerComplete(owner: OwnerForm) {
 }
 
 export default function CertidoesCpfMobile({ user }: CertidoesCpfMobileProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   const [owners, setOwners] = useState<OwnerForm[]>([{ ...EMPTY_OWNER }]);
   const [openEstadoCivilIndex, setOpenEstadoCivilIndex] = useState<
     number | null

@@ -15,7 +15,6 @@ import { AppOptionCard } from '@/components/ui/app-option-card';
 import { AppTitle } from '@/components/ui/app-title';
 
 import styles from './styles/register-web-styles';
-import { useAnalytics } from '@/hooks/use-analytics';
 
 type RegisterPayload = {
   nome: string;
@@ -127,8 +126,6 @@ function getRegisterApiErrorMessage(errorData: RegisterApiError) {
 }
 
 export default function RegisterDesktop({ onRegisterPress, onGooglePress }: RegisterDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');

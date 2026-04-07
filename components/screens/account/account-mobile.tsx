@@ -19,7 +19,6 @@ import { AuthUser, changePassword, getSession, renewToken, updateMe } from '@/se
 
 import { createAccountMobileStyles } from './styles/account-mobile-styles';
 
-import { useAnalytics } from '@/hooks/use-analytics';
 
 /* ── Types ──────────────────────────────────────────────── */
 
@@ -59,8 +58,6 @@ function resolveUser(user: AuthUser | null) {
 /* ── Component ──────────────────────────────────────────── */
 
 export default function AccountMobile({ user, onLogout, onRefresh }: AccountMobileProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   const { width, height } = useWindowDimensions();
   const styles = useMemo(() => createAccountMobileStyles(width, height), [width, height]);
   const [u, setU] = useState(() => resolveUser(user));

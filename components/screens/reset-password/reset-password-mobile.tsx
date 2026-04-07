@@ -12,7 +12,6 @@ import { AppTitle } from '@/components/ui/app-title';
 import { forgotPassword } from '@/services/auth';
 
 import { createResetPasswordMobileStyles } from './styles/reset-password-mobile-styles';
-import { useAnalytics } from '@/hooks/use-analytics';
 
 type ResetPasswordMobileProps = {
   onSubmitPress?: (payload: { email: string }) => Promise<void> | void;
@@ -23,8 +22,6 @@ function isValidEmail(value: string) {
 }
 
 export default function ResetPasswordMobile({ onSubmitPress }: ResetPasswordMobileProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
 
   const { width, height } = useWindowDimensions();
   const styles = createResetPasswordMobileStyles(width, height);

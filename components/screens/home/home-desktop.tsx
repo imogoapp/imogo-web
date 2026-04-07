@@ -10,7 +10,6 @@ import BaseWeb from "@/components/ui/base-web";
 import { BaseWebFeatureCard } from "@/components/ui/base-web-feature-card";
 import { AuthUser } from "@/services/auth";
 import styles from "./styles/home-web-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 type HomeDesktopProps = {
   user: AuthUser | null;
@@ -18,8 +17,6 @@ type HomeDesktopProps = {
 };
 
 export default function HomeDesktop({ user, onLogout }: HomeDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   
   const userName = typeof user?.name === "string" ? user.name : "Usuário";
   const navigationItems = useMemo(

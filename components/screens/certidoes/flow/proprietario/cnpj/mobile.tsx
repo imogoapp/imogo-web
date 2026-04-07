@@ -10,7 +10,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { useAnalytics } from "@/hooks/use-analytics";
 import { AppInput } from "@/components/ui/app-input";
 import { AppTheme } from "@/constants/app-theme";
 import { AuthUser } from "@/services/auth";
@@ -64,8 +63,6 @@ function isFormValid(companies: CompanyForm[]) {
 export default function CertidoesCnpjMobile({
   user,
 }: CertidoesCnpjMobileProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   const [companies, setCompanies] = useState<CompanyForm[]>([
     { ...EMPTY_COMPANY },
   ]);

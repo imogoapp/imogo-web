@@ -12,7 +12,6 @@ import { useGoogleSocialLogin } from '@/hooks/use-google-social-login';
 import { loginWithEmail, saveSession } from '@/services/auth';
 
 import styles from './styles/login-web-styles';
-import { useAnalytics } from '@/hooks/use-analytics';
 
 type LoginPayload = {
   email: string;
@@ -43,8 +42,6 @@ export default function LoginDesktop({
   onForgotPasswordPress,
   onGooglePress,
 }: LoginDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
