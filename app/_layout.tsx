@@ -1,8 +1,8 @@
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import {
-    DarkTheme,
-    DefaultTheme,
-    ThemeProvider,
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack, usePathname } from "expo-router";
