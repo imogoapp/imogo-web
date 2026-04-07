@@ -6,11 +6,8 @@ import { TrilhaCardGrid } from "@/components/ui/trilha-card-grid";
 
 import { TrilhaContent, trilhaCards } from "./content";
 import { createTrilhaPreviewMobileStyles } from "./styles/preview-mobile-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 export default function TrilhaMobile() {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   
   const styles = createTrilhaPreviewMobileStyles();
 

@@ -11,7 +11,6 @@ import { AppInput } from "@/components/ui/app-input";
 import { AppTheme } from "@/constants/app-theme";
 import { AuthUser } from "@/services/auth";
 import { styles } from "../../styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 type CertidoesCnpjDesktopProps = {
   user: AuthUser | null;
@@ -85,8 +84,6 @@ export default function CertidoesCnpjDesktop({
   user,
   onLogout,
 }: CertidoesCnpjDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   const navigationItems = useMemo(
     () =>
       createBaseWebNavigationItems({

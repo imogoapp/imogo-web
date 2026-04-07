@@ -5,11 +5,8 @@ import { Pressable, SafeAreaView, ScrollView, Text, View , Linking} from "react-
 
 import { HomeStagingContent} from "./content";
 import { createHomeStagingPreviewMobileStyles } from "./styles/preview-mobile-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 export default function HomeStagingMobile() {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
 
   const styles = createHomeStagingPreviewMobileStyles();
 

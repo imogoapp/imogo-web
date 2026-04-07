@@ -5,11 +5,8 @@ import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 
 import { simuladorContent } from "./simulador-content";
 import { createPrecificadorPreviewMobileStyles } from "./styles/simulador-preview-mobile-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 export default function SimuladorMobile() {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
 
   const styles = createPrecificadorPreviewMobileStyles();
 

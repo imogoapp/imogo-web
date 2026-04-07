@@ -5,11 +5,8 @@ import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 
 import { ContratosContent} from "./content";
 import { createContratosPreviewMobileStyles } from "./styles/preview-mobile-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 export default function ContratosMobile() {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
 
   const styles = createContratosPreviewMobileStyles();
 

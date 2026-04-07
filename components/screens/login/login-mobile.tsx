@@ -23,7 +23,6 @@ import { useGoogleSocialLogin } from '@/hooks/use-google-social-login';
 import { loginWithEmail, saveSession } from '@/services/auth';
 
 import { createLoginMobileStyles } from './styles/login-mobile-styles';
-import { useAnalytics } from '@/hooks/use-analytics';
 
 type LoginPayload = {
   email: string;
@@ -54,8 +53,6 @@ export default function LoginMobile({
   onForgotPasswordPress,
   onGooglePress,
 }: LoginMobileProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   
   const { width, height } = useWindowDimensions();
   const styles = createLoginMobileStyles(width, height);

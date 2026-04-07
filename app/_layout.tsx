@@ -1,20 +1,21 @@
 import { Nunito_400Regular, Nunito_700Bold } from "@expo-google-fonts/nunito";
 import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
+    DarkTheme,
+    DefaultTheme,
+    ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack, usePathname } from "expo-router";
 import Head from "expo-router/head";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import * as WebBrowser from "expo-web-browser";
+import { useEffect, useRef, useState } from "react";
 import { Platform, View } from "react-native";
 import "react-native-reanimated";
-import * as WebBrowser from "expo-web-browser";
 
 import GlobalPageLoader from "@/components/ui/global-page-loader";
+import { useAnalytics } from "@/hooks/use-analytics";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -28,6 +29,8 @@ export const unstable_settings = {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const pathname = usePathname();
+  const { trackEvent } = useAnalytics();
+  const previousPathnameRef = useRef<string | null>(null);
   const [isRouteLoading, setIsRouteLoading] = useState(true);
   const [fontsLoaded, fontsError] = useFonts({
     Nunito_400Regular,
@@ -65,6 +68,31 @@ export default function RootLayout() {
       // Ignore registration error in development.
     });
   }, []);
+
+  useEffect(() => {
+    if (!pathname) {
+      return;
+    }
+
+    const from = previousPathnameRef.current;
+    const to = pathname;
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+    const nextUrl = baseUrl ? `${baseUrl}${to}` : undefined;
+    const fromUrl = from && baseUrl ? `${baseUrl}${from}` : undefined;
+    trackEvent(
+      pathname,
+      {
+        event: "navigation",
+        ...(from ? { from } : {}),
+        to,
+        ...(fromUrl ? { fromUrl } : {}),
+        ...(nextUrl ? { toUrl: nextUrl } : {}),
+      },
+      { url: nextUrl },
+    );
+
+    previousPathnameRef.current = pathname;
+  }, [pathname, trackEvent]);
 
   useEffect(() => {
     setIsRouteLoading(true);

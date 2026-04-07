@@ -10,7 +10,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { useAnalytics } from "@/hooks/use-analytics";
 import { AppInput } from "@/components/ui/app-input";
 import { AppTheme } from "@/constants/app-theme";
 import { AuthUser } from "@/services/auth";
@@ -66,8 +65,6 @@ function isFormValid(params: {
 export default function CertidoesImovelMobile({
   analiseId,
 }: CertidoesImovelMobileProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   const [cep, setCep] = useState("");
   const [endereco, setEndereco] = useState("");
   const [complemento, setComplemento] = useState("");

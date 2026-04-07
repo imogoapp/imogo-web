@@ -11,7 +11,6 @@ import { AppInput } from "@/components/ui/app-input";
 import { AppTheme } from "@/constants/app-theme";
 import { AuthUser } from "@/services/auth";
 import { styles } from "../../styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 type CertidoesCpfDesktopProps = {
   user: AuthUser | null;
@@ -144,8 +143,6 @@ export default function CertidoesCpfDesktop({
   user,
   onLogout,
 }: CertidoesCpfDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
 
   const navigationItems = useMemo(
     () =>

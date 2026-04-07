@@ -23,7 +23,6 @@ import {
   getSession,
 } from "@/services/auth";
 import { createHomeMobileStyles } from "./styles/home-mobile-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 function decodeUserFromSession(): AuthUser | null {
   const session = getSession();
@@ -44,8 +43,6 @@ type HomeMobileProps = {
 };
 
 export default function HomeMobile({ onLogout }: HomeMobileProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   const { width, height } = useWindowDimensions();
   const styles = useMemo(
     () => createHomeMobileStyles({ width, height }),

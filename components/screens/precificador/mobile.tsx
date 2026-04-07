@@ -5,11 +5,8 @@ import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 
 import { precificadorContent } from "./content";
 import { createPrecificadorPreviewMobileStyles } from "./styles/preview-mobile-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 export default function PrecificadorMobile() {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   
   const styles = createPrecificadorPreviewMobileStyles();
 

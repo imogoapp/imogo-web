@@ -1,7 +1,7 @@
-import { useCallback } from 'react';
-import { browserName, osName, osVersion } from 'react-device-detect';
-import { getMe, getSession, decodeJwtPayload } from '@/services/auth';
-import { usePwaInstalled } from './use-pwa-installed';
+import { decodeJwtPayload, getMe, getSession } from "@/services/auth";
+import { useCallback } from "react";
+import { browserName, osName, osVersion } from "react-device-detect";
+import { usePwaInstalled } from "./use-pwa-installed";
 
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_ANALYTICS;
 const DEVICE_INFO = `${osName}-${osVersion}-${browserName}`;
@@ -11,7 +11,7 @@ let lastToken: string | null = null;
 let cachedPublicId: string | null = null;
 
 export interface TrackEventPayload {
-  channel: 'pwa' | 'website';
+  channel: "pwa" | "website";
   identify: string;
   public_id?: string;
   device?: string;
@@ -20,6 +20,10 @@ export interface TrackEventPayload {
   page?: string;
   properties?: Record<string, any>;
 }
+
+type TrackEventOptions = {
+  url?: string;
+};
 
 /**
  * Hook para disparar eventos de analytics.
@@ -34,8 +38,13 @@ export function useAnalytics() {
    * @param properties Propriedades adicionais do evento (ex: { action: "success" })
    */
   const trackEvent = useCallback(
-    async (page?: string, properties?: Record<string, any>) => {
+    async (
+      page?: string,
+      properties?: Record<string, any>,
+      options?: TrackEventOptions,
+    ) => {
       if (!API_BASE_URL) return false;
+      if (typeof window === "undefined" || !window?.location) return false;
 
       const session = getSession();
       const currentToken = session?.token || null;
@@ -51,7 +60,7 @@ export function useAnalytics() {
         try {
           // 1. Tenta decodificar o JWT (instantâneo)
           const payload = decodeJwtPayload(currentToken);
-          if (payload?.public_id && typeof payload.public_id === 'string') {
+          if (payload?.public_id && typeof payload.public_id === "string") {
             cachedPublicId = payload.public_id;
           } else if (session?.key) {
             // 2. Fallback: Busca via API getMe se o JWT não tiver o campo
@@ -61,26 +70,29 @@ export function useAnalytics() {
             }
           }
         } catch (error) {
-          console.error('[Analytics] Falha ao obter identificador do usuário:', error);
+          console.error(
+            "[Analytics] Falha ao obter identificador do usuário:",
+            error,
+          );
         }
       }
 
       const payload: TrackEventPayload = {
-        channel: 'pwa',
-        identify: 'pwa-v2',
-        public_id: cachedPublicId || 'anonymous',
+        channel: "pwa",
+        identify: "pwa-v2",
+        public_id: cachedPublicId || "anonymous",
         device: DEVICE_INFO,
         pwa_install: pwaStatus,
-        url: window.location.href,
+        url: options?.url ?? window.location.href,
         page: page || window.location.pathname,
         properties: properties || {},
       };
 
       try {
         const response = await fetch(`${API_BASE_URL}/track/event`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(payload),
         });
@@ -88,11 +100,11 @@ export function useAnalytics() {
         const data = await (response.ok ? response.json() : {});
         return data?.success || response.status === 200;
       } catch (error) {
-        console.error('Erro ao enviar analytics:', error);
+        console.error("Erro ao enviar analytics:", error);
         return false;
       }
     },
-    [pwaStatus]
+    [pwaStatus],
   );
 
   return { trackEvent };

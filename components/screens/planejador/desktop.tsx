@@ -9,7 +9,6 @@ import { AuthUser } from "@/services/auth";
 
 import { PlanejadorContent } from "./content";
 import styles from "./styles/web-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 type PlanejadorDesktopProps = {
   user: AuthUser | null;
@@ -21,8 +20,6 @@ export default function PlanejadorDesktop({
   user,
   onLogout,
 }: PlanejadorDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   const navigationItems = useMemo(
     () =>
       createBaseWebNavigationItems({

@@ -9,7 +9,6 @@ import { AuthUser } from "@/services/auth";
 
 import { simuladorContent } from "./simulador-content";
 import styles from "./styles/simulador-web-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 type SimuladorDesktopProps = {
   user: AuthUser | null;
@@ -20,8 +19,6 @@ export default function SimuladorDesktop({
   user,
   onLogout,
 }: SimuladorDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   
   const navigationItems = useMemo(
     () =>

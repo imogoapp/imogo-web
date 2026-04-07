@@ -9,7 +9,6 @@ import { AuthUser } from "@/services/auth";
 
 import { TrilhaContent, trilhaCards } from "./content";
 import styles from "./styles/web-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 type TrilhaDesktopProps = {
   user: AuthUser | null;
@@ -21,8 +20,6 @@ export default function TrilhaDesktop({
   user,
   onLogout,
 }: TrilhaDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
   
   const navigationItems = useMemo(
     () =>

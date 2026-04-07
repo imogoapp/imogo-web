@@ -10,7 +10,6 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { CertidoesContent } from "./content";
 import styles from "./styles/web-styles";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 type CertidoesDesktopProps = {
   user: AuthUser | null;
@@ -21,8 +20,6 @@ export default function CertidoesDesktop({
   user,
   onLogout,
 }: CertidoesDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
 
   const [modalVisible, setModalVisible] = useState(false);
   const closeMenu = () => setModalVisible(false);

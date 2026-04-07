@@ -11,7 +11,6 @@ import { AppTitle } from '@/components/ui/app-title';
 import { forgotPassword } from '@/services/auth';
 
 import styles from './styles/reset-password-web-styles';
-import { useAnalytics } from '@/hooks/use-analytics';
 
 type ResetPasswordDesktopProps = {
   onSubmitPress?: (payload: { email: string }) => Promise<void> | void;
@@ -22,8 +21,6 @@ function isValidEmail(value: string) {
 }
 
 export default function ResetPasswordDesktop({ onSubmitPress }: ResetPasswordDesktopProps) {
-  const { trackEvent } = useAnalytics();
-  trackEvent();
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
