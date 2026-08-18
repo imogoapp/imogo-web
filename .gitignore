@@ -31,7 +31,6 @@ yarn-error.*
 *.pem
 
 # local env files
-.env*.local
 .env
 
 # typescript
@@ -44,3 +43,6 @@ app-example
 /android
 /py
 modelo/
+
+# other
+image-size/

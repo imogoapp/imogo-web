@@ -68,9 +68,10 @@ function extractIdTokenFromResult(result: AuthSessionResult) {
 export function useGoogleSocialLogin() {
   const [loading, setLoading] = useState(false);
   const clientConfig = useMemo(() => getGoogleClientConfig(), []);
+  const hasRealWebClientId = !!process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
   const hasAnyClientId = useMemo(
-    () => !!(clientConfig.webClientId || clientConfig.iosClientId || clientConfig.androidClientId),
-    [clientConfig.androidClientId, clientConfig.iosClientId, clientConfig.webClientId]
+    () => !!(hasRealWebClientId || clientConfig.iosClientId || clientConfig.androidClientId),
+    [clientConfig.androidClientId, clientConfig.iosClientId, hasRealWebClientId]
   );
 
   const redirectUri = useMemo(
@@ -92,8 +93,8 @@ export function useGoogleSocialLogin() {
 
   const login = useCallback(
     async (persist: boolean, device: LoginDevice): Promise<GoogleLoginResult> => {
-      if (!hasAnyClientId) {
-        return { ok: false, message: 'Google OAuth nao configurado. Defina os client IDs no .env.' };
+      if (!hasRealWebClientId && !hasAnyClientId) {
+        return { ok: false, message: 'Google OAuth nao configurado. Defina EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID no arquivo .env.' };
       }
 
       setLoading(true);
