@@ -13,6 +13,7 @@ export type HomeFeatureDefinition = {
   accentColor: string;
   route?: Href;
   disabled?: boolean;
+  keywords?: string[];
 };
 
 export type BaseWebNavigationConfig = {
@@ -48,6 +49,19 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       accentColor: "#f5f5f5",
       route: "/precificador",
       disabled: false,
+      keywords: [
+        "avaliacao",
+        "avaliar",
+        "preco",
+        "valor",
+        "m2",
+        "metro quadrado",
+        "imovel",
+        "imoveis",
+        "venda",
+        "aluguel",
+        "precificar",
+      ],
     },
     {
       id: "credito",
@@ -60,6 +74,22 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       accentColor: "#f5f5f5",
       route: "/simulador",
       disabled: false,
+      keywords: [
+        "credito",
+        "simulador",
+        "simulacao",
+        "financiamento",
+        "financiamento imobiliario",
+        "banco",
+        "taxa",
+        "juros",
+        "parcela",
+        "emprestimo",
+        "caixa",
+        "itau",
+        "santander",
+        "bradesco",
+      ],
     },
     {
       id: "certidoes",
@@ -72,6 +102,19 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       accentColor: "#f5f5f5",
       route: "/certidoes",
       disabled: false,
+      keywords: [
+        "certidao",
+        "certidoes",
+        "emissao",
+        "cartorio",
+        "matricula",
+        "onus",
+        "iptu",
+        "vintenaria",
+        "documentos",
+        "juridico",
+        "due diligence",
+      ],
     },
     {
       id: "staging",
@@ -84,6 +127,20 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       accentColor: "#f5f5f5",
       route: "/staging",
       disabled: false,
+      keywords: [
+        "staging",
+        "decoracao",
+        "decorar",
+        "ia",
+        "inteligencia artificial",
+        "foto",
+        "fotos",
+        "imagem",
+        "virtual",
+        "render",
+        "design",
+        "moveis",
+      ],
     },
     {
       id: "planejador",
@@ -96,6 +153,19 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       accentColor: "#f5f5f5",
       route: "/planejador",
       disabled: false,
+      keywords: [
+        "planejador",
+        "redes",
+        "sociais",
+        "instagram",
+        "facebook",
+        "post",
+        "stories",
+        "marketing",
+        "conteudo",
+        "publicacao",
+        "calendario",
+      ],
     },
 
     {
@@ -109,6 +179,19 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       accentColor: "#f5f5f5",
       route: "/trilha",
       disabled: false,
+      keywords: [
+        "trilha",
+        "conhecimento",
+        "curso",
+        "cursos",
+        "aula",
+        "aulas",
+        "treinamento",
+        "video",
+        "aprender",
+        "dicas",
+        "mercado",
+      ],
     },
 
     {
@@ -122,6 +205,18 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       accentColor: "#f5f5f5",
       route: "/contratos",
       disabled: true,
+      keywords: [
+        "contrato",
+        "contratos",
+        "gerador",
+        "modelo",
+        "locacao",
+        "compra e venda",
+        "assinatura",
+        "digital",
+        "juridico",
+        "documento",
+      ],
     },
     {
       id: "boletos",
@@ -133,6 +228,17 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
         "Parcele o pagamento de qualquer boleto usando o limite do seu cartão de crédito!",
       accentColor: "#f5f5f5",
       disabled: true,
+      keywords: [
+        "boleto",
+        "boletos",
+        "parcelamento",
+        "parcelar",
+        "cartao",
+        "credito",
+        "pagamento",
+        "fatura",
+        "limite",
+      ],
     },
     {
       id: "anuncios",
@@ -145,6 +251,20 @@ export function getHomeFeatureDefinitions(): HomeFeatureDefinition[] {
       accentColor: "#f5f5f5",
       route: "/modal",
       disabled: true,
+      keywords: [
+        "anuncio",
+        "anuncios",
+        "gerador",
+        "ia",
+        "inteligencia artificial",
+        "copy",
+        "texto",
+        "descricao",
+        "portais",
+        "zap",
+        "olx",
+        "vivareal",
+      ],
     },
   ];
 }

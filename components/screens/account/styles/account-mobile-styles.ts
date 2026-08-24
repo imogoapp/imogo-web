@@ -47,7 +47,7 @@ export function createAccountMobileStyles(width: number, _height: number) {
 
     /* ═══════ SCROLL ═══════════════════════════════════ */
     scrollContent: {
-      paddingBottom: 40,
+      paddingBottom: 120,
     },
 
     /* ═══════ PROFILE ══════════════════════════════════ */

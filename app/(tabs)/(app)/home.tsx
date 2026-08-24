@@ -44,7 +44,7 @@ export default function HomeScreen() {
           <meta property="og:description" content={pageDescription} />
         </Head>
   
-        {isMobile ? <HomeMobile onLogout={handleLogout} /> : <HomeDesktop user={user} onLogout={handleLogout} />}
+        {isMobile ? <HomeMobile user={user} onLogout={handleLogout} /> : <HomeDesktop user={user} onLogout={handleLogout} />}
       </>
     );
 

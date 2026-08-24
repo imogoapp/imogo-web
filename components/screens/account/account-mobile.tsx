@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 
 import { AuthUser, changePassword, getSession, renewToken, updateMe } from '@/services/auth';
+import { MobileBottomNav } from '@/components/ui/mobile-bottom-nav';
 
 import { createAccountMobileStyles } from './styles/account-mobile-styles';
 
@@ -321,6 +322,9 @@ export default function AccountMobile({ user, onLogout, onRefresh }: AccountMobi
           <Ionicons name="chevron-forward" size={20} color="#D9534F" />
         </Pressable>
       </ScrollView>
+
+      {/* ── Floating Bottom Navigation Dock ──────────── */}
+      <MobileBottomNav activeTab="conta" user={user} onLogout={onLogout} />
     </SafeAreaView>
   );
 }
