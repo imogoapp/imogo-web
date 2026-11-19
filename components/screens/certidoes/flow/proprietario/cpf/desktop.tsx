@@ -9,7 +9,7 @@ import BaseWeb from "@/components/ui/base-web";
 import { BaseWebButton } from "@/components/ui/base-web-button";
 import { AppInput } from "@/components/ui/app-input";
 import { AppTheme } from "@/constants/app-theme";
-import { AuthUser } from "@/services/auth";
+import { AuthUser, API_BASE_URL, getAuthHeaders } from "@/services/auth";
 import { styles } from "../../styles";
 
 type CertidoesCpfDesktopProps = {
@@ -37,8 +37,6 @@ type CreateAnaliseResponse = {
   analise_id?: number | string;
   id?: number | string;
 };
-
-const ANALISE_API_BASE_URL = "https://analise3.imogo.com.br";
 
 const ESTADO_CIVIL_OPTIONS = [
   "solteiro(a)",
@@ -227,7 +225,7 @@ export default function CertidoesCpfDesktop({
       });
 
       const response = await axios.post<CreateAnaliseResponse>(
-        `${ANALISE_API_BASE_URL}/analises/etapa1/cpf/`,
+        `${API_BASE_URL}/api/v3/analises/etapa1/cpf`,
         [
           {
             usuario_id: userId,
@@ -235,10 +233,7 @@ export default function CertidoesCpfDesktop({
           },
         ],
         {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
+          headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
         },
       );
 

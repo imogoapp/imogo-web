@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { AppInput } from "@/components/ui/app-input";
 import { AppTheme } from "@/constants/app-theme";
-import { AuthUser } from "@/services/auth";
+import { AuthUser, API_BASE_URL, getAuthHeaders } from "@/services/auth";
 import { flowMobileStyles as styles } from "../../styles/flow-mobile-styles";
 
 type CertidoesCnpjMobileProps = {
@@ -30,8 +30,6 @@ type CreateAnaliseResponse = {
   analise_id?: number | string;
   id?: number | string;
 };
-
-const ANALISE_API_BASE_URL = "https://analise3.imogo.com.br";
 
 const EMPTY_COMPANY: CompanyForm = {
   razaoSocial: "",
@@ -101,9 +99,9 @@ export default function CertidoesCnpjMobile({
       }));
 
       const response = await axios.post<CreateAnaliseResponse>(
-        `${ANALISE_API_BASE_URL}/analises/etapa1/cnpj/`,
+        `${API_BASE_URL}/api/v3/analises/etapa1/cnpj`,
         [{ usuario_id: userId, proprietarios }],
-        { headers: { Accept: "application/json", "Content-Type": "application/json" } }
+        { headers: { ...getAuthHeaders(), "Content-Type": "application/json" } }
       );
 
       const analiseId = response.data?.analise_id ?? response.data?.id;

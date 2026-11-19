@@ -20,7 +20,7 @@ import { AppInput } from '@/components/ui/app-input';
 import { AppLogo } from '@/components/ui/app-logo';
 import { AppTitle } from '@/components/ui/app-title';
 import { useGoogleSocialLogin } from '@/hooks/use-google-social-login';
-import { loginWithEmail, saveSession } from '@/services/auth';
+import { loginWithEmail, saveSessionAndFetchUser } from '@/services/auth';
 
 import { createLoginMobileStyles } from './styles/login-mobile-styles';
 
@@ -111,13 +111,23 @@ export default function LoginMobile({
 
     try {
       const session = await loginWithEmail(email.trim(), password);
-      saveSession(session, remember);
+      await saveSessionAndFetchUser(session, remember);
       onLoginPress?.({ email, password, remember });
       router.replace('/home');
     } catch (error) {
       if (isAxiosError(error)) {
-        const errorData = (error.response?.data ?? {}) as { message?: string; detail?: string };
+        const errorData = (error.response?.data ?? {}) as {
+          message?: string;
+          detail?: string;
+          code?: string;
+          email?: string;
+        };
         const status = error.response?.status ?? error.status;
+        if (status === 403 && errorData.code === 'EMAIL_NOT_VERIFIED') {
+          const targetEmail = errorData.email || email.trim();
+          router.replace(`/verify-email?email=${encodeURIComponent(targetEmail)}` as never);
+          return;
+        }
         const message =
           status === 401
             ? 'Email ou senha invalidos.'

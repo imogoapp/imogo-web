@@ -21,6 +21,7 @@ import { AppLegalConsent } from '@/components/ui/app-legal-consent';
 import { AppOptionCard } from '@/components/ui/app-option-card';
 import { AppStepProgress } from '@/components/ui/app-step-progress';
 import { AppTitle } from '@/components/ui/app-title';
+import { API_BASE_URL } from '@/services/auth';
 
 import { createRegisterMobileStyles } from './styles/register-mobile-styles';
 
@@ -46,20 +47,6 @@ const originMap: Record<(typeof options)[number], number> = {
   Indicacao: 14,
   Outro: 15,
 };
-
-const API_BASE_URL = (() => {
-  const candidates = [process.env.EXPO_PUBLIC_API_IMOGO, process.env.API_IMOGO, 'https://api-homologacao.vercel.app'];
-  const valid = candidates.find((value) => {
-    if (!value) {
-      return false;
-    }
-
-    const normalized = value.trim().toLowerCase();
-    return normalized !== 'undefined' && normalized !== 'null';
-  });
-
-  return (valid ?? 'https://api-homologacao.vercel.app').replace(/\/+$/, '');
-})();
 
 type RegisterApiSuccess = {
   public_id: string;
@@ -256,7 +243,7 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
 
     setLoading(true);
     try {
-      const response = await axios.post<RegisterApiSuccess>(`${API_BASE_URL}/api/v2/auth/register`, {
+      const response = await axios.post<RegisterApiSuccess>(`${API_BASE_URL}/api/v3/auth/register`, {
         name: `${nome.trim()} ${sobrenome.trim()}`.trim(),
         phone: telefone.trim(),
         email: email.trim(),
@@ -282,7 +269,7 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
       }
 
       onRegisterPress?.(payload);
-      setStep(4);
+      router.replace(`/verify-email?email=${encodeURIComponent(email.trim())}` as never);
     } catch (error) {
       if (isAxiosError(error)) {
         const status = error.response?.status;
@@ -448,8 +435,8 @@ export default function RegisterMobile({ onRegisterPress }: RegisterMobileProps)
             <View style={styles.legalRow}>
               <AppCheckbox checked={acceptedTerms} onToggle={() => setAcceptedTerms((state) => !state)} label="" />
               <AppLegalConsent
-                onTermsPress={() => Linking.openURL('https://sites.google.com/view/imogoapp/termos')}
-                onPrivacyPress={() => Linking.openURL('https://sites.google.com/view/imogoapp/privacy-policy')}
+                onTermsPress={() => Linking.openURL('https://imogo.com.br/termos-de-uso')}
+                onPrivacyPress={() => Linking.openURL('https://imogo.com.br/politica-de-privacidade')}
               />
             </View>
           </View>

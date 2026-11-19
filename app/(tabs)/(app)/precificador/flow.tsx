@@ -5,34 +5,23 @@ import PrecificadorFlowDesktop from "@/components/screens/precificador/flow/desk
 import PrecificadorFlowMobile from "@/components/screens/precificador/flow/mobile";
 import { useScreenType } from "@/hooks/use-screen-type";
 import {
-    AuthUser,
-    clearSession,
-    decodeJwtPayload,
-    getSession,
+  AuthUser,
+  logoutSession,
+  getSessionUser,
 } from "@/services/auth";
 
 import { router } from "expo-router";
 import { useCallback, useMemo } from "react";
 
 function decodeUserFromSession(): AuthUser | null {
-  const session = getSession();
-  if (!session?.token) {
-    return null;
-  }
-
-  const payload = decodeJwtPayload(session.token);
-  if (!payload) {
-    return null;
-  }
-
-  return payload as AuthUser;
+  return getSessionUser();
 }
 
 export default function PrecificadorFlowScreen() {
   const { isMobile } = useScreenType();
 
   const handleLogout = useCallback(() => {
-    clearSession();
+    void logoutSession();
     router.replace("/welcome");
   }, []);
 

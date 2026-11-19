@@ -5,20 +5,10 @@ import { useCallback, useMemo } from "react";
 import CertidoesImovelDesktop from "@/components/screens/certidoes/flow/imovel/desktop";
 import CertidoesImovelMobile from "@/components/screens/certidoes/flow/imovel/mobile";
 import { useScreenType } from "@/hooks/use-screen-type";
-import { AuthUser, clearSession, decodeJwtPayload, getSession } from "@/services/auth";
+import { AuthUser, logoutSession, getSessionUser } from "@/services/auth";
 
 function decodeUserFromSession(): AuthUser | null {
-  const session = getSession();
-  if (!session?.token) {
-    return null;
-  }
-
-  const payload = decodeJwtPayload(session.token);
-  if (!payload) {
-    return null;
-  }
-
-  return payload as AuthUser;
+  return getSessionUser();
 }
 
 export default function CertidoesImovelFlowScreen() {
@@ -27,7 +17,7 @@ export default function CertidoesImovelFlowScreen() {
   const analiseId = Array.isArray(params.id) ? params.id[0] : params.id;
 
   const handleLogout = useCallback(() => {
-    clearSession();
+    void logoutSession();
     router.replace("/welcome");
   }, []);
 

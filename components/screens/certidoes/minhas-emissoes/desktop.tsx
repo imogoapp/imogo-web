@@ -6,7 +6,7 @@ import axios from "axios";
 
 import { createBaseWebNavigationItems } from "@/components/screens/home/home-tools";
 import BaseWeb from "@/components/ui/base-web";
-import { AuthUser } from "@/services/auth";
+import { AuthUser, API_BASE_URL, getAuthHeaders } from "@/services/auth";
 import { AppTheme } from "@/constants/app-theme";
 import styles from "../styles/web-styles";
 
@@ -16,7 +16,8 @@ type MinhasEmissoesDesktopProps = {
 };
 
 type Analise = {
-  id: number;
+  id: number | string;
+  protocolo?: string | null;
   resumo: string | null;
   data: string;
   status: "pendente" | "concluida" | "em_progresso" | string;
@@ -51,7 +52,7 @@ export default function MinhasEmissoesDesktop({
   const fetchAnaliseData = async (usuario_id: string) => {
     setLoading(true);
     try {
-      const response = await axios.get<Analise[]>(`https://analise3.imogo.com.br/analises/usuario/${usuario_id}`);
+      const response = await axios.get<Analise[]>(`${API_BASE_URL}/api/v3/analises/usuario/${usuario_id}`, { headers: getAuthHeaders() });
       setAnalyses(response.data);
     } catch (error) {
       console.error('Erro ao buscar os dados das emissões:', error);
@@ -114,7 +115,7 @@ export default function MinhasEmissoesDesktop({
           />
           <View style={styles.optionTextContainer}>
             <Text style={styles.optionTextTitle} allowFontScaling={false}>
-              Emissão de certidões #{item.id}
+              Emissão de certidões #{item.protocolo ?? item.id}
             </Text>
             <Text
               style={[localStyles.optionTextSubtitle, { color: getStatusColor(item.status) }]}

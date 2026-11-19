@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { AppInput } from "@/components/ui/app-input";
 import { AppTheme } from "@/constants/app-theme";
-import { AuthUser } from "@/services/auth";
+import { AuthUser, API_BASE_URL, getAuthHeaders } from "@/services/auth";
 import { flowMobileStyles as styles } from "../styles/flow-mobile-styles";
 
 type CertidoesImovelMobileProps = {
@@ -21,7 +21,6 @@ type CertidoesImovelMobileProps = {
   analiseId: string;
 };
 
-const ANALISE_API_BASE_URL = "https://analise3.imogo.com.br";
 const VIA_CEP_BASE_URL = "https://viacep.com.br";
 
 const CARTORIO_OPTIONS = [
@@ -141,9 +140,9 @@ export default function CertidoesImovelMobile({
       };
 
       const response = await axios.put(
-        `${ANALISE_API_BASE_URL}/analises/etapa2/${analiseId}/`,
+        `${API_BASE_URL}/api/v3/analises/etapa2/${analiseId}`,
         payload,
-        { headers: { Accept: "application/json", "Content-Type": "application/json" } }
+        { headers: { ...getAuthHeaders(), "Content-Type": "application/json" } }
       );
 
       if (response.status !== 200) {

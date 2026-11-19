@@ -1,4 +1,4 @@
-import { decodeJwtPayload, getMe, getSession } from "@/services/auth";
+import { getMe, getSession, getSessionUser } from "@/services/auth";
 import { useCallback } from "react";
 import { browserName, osName, osVersion } from "react-device-detect";
 import { usePwaInstalled } from "./use-pwa-installed";
@@ -59,7 +59,7 @@ export function useAnalytics() {
       if (!cachedPublicId && currentToken) {
         try {
           // 1. Tenta decodificar o JWT (instantâneo)
-          const payload = decodeJwtPayload(currentToken);
+          const payload = getSessionUser();
           if (payload?.public_id && typeof payload.public_id === "string") {
             cachedPublicId = payload.public_id;
           } else if (session?.key) {
@@ -79,7 +79,7 @@ export function useAnalytics() {
 
       const payload: TrackEventPayload = {
         channel: "pwa",
-        identify: "pwa-v2",
+        identify: "pwa-v3",
         public_id: cachedPublicId || "anonymous",
         device: DEVICE_INFO,
         pwa_install: pwaStatus,

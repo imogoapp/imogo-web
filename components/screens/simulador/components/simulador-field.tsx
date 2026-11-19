@@ -1,6 +1,6 @@
 import { Text, TextInput, View } from "react-native";
 
-import styles from "../styles/simulador-web-styles";
+import styles from "../flow/styles/web-styles";
 
 type SimuladorFieldProps = {
   label: string;

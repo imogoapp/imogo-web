@@ -6,33 +6,22 @@ import { simuladorContent } from "@/components/screens/simulador/simulador-conte
 import { useScreenType } from "@/hooks/use-screen-type";
 import {
   AuthUser,
-  clearSession,
-  decodeJwtPayload,
-  getSession,
+  logoutSession,
+  getSessionUser,
 } from "@/services/auth";
 
 import { useCallback, useMemo } from "react";
 import { router } from "expo-router";
 
 function decodeUserFromSession(): AuthUser | null {
-  const session = getSession();
-  if (!session?.token) {
-    return null;
-  }
-
-  const payload = decodeJwtPayload(session.token);
-  if (!payload) {
-    return null;
-  }
-
-  return payload as AuthUser;
+  return getSessionUser();
 }
 
 export default function SimuladorPreviewScreen() {
   const { isMobile } = useScreenType();
 
   const handleLogout = useCallback(() => {
-    clearSession();
+    void logoutSession();
     router.replace("/welcome");
   }, []);
 

@@ -21,9 +21,10 @@ import {
 import { MobileBottomNav } from "@/components/ui/mobile-bottom-nav";
 import {
   AuthUser,
-  clearSession,
-  decodeJwtPayload,
+  getMe,
   getSession,
+  getSessionUser,
+  logoutSession,
 } from "@/services/auth";
 import { createHomeMobileStyles } from "./styles/home-mobile-styles";
 
@@ -53,17 +54,7 @@ function normalizeText(text: string): string {
 }
 
 function decodeUserFromSession(): AuthUser | null {
-  const session = getSession();
-  if (!session?.token) {
-    return null;
-  }
-
-  const payload = decodeJwtPayload(session.token);
-  if (!payload) {
-    return null;
-  }
-
-  return payload as AuthUser;
+  return getSessionUser();
 }
 
 type HomeMobileProps = {
@@ -93,13 +84,35 @@ export default function HomeMobile({
     }
 
     const payloadUser = decodeUserFromSession();
-    if (!payloadUser) {
-      clearSession();
+    if (payloadUser) {
+      setUser(payloadUser);
+      return;
+    }
+
+    const session = getSession();
+    if (!session?.token && !session?.key) {
+      void logoutSession();
       onLogout();
       return;
     }
 
-    setUser(payloadUser);
+    let active = true;
+    void getMe(session.key)
+      .then((me) => {
+        if (active) setUser(me);
+      })
+      .catch((err) => {
+        if (!active) return;
+        const status = (err as { response?: { status?: number } })?.response?.status;
+        if (status === 401 || status === 403) {
+          void logoutSession();
+          onLogout();
+        }
+      });
+
+    return () => {
+      active = false;
+    };
   }, [initialUser, onLogout]);
 
   const userName =
@@ -187,6 +200,7 @@ export default function HomeMobile({
             source={require("@/assets/img/logo.png")}
             style={styles.logo}
             contentFit="contain"
+            contentPosition="left"
           />
         </View>
 

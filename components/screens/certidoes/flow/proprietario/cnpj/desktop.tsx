@@ -9,7 +9,7 @@ import BaseWeb from "@/components/ui/base-web";
 import { BaseWebButton } from "@/components/ui/base-web-button";
 import { AppInput } from "@/components/ui/app-input";
 import { AppTheme } from "@/constants/app-theme";
-import { AuthUser } from "@/services/auth";
+import { AuthUser, API_BASE_URL, getAuthHeaders } from "@/services/auth";
 import { styles } from "../../styles";
 
 type CertidoesCnpjDesktopProps = {
@@ -27,8 +27,6 @@ type CreateAnaliseResponse = {
   analise_id?: number | string;
   id?: number | string;
 };
-
-const ANALISE_API_BASE_URL = "https://analise3.imogo.com.br";
 
 const EMPTY_COMPANY: CompanyForm = {
   razaoSocial: "",
@@ -141,7 +139,7 @@ export default function CertidoesCnpjDesktop({
       }));
 
       const response = await axios.post<CreateAnaliseResponse>(
-        `${ANALISE_API_BASE_URL}/analises/etapa1/cnpj/`,
+        `${API_BASE_URL}/api/v3/analises/etapa1/cnpj`,
         [
           {
             usuario_id: userId,
@@ -149,10 +147,7 @@ export default function CertidoesCnpjDesktop({
           },
         ],
         {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
+          headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
         },
       );
 

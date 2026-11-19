@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import axios from "axios";
-import { AuthUser } from "@/services/auth";
+import { AuthUser, API_BASE_URL, getAuthHeaders } from "@/services/auth";
 import { AppTheme } from "@/constants/app-theme";
 import { flowMobileStyles as styles } from "../flow/styles/flow-mobile-styles";
 
@@ -21,7 +21,8 @@ type MinhasEmissoesMobileProps = {
 };
 
 type Analise = {
-  id: number;
+  id: number | string;
+  protocolo?: string | null;
   resumo: string | null;
   data: string;
   status: "pendente" | "concluida" | "em_progresso" | string;
@@ -80,9 +81,7 @@ export default function MinhasEmissoesMobile({
   const fetchAnaliseData = async (usuario_id: string) => {
     setLoading(true);
     try {
-      const response = await axios.get<Analise[]>(
-        `https://analise3.imogo.com.br/analises/usuario/${usuario_id}`
-      );
+      const response = await axios.get<Analise[]>(`${API_BASE_URL}/api/v3/analises/usuario/${usuario_id}`, { headers: getAuthHeaders() });
       setAnalyses(response.data);
     } catch (error) {
       console.error("Erro ao buscar os dados das emissões:", error);
@@ -140,7 +139,7 @@ export default function MinhasEmissoesMobile({
                   allowFontScaling={false}
                   style={styles.analysisCardTitle}
                 >
-                  Emissão de certidões #{item.id}
+                  Emissão de certidões #{item.protocolo ?? item.id}
                 </Text>
                 <Text
                   allowFontScaling={false}

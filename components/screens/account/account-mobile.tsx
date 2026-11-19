@@ -17,6 +17,7 @@ import {
 
 import { AuthUser, changePassword, getSession, renewToken, updateMe } from '@/services/auth';
 import { MobileBottomNav } from '@/components/ui/mobile-bottom-nav';
+import { SessionsSection } from './components/sessions-section';
 
 import { createAccountMobileStyles } from './styles/account-mobile-styles';
 
@@ -313,6 +314,16 @@ export default function AccountMobile({ user, onLogout, onRefresh }: AccountMobi
             </Pressable>
           </View>
         ) : null}
+
+        <View style={styles.divider} />
+
+        {/* ── Sessões ativas ───────────────────── */}
+        <SessionsSection
+          onLogout={onLogout}
+          rowStyle={styles.navRow}
+          labelStyle={styles.navLabel}
+          containerStyle={styles.passwordSection}
+        />
 
         <View style={styles.divider} />
 

@@ -208,6 +208,7 @@ export function BaseWebHeader({ user, onLogout }: BaseWebHeaderProps) {
   const isServicosOpen = activePopover === "servicos";
   const isAjudaOpen = activePopover === "ajuda";
   const isStatusOpen = activePopover === "status";
+  const userPopoverRight = width > 1440 ? (width - 1440) / 2 + 36 : 36;
   const isUserOpen = activePopover === "user";
 
   return (
@@ -227,6 +228,7 @@ export function BaseWebHeader({ user, onLogout }: BaseWebHeaderProps) {
               source={require("@/assets/img/logo.png")}
               style={styles.logo}
               contentFit="contain"
+              contentPosition="left"
             />
           </Pressable>
         </View>
@@ -583,7 +585,7 @@ export function BaseWebHeader({ user, onLogout }: BaseWebHeaderProps) {
               // @ts-ignore
               onMouseEnter={() => handleMouseEnter("user")}
               onMouseLeave={handleMouseLeave}
-              style={styles.userPopover}
+              style={[styles.userPopover, { right: userPopoverRight }]}
             >
               {/* Item 1: Minha Conta */}
               <Pressable
@@ -668,7 +670,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 132,
+    width: 72,
     height: 38,
   },
   centerSection: {
@@ -725,8 +727,8 @@ const styles = StyleSheet.create({
   userAvatar: {
     width: 32,
     height: 32,
-    borderRadius: 8,
-    backgroundColor: "#E6DFEA",
+    borderRadius: 16,
+    backgroundColor: "transparent",
   },
   userGreeting: {
     fontSize: 15,
@@ -933,7 +935,7 @@ const styles = StyleSheet.create({
     top: 66,
     right: 36,
     width: 250,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#FFFFFF",
     borderRadius: 16,
     paddingVertical: 12,
     paddingHorizontal: 10,

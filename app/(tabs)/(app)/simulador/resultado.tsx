@@ -9,15 +9,15 @@ import { simuladorFlowContent } from "@/components/screens/simulador/flow/conten
 import { useScreenType } from "@/hooks/use-screen-type";
 import {
   AuthUser,
-  clearSession,
-  decodeJwtPayload,
+  logoutSession,
+  getSessionUser,
   getSession,
 } from "@/services/auth";
 
 function decodeUserFromSession(): AuthUser | null {
   const session = getSession();
   if (!session?.token) return null;
-  const payload = decodeJwtPayload(session.token);
+  const payload = getSessionUser();
   if (!payload) return null;
   return payload as AuthUser;
 }
@@ -36,7 +36,7 @@ export default function SimuladorResultadoScreen() {
   }, []);
 
   const handleLogout = useCallback(() => {
-    clearSession();
+    void logoutSession();
     router.replace("/welcome");
   }, []);
 

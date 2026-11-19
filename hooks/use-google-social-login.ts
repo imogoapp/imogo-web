@@ -3,7 +3,7 @@ import { isAxiosError } from 'axios';
 import { AuthSessionResult, makeRedirectUri } from 'expo-auth-session';
 import * as Google from 'expo-auth-session/providers/google';
 
-import { decodeJwtPayload, loginWithSocial, saveSession } from '@/services/auth';
+import { decodeJwtPayload, loginWithSocial, saveSessionAndFetchUser } from '@/services/auth';
 
 type GoogleProfile = {
   sub: string;
@@ -128,7 +128,7 @@ export function useGoogleSocialLogin() {
           name: profile.name,
         });
 
-        saveSession(session, persist);
+        await saveSessionAndFetchUser(session, persist);
         return { ok: true };
       } catch (error) {
         if (isAxiosError(error)) {

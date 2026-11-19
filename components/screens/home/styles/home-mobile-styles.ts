@@ -28,7 +28,7 @@ export function createHomeMobileStyles({ width }: HomeMobileStylesParams) {
       alignItems: "center",
     },
     logo: {
-      width: 115,
+      width: 60,
       height: 32,
     },
     avatarButton: {

@@ -12,6 +12,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { AppTheme } from "@/constants/app-theme";
 import { AuthUser } from "@/services/auth";
+import { BaseWebFooter } from "./base-web-footer";
 import { BaseWebHeader } from "./base-web-header";
 
 export type BaseWebNavigationItem = {
@@ -71,10 +72,13 @@ export default function BaseWeb({
 
         <ScrollView
           style={styles.scrollContainer}
-          contentContainerStyle={styles.body}
+          contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.contentWrapper}>{children}</View>
+          <View style={styles.body}>
+            <View style={styles.contentWrapper}>{children}</View>
+          </View>
+          <BaseWebFooter user={user} />
         </ScrollView>
       </View>
     </View>
@@ -104,14 +108,11 @@ const styles = StyleSheet.create({
     gap: 8,
     alignSelf: "flex-start",
     paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: "#EAEAEA",
+    paddingHorizontal: 0,
+    backgroundColor: "transparent",
   },
   backButtonPressed: {
-    backgroundColor: "#F4ECFB",
+    opacity: 0.7,
   },
   backText: {
     fontSize: 13,
@@ -122,10 +123,14 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: "space-between",
+  },
   body: {
     paddingHorizontal: 36,
     paddingVertical: 24,
-    paddingBottom: 64,
+    paddingBottom: 32,
   },
   contentWrapper: {
     maxWidth: 1440,

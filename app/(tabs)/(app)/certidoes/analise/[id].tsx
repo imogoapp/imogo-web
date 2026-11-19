@@ -7,23 +7,12 @@ import AnaliseDetalheMobile from "@/components/screens/certidoes/analise/mobile"
 import { useScreenType } from "@/hooks/use-screen-type";
 import {
   AuthUser,
-  clearSession,
-  decodeJwtPayload,
-  getSession,
+  logoutSession,
+  getSessionUser,
 } from "@/services/auth";
 
 function decodeUserFromSession(): AuthUser | null {
-  const session = getSession();
-  if (!session?.token) {
-    return null;
-  }
-
-  const payload = decodeJwtPayload(session.token);
-  if (!payload) {
-    return null;
-  }
-
-  return payload as AuthUser;
+  return getSessionUser();
 }
 
 export default function AnaliseDetalheScreen() {
@@ -31,7 +20,7 @@ export default function AnaliseDetalheScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const handleLogout = useCallback(() => {
-    clearSession();
+    void logoutSession();
     router.replace("/welcome");
   }, []);
 

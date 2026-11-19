@@ -8,6 +8,7 @@ import { AppButton } from '@/components/ui/app-button';
 import { AppInput } from '@/components/ui/app-input';
 import { AppLogo } from '@/components/ui/app-logo';
 import { AppTitle } from '@/components/ui/app-title';
+import { AuthDesktopShell } from '@/components/ui/auth-desktop-shell';
 import { forgotPassword } from '@/services/auth';
 
 import styles from './styles/reset-password-web-styles';
@@ -79,9 +80,11 @@ export default function ResetPasswordDesktop({ onSubmitPress }: ResetPasswordDes
   };
 
   return (
-    <ImageBackground source={require('@/assets/img/bg.png')} style={styles.background} resizeMode="cover">
-      <View style={styles.card}>
-        <AppLogo />
+    <AuthDesktopShell
+      bannerTitle="Recupere seu acesso"
+      bannerSubtitle="Enviaremos um link seguro e um código de 6 dígitos para você criar uma nova senha."
+    >
+      <AppLogo />
 
         {!sent ? (
           <>
@@ -111,6 +114,9 @@ export default function ResetPasswordDesktop({ onSubmitPress }: ResetPasswordDes
               <Pressable onPress={() => router.push('/login')}>
                 <Text style={styles.backLink}>Voltar para login</Text>
               </Pressable>
+              <Pressable onPress={() => router.push('/register')}>
+                <Text style={styles.backLink}>Não tem conta? Criar cadastro</Text>
+              </Pressable>
             </View>
           </>
         ) : (
@@ -123,11 +129,18 @@ export default function ResetPasswordDesktop({ onSubmitPress }: ResetPasswordDes
               Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.
             </Text>
             <View style={styles.content}>
-              <AppButton label="Ir para login" onPress={() => router.push('/login')} />
+              <AppButton
+                label="Já tenho o código"
+                onPress={() =>
+                  router.push(`/reset-password-confirm?email=${encodeURIComponent(email.trim())}` as never)
+                }
+              />
+              <Pressable onPress={() => router.push('/login')}>
+                <Text style={styles.backLink}>Ir para login</Text>
+              </Pressable>
             </View>
           </View>
         )}
-      </View>
-    </ImageBackground>
+    </AuthDesktopShell>
   );
 }

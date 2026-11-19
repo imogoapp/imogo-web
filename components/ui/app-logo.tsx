@@ -1,24 +1,46 @@
-import { Image } from 'expo-image';
-import { StyleSheet, type ImageSourcePropType, type StyleProp, type ViewStyle } from 'react-native';
+import { Image, type ImageStyle } from 'expo-image';
+import {
+  StyleSheet,
+  useWindowDimensions,
+  type ImageSourcePropType,
+  type StyleProp,
+} from 'react-native';
 
 type AppLogoProps = {
   width?: number;
   height?: number;
   marginBottom?: number;
   source?: ImageSourcePropType;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<ImageStyle>;
 };
 
 export function AppLogo({
-  width = 150,
-  height = 60,
+  width,
+  height,
   marginBottom = 20,
   source = require('@/assets/img/logo.png'),
   style,
 }: AppLogoProps) {
-  return <Image source={source} style={[styles.logo, { width, height, marginBottom }, style]} contentFit="contain" />;
+  const { width: screenWidth } = useWindowDimensions();
+  const responsiveWidth = Math.min(168, Math.max(120, Math.round(screenWidth * 0.34)));
+  const resolvedWidth = width ?? responsiveWidth;
+  const resolvedHeight = height ?? Math.round(resolvedWidth * 0.4);
+
+  return (
+    <Image
+      source={source}
+      style={[
+        styles.logo,
+        { width: resolvedWidth, height: resolvedHeight, marginBottom },
+        style,
+      ]}
+      contentFit="contain"
+    />
+  );
 }
 
 const styles = StyleSheet.create({
-  logo: {},
+  logo: {
+    alignSelf: 'center',
+  },
 });

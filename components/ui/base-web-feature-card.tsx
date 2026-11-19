@@ -15,23 +15,34 @@ type BaseWebFeatureCardProps = {
   onPress?: () => void;
 };
 
-export function BaseWebFeatureCard({ title, description, icon, accentColor, disabled = false, onPress }: BaseWebFeatureCardProps) {
+export function BaseWebFeatureCard({
+  title,
+  description,
+  icon,
+  accentColor,
+  disabled = false,
+  onPress,
+}: BaseWebFeatureCardProps) {
   return (
     <View style={[styles.card, disabled ? styles.cardDisabled : undefined]}>
-      <View style={styles.header}>
-        <View style={styles.iconWrap}>
-          <Image source={icon} style={styles.icon} contentFit="contain" />
+      <View style={styles.topContent}>
+        <View style={styles.header}>
+          <View style={styles.iconWrap}>
+            <Image source={icon} style={styles.icon} contentFit="contain" />
+          </View>
+          {disabled ? (
+            <View style={[styles.statusPill, styles.statusPillDisabled]}>
+              <Ionicons name="lock-closed-outline" size={13} color="#8F8A95" />
+              <Text style={[styles.statusText, styles.statusTextDisabled]}>
+                Desativado
+              </Text>
+            </View>
+          ) : null}
         </View>
-        <View style={[styles.statusPill, disabled ? styles.statusPillDisabled : { backgroundColor: `${accentColor}18` }]}>
-          <Ionicons name={disabled ? 'lock-closed-outline' : 'checkmark-circle-outline'} size={14} color={disabled ? '#8F8A95' : accentColor} />
-          <Text style={[styles.statusText, disabled ? styles.statusTextDisabled : { color: accentColor }]}>
-            {disabled ? 'Desativado' : ''}
-          </Text>
-        </View>
-      </View>
 
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.description}>{description}</Text>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.description}>{description}</Text>
+      </View>
 
       <BaseWebButton
         label={disabled ? 'Em breve' : 'Acessar'}
@@ -47,65 +58,77 @@ export function BaseWebFeatureCard({ title, description, icon, accentColor, disa
 const styles = StyleSheet.create({
   card: {
     width: '100%',
+    flex: 1,
+    justifyContent: 'space-between',
     backgroundColor: '#f5f5f5',
-    borderRadius: 24,
-    padding: 24,
+    borderRadius: 16,
+    padding: 18,
     borderWidth: 1,
     borderColor: '#E6DFEA',
-    gap: 16,
+    gap: 14,
     shadowColor: '#15081D',
-    shadowOpacity: 0.06,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 4,
+    shadowOpacity: 0.04,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
   },
   cardDisabled: {
     backgroundColor: '#f5f5f5',
+  },
+  topContent: {
+    gap: 8,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginBottom: 2,
   },
   iconWrap: {
-    width: 56,
-    height: 56,
-    alignItems: 'center',
+    width: 28,
+    height: 28,
+    alignItems: 'flex-start',
     justifyContent: 'center',
   },
   icon: {
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
   },
   statusPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 5,
     borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  statusPillFree: {
+    backgroundColor: '#D1FAE5',
   },
   statusPillDisabled: {
     backgroundColor: '#e3e3e3',
   },
   statusText: {
-    fontSize: 12,
+    fontSize: 11,
     fontFamily: AppTheme.typography.fontBold,
+  },
+  statusTextFree: {
+    color: '#047857',
   },
   statusTextDisabled: {
     color: '#8F8A95',
   },
   title: {
-    fontSize: 18,
-    lineHeight: 24,
+    fontSize: 15,
+    lineHeight: 21,
     color: AppTheme.colors.text,
     fontFamily: AppTheme.typography.fontBold,
   },
   description: {
-    fontSize: 14,
-    lineHeight: 22,
+    fontSize: 13,
+    lineHeight: 19,
     color: '#5F6170',
     fontFamily: AppTheme.typography.fontRegular,
-    minHeight: 66,
+    minHeight: 38,
   },
 });

@@ -23,10 +23,37 @@ type JwtPayload = {
   [key: string]: unknown;
 };
 
+export type AuthUser = {
+  photo?: string;
+  phone?: string;
+  email?: string;
+  name?: string;
+  status?: number;
+  public_id?: string;
+  profile?: number;
+  exp?: number;
+  [key: string]: unknown;
+};
+
 export type AuthSession = {
   token: string;
   key: string;
   remember: boolean;
+  session_id?: string;
+  expires_at?: string;
+  user?: AuthUser;
+};
+
+export type RemoteSessionInfo = {
+  id: string;
+  user_id: number;
+  device: number;
+  ip_address: string | null;
+  user_agent: string | null;
+  created_at: string;
+  last_seen_at: string;
+  expires_at: string;
+  is_current: boolean;
 };
 
 export type SocialProvider = 'google';
@@ -45,18 +72,9 @@ type AuthSessionInput = {
   token: string;
   key: string;
   remember?: boolean;
-};
-
-export type AuthUser = {
-  photo?: string;
-  phone?: string;
-  email?: string;
-  name?: string;
-  status?: number;
-  public_id?: string;
-  profile?: number;
-  exp?: number;
-  [key: string]: unknown;
+  session_id?: string;
+  expires_at?: string;
+  user?: AuthUser;
 };
 
 let memorySession: AuthSession | null = null;
@@ -66,18 +84,10 @@ function hasLocalStorage() {
 }
 
 function decodeBase64(value: string) {
-  if (typeof globalThis.atob === 'function') {
-    return globalThis.atob(value);
-  }
-
   return Buffer.from(value, 'base64').toString('utf-8');
 }
 
 function encodeBase64(value: string) {
-  if (typeof globalThis.btoa === 'function') {
-    return globalThis.btoa(value);
-  }
-
   return Buffer.from(value, 'utf-8').toString('base64');
 }
 
@@ -132,9 +142,33 @@ export function decodeJwtPayload(token: string): JwtPayload | null {
   }
 }
 
+export function getAuthHeaders(apiKeyOverride?: string): Record<string, string> {
+  const session = getSession();
+  const headers: Record<string, string> = {
+    Accept: 'application/json',
+  };
+
+  if (session?.token) {
+    headers.Authorization = `Bearer ${session.token}`;
+  }
+
+  const key = apiKeyOverride || session?.key;
+  if (key) {
+    headers['X-API-Key'] = key;
+  }
+
+  return headers;
+}
+
 export async function loginWithEmail(email: string, password: string) {
-  const response = await axios.post<{ token: string; key: string }>(
-    `${API_BASE_URL}/api/v2/auth/login`,
+  const response = await axios.post<{
+    token: string;
+    key: string;
+    session_id?: string;
+    expires_at?: string;
+    user?: AuthUser;
+  }>(
+    `${API_BASE_URL}/api/v3/auth/login`,
     { email, password },
     {
       headers: {
@@ -148,7 +182,13 @@ export async function loginWithEmail(email: string, password: string) {
 }
 
 export async function loginWithSocial(payload: SocialLoginPayload) {
-  const response = await axios.post<{ token: string; key: string }>(`${API_BASE_URL}/api/v2/auth/social`, payload, {
+  const response = await axios.post<{
+    token: string;
+    key: string;
+    session_id?: string;
+    expires_at?: string;
+    user?: AuthUser;
+  }>(`${API_BASE_URL}/api/v3/auth/social`, payload, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -158,44 +198,112 @@ export async function loginWithSocial(payload: SocialLoginPayload) {
   return response.data;
 }
 
-export async function getMe(apiKey: string) {
-  const response = await axios.get<AuthUser>(`${API_BASE_URL}/api/v2/auth/me`, {
-    headers: {
-      Accept: 'application/json',
-      'X-API-Key': apiKey,
-    },
+export async function getMe(apiKey?: string) {
+  const response = await axios.get<AuthUser>(`${API_BASE_URL}/api/v3/auth/me`, {
+    headers: getAuthHeaders(apiKey),
   });
+
+  const currentSession = getSession();
+  if (currentSession) {
+    saveSession({ ...currentSession, user: response.data }, currentSession.remember);
+  }
 
   return response.data;
 }
 
-export async function renewToken(apiKey: string) {
-  const response = await axios.post<{ token: string }>(
-    `${API_BASE_URL}/api/v2/auth/renew`,
+export async function saveSessionAndFetchUser(session: AuthSessionInput, persist: boolean) {
+  saveSession(session, persist);
+  try {
+    await getMe(session.key);
+  } catch {
+    // Keep session even if profile fetch fails transiently
+  }
+}
+
+export async function renewToken(apiKey?: string) {
+  const response = await axios.post<{ token: string; expires_at?: string }>(
+    `${API_BASE_URL}/api/v3/auth/renew`,
     {},
     {
-      headers: {
-        Accept: 'application/json',
-        'X-API-Key': apiKey,
-      },
+      headers: getAuthHeaders(apiKey),
     }
   );
 
   const newToken = response.data.token;
   const currentSession = getSession();
   if (currentSession) {
-    saveSession({ ...currentSession, token: newToken }, currentSession.remember);
+    saveSession(
+      {
+        ...currentSession,
+        token: newToken,
+        expires_at: response.data.expires_at ?? currentSession.expires_at,
+      },
+      currentSession.remember
+    );
+  }
+
+  try {
+    await getMe(apiKey);
+  } catch {
+    // Best-effort refresh of cached user profile
   }
 
   return newToken;
 }
 
+export async function logoutSession() {
+  const session = getSession();
+  if (session?.token) {
+    try {
+      await axios.post(
+        `${API_BASE_URL}/api/v3/auth/logout`,
+        {},
+        { headers: getAuthHeaders() }
+      );
+    } catch {
+      // Clear local session regardless of server response
+    }
+  }
+  clearSession();
+}
+
+export async function logoutAllSessions() {
+  const session = getSession();
+  if (session?.token || session?.key) {
+    try {
+      await axios.post(
+        `${API_BASE_URL}/api/v3/auth/logout-all`,
+        {},
+        { headers: getAuthHeaders() }
+      );
+    } catch {
+      // Clear local session regardless of server response
+    }
+  }
+  clearSession();
+}
+
+export async function listSessions() {
+  const response = await axios.get<{ sessions: RemoteSessionInfo[] }>(
+    `${API_BASE_URL}/api/v3/auth/sessions`,
+    { headers: getAuthHeaders() }
+  );
+  return response.data.sessions;
+}
+
+export async function revokeRemoteSession(sessionId: string) {
+  const response = await axios.delete<{ message: string }>(
+    `${API_BASE_URL}/api/v3/auth/sessions/${encodeURIComponent(sessionId)}`,
+    { headers: getAuthHeaders() }
+  );
+  return response.data;
+}
+
 export async function updateMe(apiKey: string, data: { campo: 'nome' | 'telefone'; value: string }) {
-  const response = await axios.post<{ message: string }>(`${API_BASE_URL}/api/v2/auth/update`, data, {
+  const response = await axios.post<{ message: string }>(`${API_BASE_URL}/api/v3/auth/update`, data, {
     headers: {
-      Accept: 'application/json',
+      ...getAuthHeaders(apiKey),
       'Content-Type': 'application/json',
-      'X-API-Key': apiKey,
     },
   });
 
@@ -203,11 +311,10 @@ export async function updateMe(apiKey: string, data: { campo: 'nome' | 'telefone
 }
 
 export async function changePassword(apiKey: string, data: Record<string, string>) {
-  const response = await axios.post<{ message: string }>(`${API_BASE_URL}/api/v2/auth/update-password`, data, {
+  const response = await axios.post<{ message: string }>(`${API_BASE_URL}/api/v3/auth/update-password`, data, {
     headers: {
-      Accept: 'application/json',
+      ...getAuthHeaders(apiKey),
       'Content-Type': 'application/json',
-      'X-API-Key': apiKey,
     },
   });
 
@@ -216,7 +323,61 @@ export async function changePassword(apiKey: string, data: Record<string, string
 
 export async function forgotPassword(email: string) {
   const response = await axios.post<{ message?: string; detail?: string }>(
-    `${API_BASE_URL}/api/v2/auth/forgot-password`,
+    `${API_BASE_URL}/api/v3/auth/forgot-password`,
+    { email },
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  return response.data;
+}
+
+export async function resetPassword(payload: {
+  token?: string;
+  email?: string;
+  code?: string;
+  new_password: string;
+}) {
+  const response = await axios.post<{ message?: string; detail?: string }>(
+    `${API_BASE_URL}/api/v3/auth/reset-password`,
+    payload,
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  return response.data;
+}
+
+export async function verifyEmail(payload: {
+  token?: string;
+  email?: string;
+  code?: string;
+}) {
+  const response = await axios.post<{ message?: string; detail?: string }>(
+    `${API_BASE_URL}/api/v3/auth/verify-email`,
+    payload,
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  return response.data;
+}
+
+export async function resendVerification(email: string) {
+  const response = await axios.post<{ message?: string; detail?: string }>(
+    `${API_BASE_URL}/api/v3/auth/resend-verification`,
     { email },
     {
       headers: {
@@ -273,6 +434,23 @@ export function getSession() {
   }
 }
 
+export function getSessionUser(): AuthUser | null {
+  const session = getSession();
+  if (!session) {
+    return null;
+  }
+
+  if (session.user) {
+    return session.user;
+  }
+
+  if (session.token && session.token.split('.').length >= 2) {
+    return decodeJwtPayload(session.token) as AuthUser | null;
+  }
+
+  return null;
+}
+
 export function clearSession() {
   memorySession = null;
   if (hasLocalStorage()) {
@@ -303,7 +481,18 @@ export function hasValidSession(session: AuthSession | null) {
     return false;
   }
 
-  return isJwtValid(session.token);
+  if (session.expires_at) {
+    const expiresMs = Date.parse(session.expires_at);
+    if (!Number.isNaN(expiresMs)) {
+      return expiresMs > Date.now();
+    }
+  }
+
+  if (session.token.split('.').length === 3) {
+    return isJwtValid(session.token);
+  }
+
+  return true;
 }
 
 export function isLoggedIn() {
@@ -311,6 +500,14 @@ export function isLoggedIn() {
 }
 
 export function getTokenRemainingSeconds(token: string) {
+  const session = getSession();
+  if (session?.expires_at) {
+    const expiresMs = Date.parse(session.expires_at);
+    if (!Number.isNaN(expiresMs)) {
+      return Math.max(0, Math.floor((expiresMs - Date.now()) / 1000));
+    }
+  }
+
   const payload = decodeJwtPayload(token);
   if (!payload || typeof payload.exp !== 'number') {
     return null;

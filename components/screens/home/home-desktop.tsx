@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useMemo } from "react";
-import { Text, View } from "react-native";
+import { Text, View, useWindowDimensions } from "react-native";
 
 import {
   createBaseWebNavigationItems,
@@ -17,7 +17,16 @@ type HomeDesktopProps = {
 };
 
 export default function HomeDesktop({ user, onLogout }: HomeDesktopProps) {
-  
+  const { width } = useWindowDimensions();
+  const columnWidth =
+    width >= 1200
+      ? "25%"
+      : width >= 880
+        ? "33.3333%"
+        : width >= 580
+          ? "50%"
+          : "100%";
+
   const userName = typeof user?.name === "string" ? user.name : "Usuário";
   const navigationItems = useMemo(
     () =>
@@ -46,7 +55,10 @@ export default function HomeDesktop({ user, onLogout }: HomeDesktopProps) {
 
       <View style={styles.desktopGrid}>
         {features.map((feature) => (
-          <View key={feature.id} style={styles.desktopGridItem}>
+          <View
+            key={feature.id}
+            style={[styles.desktopGridItem, { width: columnWidth }]}
+          >
             <BaseWebFeatureCard
               title={feature.label}
               description={feature.description}

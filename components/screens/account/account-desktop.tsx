@@ -8,6 +8,7 @@ import { createBaseWebNavigationItems } from '@/components/screens/home/home-too
 import { AppInput } from '@/components/ui/app-input';
 import BaseWeb from '@/components/ui/base-web';
 import { AuthUser, changePassword, getSession, renewToken, updateMe } from '@/services/auth';
+import { SessionsSection } from './components/sessions-section';
 import styles from './styles/account-web-styles';
 
 /* ── Types ──────────────────────────────────────────────── */
@@ -313,6 +314,15 @@ export default function AccountDesktop({ user, onLogout, onRefresh }: AccountDes
                 </View>
               </View>
             ) : null}
+
+            <View style={styles.divider} />
+
+            <SessionsSection
+              onLogout={onLogout}
+              rowStyle={styles.navRow}
+              labelStyle={styles.navLabel}
+              containerStyle={styles.passwordArea}
+            />
 
             <View style={styles.divider} />
 

@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { AuthUser, getSession, API_BASE_URL } from "@/services/auth";
+import { AuthUser, getAuthHeaders, getSession, API_BASE_URL } from "@/services/auth";
 import { setSimuladorLink } from "@/app/(tabs)/(app)/simulador/state";
 
 import { AppInput } from "@/components/ui/app-input";
@@ -77,9 +77,6 @@ function currencyToNumber(value: string) {
   const digits = value.replace(/\D/g, "");
   return digits ? Number(digits) / 100 : 0;
 }
-
-const session = getSession();
-const Key = session?.key;
 
 export default function SimuladorFlowMobile({ user }: SimuladorFlowMobileProps) {
   
@@ -154,11 +151,12 @@ export default function SimuladorFlowMobile({ user }: SimuladorFlowMobileProps) 
     setLoading(true);
 
     try {
+      const currentUser = user ?? getSession()?.user ?? null;
       const payload = {
         nome: nomeCompleto,
         data_nascimento: dataNascimento,
         telefone: phone,
-        email: user?.email || "",
+        email: currentUser?.email || "",
         valor_imovel: valorVendaImovel.replace(/[^\d]/g, "").slice(0, -2) || "0",
         valor_afinanciar: valorFinanciamentoImovel.replace(/[^\d]/g, "").slice(0, -2) || "0",
         valor_renda_bruta: rendaBruta.replace(/[^\d]/g, "").slice(0, -2) || "0",
@@ -167,10 +165,9 @@ export default function SimuladorFlowMobile({ user }: SimuladorFlowMobileProps) 
         qtd_parcelas: prazo,
       };
 
-      const response = await axios.post(`${API_BASE_URL}/api/v2/quadracred/simulador`, payload, {
+      const response = await axios.post(`${API_BASE_URL}/api/v3/quadracred/simulador`, payload, {
         headers: {
-          Accept: "application/json",
-          "X-API-Key": Key,
+          ...getAuthHeaders(),
           "Content-Type": "application/json",
         },
       });
@@ -183,7 +180,12 @@ export default function SimuladorFlowMobile({ user }: SimuladorFlowMobileProps) 
       }
     } catch (error) {
       if (isAxiosError(error)) {
-        Alert.alert("Erro", error.response?.data?.message || "Não foi possível enviar os dados da simulação.");
+        Alert.alert(
+          "Erro",
+          error.response?.data?.detail ||
+            error.response?.data?.message ||
+            "Não foi possível enviar os dados da simulação.",
+        );
       } else {
         Alert.alert("Erro", "Ocorreu um erro inesperado.");
       }

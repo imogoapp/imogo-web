@@ -13,7 +13,7 @@ import {
 
 import { AppInput } from "@/components/ui/app-input";
 import { AppTheme } from "@/constants/app-theme";
-import { AuthUser } from "@/services/auth";
+import { AuthUser, API_BASE_URL, getAuthHeaders } from "@/services/auth";
 import { flowMobileStyles as styles } from "../../styles/flow-mobile-styles";
 
 type CertidoesCpfMobileProps = {
@@ -41,8 +41,6 @@ type CreateAnaliseResponse = {
   analise_id?: number | string;
   id?: number | string;
 };
-
-const ANALISE_API_BASE_URL = "https://analise3.imogo.com.br";
 
 const ESTADO_CIVIL_OPTIONS = [
   "solteiro(a)",
@@ -169,9 +167,9 @@ export default function CertidoesCpfMobile({ user }: CertidoesCpfMobileProps) {
       });
 
       const response = await axios.post<CreateAnaliseResponse>(
-        `${ANALISE_API_BASE_URL}/analises/etapa1/cpf/`,
+        `${API_BASE_URL}/api/v3/analises/etapa1/cpf`,
         [{ usuario_id: userId, proprietarios }],
-        { headers: { Accept: "application/json", "Content-Type": "application/json" } }
+        { headers: { ...getAuthHeaders(), "Content-Type": "application/json" } }
       );
 
       const analiseId = response.data?.analise_id ?? response.data?.id;

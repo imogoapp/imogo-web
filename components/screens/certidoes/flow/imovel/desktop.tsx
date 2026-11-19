@@ -8,7 +8,7 @@ import { createBaseWebNavigationItems } from "@/components/screens/home/home-too
 import BaseWeb from "@/components/ui/base-web";
 import { BaseWebButton } from "@/components/ui/base-web-button";
 import { AppInput } from "@/components/ui/app-input";
-import { AuthUser } from "@/services/auth";
+import { AuthUser, API_BASE_URL, getAuthHeaders } from "@/services/auth";
 import { styles } from "../styles";
 
 type CertidoesImovelDesktopProps = {
@@ -17,7 +17,6 @@ type CertidoesImovelDesktopProps = {
   analiseId: string;
 };
 
-const ANALISE_API_BASE_URL = "https://analise3.imogo.com.br";
 const VIA_CEP_BASE_URL = "https://viacep.com.br";
 
 const CARTORIO_OPTIONS = [
@@ -165,13 +164,10 @@ export default function CertidoesImovelDesktop({
       };
 
       const response = await axios.put(
-        `${ANALISE_API_BASE_URL}/analises/etapa2/${analiseId}/`,
+        `${API_BASE_URL}/api/v3/analises/etapa2/${analiseId}`,
         payload,
         {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
+          headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
         },
       );
 

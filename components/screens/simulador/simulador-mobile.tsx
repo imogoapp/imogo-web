@@ -1,7 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
-import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Linking, Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 
 import { simuladorContent } from "./simulador-content";
 import { createPrecificadorPreviewMobileStyles } from "./styles/simulador-preview-mobile-styles";
@@ -53,6 +53,27 @@ export default function SimuladorMobile() {
                   </Text>
                 </View>
               </Pressable>
+
+              {simuladorContent.externalSimulators.map((item) => (
+                <Pressable
+                  key={item.id}
+                  onPress={() => void Linking.openURL(item.url)}
+                  style={styles.optionButton}
+                >
+                  <Ionicons
+                    name="business-outline"
+                    size={22}
+                    color="#730d83"
+                    style={styles.optionIcon}
+                  />
+                  <View style={styles.optionTextContainer}>
+                    <Text allowFontScaling={false} style={styles.optionTextTitle}>
+                      {item.label}
+                    </Text>
+                  </View>
+                  <Ionicons name="open-outline" size={18} color="#9B9DA6" />
+                </Pressable>
+              ))}
             </View>
           </View>
 

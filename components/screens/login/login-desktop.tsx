@@ -1,15 +1,16 @@
 import { router } from 'expo-router';
 import { isAxiosError } from 'axios';
 import { useMemo, useState } from 'react';
-import { Alert, ImageBackground, Pressable, Text, View } from 'react-native';
+import { Alert, Pressable, Text, TouchableOpacity, View } from 'react-native';
 
 import { AppButton } from '@/components/ui/app-button';
 import { AppCheckbox } from '@/components/ui/app-checkbox';
 import { AppInput } from '@/components/ui/app-input';
 import { AppLogo } from '@/components/ui/app-logo';
 import { AppTitle } from '@/components/ui/app-title';
+import { AuthDesktopShell } from '@/components/ui/auth-desktop-shell';
 import { useGoogleSocialLogin } from '@/hooks/use-google-social-login';
-import { loginWithEmail, saveSession } from '@/services/auth';
+import { loginWithEmail, saveSessionAndFetchUser } from '@/services/auth';
 
 import styles from './styles/login-web-styles';
 
@@ -89,13 +90,23 @@ export default function LoginDesktop({
 
     try {
       const session = await loginWithEmail(email.trim(), password);
-      saveSession(session, remember);
+      await saveSessionAndFetchUser(session, remember);
       onLoginPress?.({ email, password, remember });
       router.replace('/home');
     } catch (error) {
       if (isAxiosError(error)) {
-        const errorData = (error.response?.data ?? {}) as { message?: string; detail?: string };
+        const errorData = (error.response?.data ?? {}) as {
+          message?: string;
+          detail?: string;
+          code?: string;
+          email?: string;
+        };
         const status = error.response?.status ?? error.status;
+        if (status === 403 && errorData.code === 'EMAIL_NOT_VERIFIED') {
+          const targetEmail = errorData.email || email.trim();
+          router.replace(`/verify-email?email=${encodeURIComponent(targetEmail)}` as never);
+          return;
+        }
         const message =
           status === 401
             ? 'Email ou senha invalidos.'
@@ -127,15 +138,14 @@ export default function LoginDesktop({
   };
 
   return (
-    <ImageBackground
-      source={require('@/assets/img/bg.png')}
-      style={styles.background}
-      resizeMode="cover">
-      <View style={styles.card}>
-        <AppLogo />
-        <AppTitle>Bem-vindo!</AppTitle>
+    <AuthDesktopShell
+      bannerTitle="Acesse sua conta imoGo"
+      bannerSubtitle="Continue suas simulações de crédito, acompanhe certidões e gerencie suas sessões com segurança."
+    >
+      <AppLogo />
+      <AppTitle>Bem-vindo!</AppTitle>
 
-        <View style={styles.form}>
+      <View style={styles.form}>
           <AppInput
             label="Email"
             value={email}
@@ -183,9 +193,12 @@ export default function LoginDesktop({
             onPress={handleGoogle}
             disabled={googleLoading || loading}
             leftIconName="logo-google"
-          />          
+          />
+
+          <TouchableOpacity onPress={() => router.push('/register')} style={{ alignItems: 'center', marginTop: 16 }}>
+            <Text style={{ color: '#730d83', fontSize: 14, fontWeight: 'bold' }}>Não tem uma conta? Criar cadastro</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-    </ImageBackground>
+    </AuthDesktopShell>
   );
 }

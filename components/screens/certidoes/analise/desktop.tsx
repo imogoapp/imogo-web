@@ -7,7 +7,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { createBaseWebNavigationItems } from "@/components/screens/home/home-tools";
 import BaseWeb from "@/components/ui/base-web";
 import { BaseWebButton } from "@/components/ui/base-web-button";
-import { AuthUser } from "@/services/auth";
+import { AuthUser, API_BASE_URL, getAuthHeaders } from "@/services/auth";
 import { AppTheme } from "@/constants/app-theme";
 import { styles } from "../flow/styles";
 
@@ -18,7 +18,8 @@ type AnaliseDetalheDesktopProps = {
 };
 
 type AnaliseData = {
-  id: number;
+  id: number | string;
+  protocolo?: string | null;
   data: string;
   status: string;
   resumo: string | null;
@@ -58,10 +59,10 @@ export default function AnaliseDetalheDesktop({
     const fetchData = async () => {
       setLoading(true);
       try {
-        const analiseResponse = await axios.get<AnaliseData>(`https://analise3.imogo.com.br/analises/full/${analiseId}`);
+        const analiseResponse = await axios.get<AnaliseData>(`${API_BASE_URL}/api/v3/analises/full/${analiseId}`, { headers: getAuthHeaders() });
         setAnaliseData(analiseResponse.data);
 
-        const proprietariosResponse = await axios.get<ProprietarioData[]>(`https://analise3.imogo.com.br/analises/${analiseId}/proprietarios`);
+        const proprietariosResponse = await axios.get<ProprietarioData[]>(`${API_BASE_URL}/api/v3/analises/${analiseId}/proprietarios`, { headers: getAuthHeaders() });
         setProprietarios(proprietariosResponse.data);
       } catch (error) {
         console.error('Erro ao buscar dados da análise:', error);
@@ -115,7 +116,7 @@ export default function AnaliseDetalheDesktop({
       <ScrollView contentContainerStyle={styles.contentMinimal}>
         <View style={styles.container}>
           <Text style={styles.title}>Emissão de certidões</Text>
-          <Text style={styles.subtitle}>Detalhes da solicitação #{analiseId}</Text>
+          <Text style={styles.subtitle}>Protocolo {analiseData?.protocolo ?? analiseId}</Text>
 
           {loading ? (
              <ActivityIndicator size="large" color={AppTheme.colors.primary} style={{ marginTop: 40 }} />

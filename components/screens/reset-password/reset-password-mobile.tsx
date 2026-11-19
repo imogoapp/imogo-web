@@ -160,13 +160,18 @@ export default function ResetPasswordMobile({ onSubmitPress }: ResetPasswordMobi
                   </Text>
                   <View style={styles.form}>
                     <AppButton
-                      label="Ir para login"
-                      onPress={() => router.push('/login')}
+                      label="Já tenho o código"
+                      onPress={() =>
+                        router.push(`/reset-password-confirm?email=${encodeURIComponent(email.trim())}` as never)
+                      }
                       radius={30}
                       size="sm"
                       labelStyle={{ fontSize: buttonTextSize }}
                       containerStyle={{ minHeight: 48, paddingVertical: 12 }}
                     />
+                    <Pressable onPress={() => router.push('/login')}>
+                      <Text style={[styles.backLink, { fontSize: labelSize }]}>Ir para login</Text>
+                    </Pressable>
                   </View>
                 </View>
               )}

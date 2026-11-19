@@ -13,6 +13,9 @@ import { AppLegalConsent } from '@/components/ui/app-legal-consent';
 import { AppLogo } from '@/components/ui/app-logo';
 import { AppOptionCard } from '@/components/ui/app-option-card';
 import { AppTitle } from '@/components/ui/app-title';
+import { AuthDesktopShell } from '@/components/ui/auth-desktop-shell';
+import { useGoogleSocialLogin } from '@/hooks/use-google-social-login';
+import { API_BASE_URL } from '@/services/auth';
 
 import styles from './styles/register-web-styles';
 
@@ -40,20 +43,6 @@ const originMap: Record<(typeof options)[number], number> = {
   Indicacao: 14,
   Outro: 15,
 };
-
-const API_BASE_URL = (() => {
-  const candidates = [process.env.EXPO_PUBLIC_API_IMOGO, process.env.API_IMOGO, 'https://api-homologacao.vercel.app'];
-  const valid = candidates.find((value) => {
-    if (!value) {
-      return false;
-    }
-
-    const normalized = value.trim().toLowerCase();
-    return normalized !== 'undefined' && normalized !== 'null';
-  });
-
-  return (valid ?? 'https://api-homologacao.vercel.app').replace(/\/+$/, '');
-})();
 
 type RegisterApiSuccess = {
   public_id: string;
@@ -226,7 +215,7 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
     setLoading(true);
 
     try {
-      const response = await axios.post<RegisterApiSuccess>(`${API_BASE_URL}/api/v2/auth/register`, {
+      const response = await axios.post<RegisterApiSuccess>(`${API_BASE_URL}/api/v3/auth/register`, {
         name: nome.trim(),
         phone: telefone.trim(),
         email: email.trim(),
@@ -252,7 +241,7 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
       }
 
       onRegisterPress?.(payload);
-      setStep('success');
+      router.replace(`/verify-email?email=${encodeURIComponent(email.trim())}` as never);
     } catch (error) {
       if (isAxiosError(error)) {
         const status = error.response?.status;
@@ -281,14 +270,27 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
     }
   };
 
-  const handleGoogle = onGooglePress ?? (() => router.push('/modal'));
-  const openTerms = () => Linking.openURL('https://sites.google.com/view/imogoapp/termos');
-  const openPrivacy = () => Linking.openURL('https://sites.google.com/view/imogoapp/privacy-policy');
+  const { login: loginWithGoogle, loading: googleLoading } = useGoogleSocialLogin();
+  const handleGoogle = async () => {
+    const result = await loginWithGoogle(true, 20);
+    if (!result.ok) {
+      if (!result.cancelled) {
+        showAlert('Erro no cadastro social', result.message);
+      }
+      return;
+    }
+    onGooglePress?.();
+    router.replace('/home');
+  };
+  const openTerms = () => Linking.openURL('https://imogo.com.br/termos-de-uso');
+  const openPrivacy = () => Linking.openURL('https://imogo.com.br/politica-de-privacidade');
 
   return (
-    <ImageBackground source={require('@/assets/img/bg.png')} style={styles.background} resizeMode="cover">
-      <AppCard style={styles.card}>
-        <AppLogo />
+    <AuthDesktopShell
+      bannerTitle="Crie sua conta em minutos"
+      bannerSubtitle="Cadastre-se gratuitamente para simular financiamentos nos principais bancos e organizar seus imóveis."
+    >
+      <AppLogo />
 
         {step === 'form' ? (
           <>
@@ -363,10 +365,11 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
             <View style={styles.authBlock}>
               <AppDividerText>Ou acesse com</AppDividerText>
               <AppButton
-                label="Continuar com Google"
+                label={googleLoading ? 'Conectando com Google...' : 'Continuar com Google'}
                 variant="secondary"
                 leftIconName="logo-google"
-                onPress={handleGoogle}
+                onPress={() => void handleGoogle()}
+                disabled={googleLoading || loading}
               />
 
               <TouchableOpacity onPress={() => router.push('/login')} style={{ alignItems: 'center', marginTop: 16 }}>
@@ -418,8 +421,7 @@ export default function RegisterDesktop({ onRegisterPress, onGooglePress }: Regi
             </View>
           </>
         ) : null}
-      </AppCard>
-    </ImageBackground>
+    </AuthDesktopShell>
   );
 }
 

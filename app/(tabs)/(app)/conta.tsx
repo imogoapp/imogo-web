@@ -5,20 +5,10 @@ import Head from 'expo-router/head';
 import AccountDesktop from '@/components/screens/account/account-desktop';
 import AccountMobile from '@/components/screens/account/account-mobile';
 import { useScreenType } from '@/hooks/use-screen-type';
-import { AuthUser, clearSession, decodeJwtPayload, getSession } from '@/services/auth';
+import { AuthUser, logoutSession, getSessionUser, getSession } from "@/services/auth";
 
 function decodeUserFromSession(): AuthUser | null {
-  const session = getSession();
-  if (!session?.token) {
-    return null;
-  }
-
-  const payload = decodeJwtPayload(session.token);
-  if (!payload) {
-    return null;
-  }
-
-  return payload as AuthUser;
+  return getSessionUser();
 }
 
 export default function ContaScreen() {
@@ -27,7 +17,7 @@ export default function ContaScreen() {
   const [refreshCount, setRefreshCount] = useState(0);
 
   const handleLogout = useCallback(() => {
-    clearSession();
+    void logoutSession();
     router.replace('/welcome');
   }, []);
 

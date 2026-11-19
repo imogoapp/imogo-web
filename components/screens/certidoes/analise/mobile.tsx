@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import axios from "axios";
-import { AuthUser } from "@/services/auth";
+import { AuthUser, API_BASE_URL, getAuthHeaders } from "@/services/auth";
 import { AppTheme } from "@/constants/app-theme";
 import { flowMobileStyles as styles } from "../flow/styles/flow-mobile-styles";
 
@@ -22,7 +22,8 @@ type AnaliseDetalheMobileProps = {
 };
 
 type AnaliseData = {
-  id: number;
+  id: number | string;
+  protocolo?: string | null;
   data: string;
   status: string;
   resumo: string | null;
@@ -85,12 +86,8 @@ export default function AnaliseDetalheMobile({
       setLoading(true);
       try {
         const [analiseRes, proprietariosRes] = await Promise.all([
-          axios.get<AnaliseData>(
-            `https://analise3.imogo.com.br/analises/full/${analiseId}`
-          ),
-          axios.get<ProprietarioData[]>(
-            `https://analise3.imogo.com.br/analises/${analiseId}/proprietarios`
-          ),
+          axios.get<AnaliseData>(`${API_BASE_URL}/api/v3/analises/full/${analiseId}`, { headers: getAuthHeaders() }),
+          axios.get<ProprietarioData[]>(`${API_BASE_URL}/api/v3/analises/${analiseId}/proprietarios`, { headers: getAuthHeaders() }),
         ]);
         setAnaliseData(analiseRes.data);
         setProprietarios(proprietariosRes.data);
@@ -132,7 +129,7 @@ export default function AnaliseDetalheMobile({
             {/* Status Card */}
             <View style={styles.formCard}>
               <Text allowFontScaling={false} style={styles.formTitle}>
-                Emissão #{analiseId}
+                Protocolo {analiseData?.protocolo ?? analiseId}
               </Text>
               <View style={styles.infoRow}>
                 <Text allowFontScaling={false} style={styles.infoLabel}>

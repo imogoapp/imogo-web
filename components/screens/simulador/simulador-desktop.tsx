@@ -1,7 +1,8 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import { Image } from "expo-image";
 import { useMemo } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Linking, Pressable, ScrollView, Text, View } from "react-native";
 
 import { createBaseWebNavigationItems } from "@/components/screens/home/home-tools";
 import BaseWeb from "@/components/ui/base-web";
@@ -61,6 +62,30 @@ export default function SimuladorDesktop({
                   </Text>
                 </View>
               </Pressable>
+
+              {simuladorContent.externalSimulators.map((item) => (
+                <Pressable
+                  key={item.id}
+                  style={styles.optionButton}
+                  onPress={() => void Linking.openURL(item.url)}
+                >
+                  <Ionicons
+                    name="business-outline"
+                    size={22}
+                    color="#730d83"
+                    style={styles.optionIcon}
+                  />
+                  <View style={styles.optionTextContainer}>
+                    <Text
+                      style={styles.optionTextTitle}
+                      allowFontScaling={false}
+                    >
+                      {item.label}
+                    </Text>
+                  </View>
+                  <Ionicons name="open-outline" size={18} color="#9B9DA6" />
+                </Pressable>
+              ))}
             </View>
           </View>
 
