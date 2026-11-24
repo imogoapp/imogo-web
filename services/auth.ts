@@ -78,6 +78,24 @@ type AuthSessionInput = {
 };
 
 let memorySession: AuthSession | null = null;
+const sessionListeners = new Set<() => void>();
+
+export function subscribeSessionChange(listener: () => void): () => void {
+  sessionListeners.add(listener);
+  return () => {
+    sessionListeners.delete(listener);
+  };
+}
+
+function notifySessionListeners() {
+  for (const listener of sessionListeners) {
+    try {
+      listener();
+    } catch {
+      // Ignore listener errors
+    }
+  }
+}
 
 function hasLocalStorage() {
   return typeof globalThis !== 'undefined' && 'localStorage' in globalThis && !!globalThis.localStorage;
@@ -253,34 +271,42 @@ export async function renewToken(apiKey?: string) {
 
 export async function logoutSession() {
   const session = getSession();
-  if (session?.token) {
+  const headers = session?.token ? getAuthHeaders() : null;
+
+  // Clear local session synchronously before any navigation or async network call
+  clearSession();
+
+  if (headers) {
     try {
       await axios.post(
         `${API_BASE_URL}/api/v3/auth/logout`,
         {},
-        { headers: getAuthHeaders() }
+        { headers }
       );
     } catch {
-      // Clear local session regardless of server response
+      // Local session is already cleared
     }
   }
-  clearSession();
 }
 
 export async function logoutAllSessions() {
   const session = getSession();
-  if (session?.token || session?.key) {
+  const headers = session?.token || session?.key ? getAuthHeaders() : null;
+
+  // Clear local session synchronously before any navigation or async network call
+  clearSession();
+
+  if (headers) {
     try {
       await axios.post(
         `${API_BASE_URL}/api/v3/auth/logout-all`,
         {},
-        { headers: getAuthHeaders() }
+        { headers }
       );
     } catch {
-      // Clear local session regardless of server response
+      // Local session is already cleared
     }
   }
-  clearSession();
 }
 
 export async function listSessions() {
@@ -401,10 +427,12 @@ export function saveSession(session: AuthSessionInput, persist: boolean) {
     if (hasLocalStorage()) {
       globalThis.localStorage.removeItem(SESSION_STORAGE_KEY);
     }
+    notifySessionListeners();
     return;
   }
 
   globalThis.localStorage.setItem(SESSION_STORAGE_KEY, encodeSessionForStorage(nextSession));
+  notifySessionListeners();
 }
 
 export function getSession() {
@@ -456,6 +484,7 @@ export function clearSession() {
   if (hasLocalStorage()) {
     globalThis.localStorage.removeItem(SESSION_STORAGE_KEY);
   }
+  notifySessionListeners();
 }
 
 export function isJwtValid(token: string) {
